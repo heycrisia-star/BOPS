@@ -7,6 +7,7 @@ import AIArchitectAssistant from './components/AIArchitectAssistant';
 import AboutMe from './components/AboutMe';
 import ContactBot from './components/ContactBot';
 import StaggeredMenu from './components/StaggeredMenu';
+import SuccessCases from './components/SuccessCases';
 
 const App: React.FC = () => {
   const menuItems = [
@@ -25,8 +26,10 @@ const App: React.FC = () => {
 
       <ContactBot />
 
-      <main className="flex-grow max-w-5xl mx-auto w-full border-x border-slate-50 shadow-sm bg-white">
+      <main className="flex-grow max-w-7xl mx-auto w-full border-x border-white/5 shadow-2xl shadow-blue-900/5 bg-slate-950 relative z-10">
         <Hero />
+
+        <SuccessCases />
 
         <div id="ai-assistant">
           <AIArchitectAssistant />
@@ -41,7 +44,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <div className="max-w-5xl mx-auto w-full border-x border-slate-50">
+      <div className="max-w-7xl mx-auto w-full border-x border-white/5">
         <Footer />
       </div>
     </div>

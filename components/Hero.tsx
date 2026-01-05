@@ -20,13 +20,13 @@ const Hero: React.FC = () => {
           </span>
         </div>
 
-        {/* Headline Premium */}
+        {/* Headline Premium - Uniform Blue */}
         <h1 className="text-5xl md:text-8xl font-[900] tracking-tight text-white mb-8 animate-in fade-in zoom-in-95 duration-1000 leading-tight">
-          Optimiza tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 text-glow">Tiempo.</span>
+          Optimiza tu <span className="text-blue-500 text-glow">Tiempo.</span>
           <br className="hidden md:block" />
           <span className="relative inline-block mt-2">
             Escala tu Negocio.
-            <svg className="absolute w-full h-3 -bottom-1 left-0 text-blue-500 opacity-60" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00025 6.99997C2.00025 6.99997 101 -0.5 198 6.99997" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>
+            <svg className="absolute w-full h-3 -bottom-1 left-0 text-blue-600 opacity-60" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00025 6.99997C2.00025 6.99997 101 -0.5 198 6.99997" stroke="currentColor" strokeWidth="3" strokeLinecap="round" /></svg>
           </span>
         </h1>
 
@@ -37,12 +37,12 @@ const Hero: React.FC = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-5 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300">
-          <button className="group relative px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:bg-blue-500 transition-all hover:scale-105 active:scale-95">
+          <a href="mailto:info@buildersops.xyz?subject=Solicitud%20de%20Diagnóstico%20Gratuito" className="group relative px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-500 transition-all hover:scale-105 active:scale-95 text-center">
             <span className="relative z-10">Agenda Diagnóstico Gratuito</span>
             <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-md"></div>
-          </button>
+          </a>
 
-          <button className="px-8 py-4 bg-slate-900 border border-slate-700 text-slate-300 font-medium rounded-xl hover:bg-slate-800 hover:border-slate-600 transition-all hover:text-white">
+          <button className="px-8 py-4 bg-transparent border border-slate-700 text-slate-300 font-medium rounded-xl hover:bg-slate-900 hover:border-blue-900 transition-all hover:text-white">
             Ver Casos de Éxito
           </button>
         </div>
