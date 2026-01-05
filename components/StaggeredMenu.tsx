@@ -135,7 +135,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           {logoUrl && (
             <div className="flex items-center gap-3">
               <img src={logoUrl} alt="Logo" className="h-12 md:h-16 w-auto rounded-lg shadow-sm" />
-              <span className="text-[12px] md:text-[14px] font-black text-slate-900 tracking-tighter uppercase hidden sm:block">BuildersOps</span>
+              <span className="text-[12px] md:text-[14px] font-black text-white tracking-tighter uppercase hidden sm:block">BuildersOps</span>
             </div>
           )}
           <button className="sm-menu-trigger" onClick={toggleMenu} aria-label="Menu">
@@ -166,16 +166,16 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                 <div className="space-y-6">
                   <a href="tel:+34691708138" className="group block">
                     <p className="text-slate-400 text-[10px] font-bold uppercase mb-1">PHONE</p>
-                    <p className="text-[20px] md:text-[24px] font-black text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight">+34 691 708 138</p>
+                    <p className="text-[20px] md:text-[24px] font-black text-white group-hover:text-blue-400 transition-colors tracking-tight">+34 691 708 138</p>
                   </a>
                   <a href="mailto:info@buildersops.xyz" className="group block">
                     <p className="text-slate-400 text-[10px] font-bold uppercase mb-1">EMAIL</p>
-                    <p className="text-[20px] md:text-[24px] font-black text-slate-900 group-hover:text-blue-600 transition-colors tracking-tight">info@buildersops.xyz</p>
+                    <p className="text-[20px] md:text-[24px] font-black text-white group-hover:text-blue-400 transition-colors tracking-tight">info@buildersops.xyz</p>
                   </a>
                 </div>
               </div>
 
-              <div className="pt-8 border-t border-slate-100 mt-auto">
+              <div className="pt-8 border-t border-slate-800 mt-auto">
                 <p className="text-[9px] text-slate-300 font-black uppercase tracking-[0.5em]">BUILDERSOPS © 2026</p>
               </div>
             </div>
