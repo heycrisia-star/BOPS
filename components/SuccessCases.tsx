@@ -2,22 +2,22 @@ import React from 'react';
 
 const cases = [
     {
-        title: 'Logística & Distribución',
-        metric: '-40%',
-        desc: 'Reducción en tiempos de entrega mediante orquestación automática de flotas.',
-        icon: 'local_shipping'
+        title: 'Productividad Personal',
+        metric: '+50%',
+        desc: 'Tu equipo enfocado en lo importante, eliminando tareas repetitivas.',
+        icon: 'speed'
     },
     {
-        title: 'Gestión Comercial (CRM)',
-        metric: '1000+',
-        desc: 'Leads procesados y cualificados semanalmente sin intervención humana.',
-        icon: 'groups'
+        title: 'Operativa 24/7',
+        metric: '24/7',
+        desc: 'Tu negocio sigue funcionando y vendiendo mientras duermes.',
+        icon: 'schedule'
     },
     {
-        title: 'Finanzas Tiempo Real',
-        metric: '100%',
-        desc: 'Visibilidad total del flujo de caja y facturación automatizada.',
-        icon: 'query_stats'
+        title: 'Mejora del Margen',
+        metric: 'x2',
+        desc: 'Mayor rentabilidad reduciendo costes operativos innecesarios.',
+        icon: 'trending_up'
     }
 ];
 

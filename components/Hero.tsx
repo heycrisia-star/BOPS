@@ -13,13 +13,6 @@ const Hero: React.FC = () => {
 
       <div className="relative z-10 w-full max-w-6xl flex flex-col items-center">
 
-        {/* Label de Alta Ingeniería */}
-        <div className="mb-8 animate-in fade-in slide-in-from-top-4 duration-700">
-          <span className="px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-300 text-xs font-mono tracking-[0.2em] backdrop-blur-md uppercase">
-            System Architecture v2.0
-          </span>
-        </div>
-
         {/* Headline Premium - Uniform Blue */}
         <h1 className="text-5xl md:text-8xl font-[900] tracking-tight text-white mb-8 animate-in fade-in zoom-in-95 duration-1000 leading-tight">
           Optimiza tu <span className="text-blue-500 text-glow">Tiempo.</span>

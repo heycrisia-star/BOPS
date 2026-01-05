@@ -5,26 +5,27 @@
 
 @layer base {
     body {
-        @apply bg-slate-950 text-slate-200;
+        @apply bg-[#020617] text-blue-100;
+        /* Deep Midnight Blue instead of Slate */
     }
 }
 
 @layer utilities {
     .text-glow {
-        text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        text-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
     }
 
     .glass-panel {
-        @apply bg-slate-900/40 backdrop-blur-xl border border-white/10 shadow-xl;
+        @apply bg-blue-950/30 backdrop-blur-xl border border-blue-500/20 shadow-xl;
     }
 
     .tech-border {
-        @apply border border-blue-500/20 relative;
+        @apply border border-blue-500/30 relative;
     }
 
     .tech-border::after {
         content: '';
-        @apply absolute top-0 left-0 w-2 h-2 border-t border-l border-blue-400 opacity-50;
+        @apply absolute top-0 left-0 w-2 h-2 border-t border-l border-blue-400 opacity-60;
     }
 
     .animate-slow-spin {

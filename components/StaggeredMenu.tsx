@@ -134,10 +134,12 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         <div className={`sm-header-inner flex ${logoUrl ? 'justify-between' : 'justify-end'} items-center`}>
           {logoUrl && (
             <div className="flex items-center gap-3">
-              <div className="bg-white p-1 rounded-lg shadow-lg shadow-blue-900/20 overflow-hidden">
-                <img src={logoUrl} alt="Logo" className="h-10 md:h-14 w-auto object-contain mix-blend-multiply" />
-              </div>
-              <span className="text-[12px] md:text-[14px] font-black text-white tracking-tighter uppercase hidden sm:block">BuildersOps</span>
+              <img
+                src={logoUrl}
+                alt="Logo"
+                className="h-16 md:h-24 w-auto object-contain"
+                style={{ mixBlendMode: 'screen', filter: 'invert(1) grayscale(100%) brightness(200%) contrast(150%)' }}
+              />
             </div>
           )}
           <button className="sm-menu-trigger" onClick={toggleMenu} aria-label="Menu">

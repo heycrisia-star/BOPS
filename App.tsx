@@ -17,16 +17,16 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div id="top" className="min-h-screen flex flex-col bg-slate-950 text-white overflow-x-hidden relative selection:bg-blue-500/30 selection:text-blue-200">
+    <div id="top" className="min-h-screen flex flex-col bg-[#020617] text-blue-50 overflow-x-hidden relative selection:bg-blue-500/30 selection:text-blue-200">
       <StaggeredMenu
         items={menuItems}
-        colors={['#0B1121', '#1e293b', '#3b82f6']}
+        colors={['#020617', '#0f172a', '#1e3a8a']}
         logoUrl="https://res.cloudinary.com/dk7xpxrvh/image/upload/v1767147299/asasasasasa_uyedrh.jpg"
       />
 
       <ContactBot />
 
-      <main className="flex-grow max-w-7xl mx-auto w-full border-x border-white/5 shadow-2xl shadow-blue-900/5 bg-slate-950 relative z-10">
+      <main className="flex-grow max-w-7xl mx-auto w-full border-x border-blue-900/10 shadow-2xl shadow-blue-900/10 bg-[#020617] relative z-10">
         <Hero />
 
         <SuccessCases />
