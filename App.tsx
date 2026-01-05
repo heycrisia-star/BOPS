@@ -17,16 +17,17 @@ const App: React.FC = () => {
 
   return (
     <div id="top" className="min-h-screen flex flex-col bg-white overflow-x-hidden relative">
-      <StaggeredMenu 
-        items={menuItems} 
-        colors={['#0f172a', '#1e293b', '#2563eb']} 
+      <StaggeredMenu
+        items={menuItems}
+        colors={['#0f172a', '#1e293b', '#2563eb']}
+        logoUrl="/logo.png"
       />
-      
+
       <ContactBot />
 
       <main className="flex-grow max-w-5xl mx-auto w-full border-x border-slate-50 shadow-sm bg-white">
         <Hero />
-        
+
         <div id="ai-assistant">
           <AIArchitectAssistant />
         </div>
@@ -39,7 +40,7 @@ const App: React.FC = () => {
           <AboutMe />
         </div>
       </main>
-      
+
       <div className="max-w-5xl mx-auto w-full border-x border-slate-50">
         <Footer />
       </div>
