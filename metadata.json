@@ -1,0 +1,8 @@
+{
+  "name": "BuildersOps - Arquitectura de Sistemas",
+  "description": "Una plataforma para arquitectos de operaciones, pensadores de sistemas y constructores no-code que buscan escalar infraestructuras robustas.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

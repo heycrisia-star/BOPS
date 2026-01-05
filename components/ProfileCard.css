@@ -1,0 +1,44 @@
+:root {
+  --rotate-x: 0deg;
+  --rotate-y: 0deg;
+  --card-radius: 48px;
+  /* El fondo se mantiene como fallback, pero la imagen ahora cubrirá todo */
+  --image-bg: #f6f3ee; 
+}
+
+.pc-card-wrapper {
+  perspective: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.pc-card-shell {
+  transform-style: preserve-3d;
+  width: 100%;
+  max-width: 360px;
+}
+
+.pc-card {
+  position: relative;
+  width: 100%;
+  /* Proporción 1:1 para que coincida con la imagen cuadrada y no deje huecos */
+  aspect-ratio: 1; 
+  border-radius: var(--card-radius);
+  background-color: var(--image-bg);
+  transform: rotateX(var(--rotate-y)) rotateY(var(--rotate-x));
+  transition: transform 0.15s ease-out;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,0.1);
+  overflow: hidden;
+  border: none;
+}
+
+.pc-main-image {
+  width: 100%;
+  height: 100%;
+  /* 'cover' asegura que la imagen llene todo el contenedor sin dejar espacios arriba/abajo */
+  object-fit: cover;
+  background-color: var(--image-bg);
+  display: block;
+}

@@ -1,0 +1,52 @@
+.cubes-animation {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cubes-animation--scene {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.cube {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.cube-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--cube-face-bg, #060010);
+  border: var(--cube-face-border, 1px solid #fff);
+  box-shadow: var(--cube-face-shadow, none);
+  backface-visibility: visible;
+}
+
+/* Posicionamiento de las caras para formar un cubo 3D */
+.cube-face--front  { transform: rotateY(0deg) translateZ(10px); }
+.cube-face--back   { transform: rotateY(180deg) translateZ(10px); }
+.cube-face--right  { transform: rotateY(90deg) translateZ(10px); }
+.cube-face--left   { transform: rotateY(-90deg) translateZ(10px); }
+.cube-face--top    { transform: rotateX(90deg) translateZ(10px); }
+.cube-face--bottom { transform: rotateX(-90deg) translateZ(10px); }
+
+/* Ajuste dinámico de profundidad basado en el tamaño del grid si es necesario */
+@media (min-width: 1024px) {
+  .cube-face--front  { transform: rotateY(0deg) translateZ(15px); }
+  .cube-face--back   { transform: rotateY(180deg) translateZ(15px); }
+  .cube-face--right  { transform: rotateY(90deg) translateZ(15px); }
+  .cube-face--left   { transform: rotateY(-90deg) translateZ(15px); }
+  .cube-face--top    { transform: rotateX(90deg) translateZ(15px); }
+  .cube-face--bottom { transform: rotateX(-90deg) translateZ(15px); }
+}
