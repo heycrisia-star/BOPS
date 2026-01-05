@@ -85,7 +85,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       tl.fromTo(ls.el, { xPercent: ls.start }, { xPercent: 0, duration: 0.5, ease: 'power4.out' }, i * 0.07);
     });
     tl.fromTo(panel, { xPercent: panelStart }, { xPercent: 0, duration: 0.65, ease: 'power4.out' }, (layerStates.length * 0.07) + 0.05);
-    
+
     if (itemLabels.length) {
       tl.to(itemLabels, { yPercent: 0, rotate: 0, duration: 0.8, ease: 'power4.out', stagger: 0.1 }, "-=0.3");
     }
@@ -114,10 +114,10 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       const offscreen = position === 'left' ? -100 : 100;
       gsap.to([...layers, panel], { xPercent: offscreen, duration: 0.4, ease: 'power3.inOut' });
     }
-    
+
     const icon = iconRef.current;
     if (icon) gsap.to(icon, { rotate: target ? 225 : 0, duration: 0.6, ease: 'power3.out' });
-    
+
     const inner = textInnerRef.current;
     if (inner) {
       gsap.to(inner, { yPercent: target ? -50 : 0, duration: 0.4, ease: 'power2.inOut' });
@@ -129,12 +129,12 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true">
         {colors.map((c, i) => <div key={i} className="sm-prelayer" style={{ background: c }} />)}
       </div>
-      
+
       <header className="sm-header">
         <div className={`sm-header-inner flex ${logoUrl ? 'justify-between' : 'justify-end'} items-center`}>
           {logoUrl && (
             <div className="flex items-center gap-3">
-              <img src={logoUrl} alt="Logo" className="h-8 md:h-10 w-auto rounded-lg shadow-sm" />
+              <img src={logoUrl} alt="Logo" className="h-12 md:h-16 w-auto rounded-lg shadow-sm" />
               <span className="text-[12px] md:text-[14px] font-black text-slate-900 tracking-tighter uppercase hidden sm:block">BuildersOps</span>
             </div>
           )}
@@ -174,9 +174,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                   </a>
                 </div>
               </div>
-              
+
               <div className="pt-8 border-t border-slate-100 mt-auto">
-                 <p className="text-[9px] text-slate-300 font-black uppercase tracking-[0.5em]">BUILDERSOPS © 2026</p>
+                <p className="text-[9px] text-slate-300 font-black uppercase tracking-[0.5em]">BUILDERSOPS © 2026</p>
               </div>
             </div>
 

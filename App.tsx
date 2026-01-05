@@ -16,11 +16,11 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div id="top" className="min-h-screen flex flex-col bg-white overflow-x-hidden relative">
+    <div id="top" className="min-h-screen flex flex-col bg-slate-950 text-white overflow-x-hidden relative selection:bg-blue-500/30 selection:text-blue-200">
       <StaggeredMenu
         items={menuItems}
-        colors={['#0f172a', '#1e293b', '#2563eb']}
-        logoUrl="/logo.png"
+        colors={['#0B1121', '#1e293b', '#3b82f6']}
+        logoUrl="https://res.cloudinary.com/dk7xpxrvh/image/upload/v1767147299/asasasasasa_uyedrh.jpg"
       />
 
       <ContactBot />
