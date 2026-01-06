@@ -8,9 +8,6 @@ const AboutMe: React.FC = () => {
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -z-10"></div>
 
       <div className="mb-16 text-center">
-        <div className="inline-block px-4 py-1.5 bg-blue-900/20 border border-blue-500/20 text-blue-300 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-8">
-          Experiencia Senior & Liderazgo
-        </div>
         <h3 className="text-[42px] font-black text-white tracking-tighter leading-none">
           Operaciones con <span className="text-blue-600">autoridad.</span>
         </h3>
@@ -19,10 +16,22 @@ const AboutMe: React.FC = () => {
       {/* Cambiado items-center por md:items-start para subir la foto */}
       <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-10 md:gap-20 max-w-5xl mx-auto">
         {/* Añadido md:mt-2 para alineación precisa con el texto */}
-        <div className="w-full max-w-[340px] flex-shrink-0 md:mt-2">
+        <div className="w-full max-w-[340px] flex-shrink-0 md:mt-2 flex flex-col items-center">
           <ProfileCard
             avatarUrl="https://res.cloudinary.com/dk7xpxrvh/image/upload/v1767581792/Gemini_Generated_Image_i3kgpci3kgpci3kg_tmmh8a.png"
           />
+
+          {/* Founder Badge (Relocated) */}
+          <div className="inline-flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700/50 rounded-2xl mt-8 shadow-lg shadow-blue-500/10 hover:border-blue-500/30 transition-colors">
+            <img
+              src="https://res.cloudinary.com/dk7xpxrvh/image/upload/v1767147299/asasasasasa_uyedrh.jpg"
+              alt="BuildersOps Logo"
+              className="h-8 w-auto object-contain"
+              style={{ mixBlendMode: 'screen', filter: 'invert(1) grayscale(100%) brightness(200%) contrast(150%)' }}
+            />
+            <div className="h-4 w-[1px] bg-slate-700"></div>
+            <span className="text-xs font-black text-white tracking-widest uppercase">Founder Builders Ops</span>
+          </div>
         </div>
 
         <div className="max-w-md space-y-8">

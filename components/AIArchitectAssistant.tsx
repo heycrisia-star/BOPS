@@ -223,9 +223,9 @@ const AIArchitectAssistant: React.FC = () => {
               </div>
 
               <div>
-                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                  Selecciona tus procesos críticos
+                <p className="text-[11px] font-black text-blue-400 uppercase tracking-widest mb-6 flex items-center gap-2 animate-pulse">
+                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
+                  Selecciona tus procesos críticos (Click para simular)
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {PRESET_TASKS.map(preset => {

@@ -1,8 +1,20 @@
-
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import LetterGlitch from './LetterGlitch';
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import './StaggeredMenu.css';
+
+const menuItemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: (i: number) => ({
+    y: 0,
+    opacity: 1,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+  exit: { opacity: 0, y: 10, transition: { duration: 0.2 } }
+};
 
 interface MenuItem {
   label: string;
@@ -11,189 +23,103 @@ interface MenuItem {
 }
 
 interface StaggeredMenuProps {
-  position?: 'left' | 'right';
-  colors?: string[];
   items?: MenuItem[];
-  isFixed?: boolean;
-  onMenuOpen?: () => void;
-  onMenuClose?: () => void;
-  logoUrl?: string;
+  logoUrl?: string; // Kept for prop compatibility but unused
 }
 
 export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
-  position = 'right',
-  colors = ['#0f172a', '#1e293b', '#2563eb'],
   items = [],
-  isFixed = true,
-  onMenuOpen,
-  onMenuClose,
   logoUrl
 }) => {
   const [open, setOpen] = useState(false);
-  const openRef = useRef(false);
-  const panelRef = useRef<HTMLElement>(null);
-  const preLayersRef = useRef<HTMLDivElement>(null);
-  const preLayerElsRef = useRef<HTMLElement[]>([]);
-  const iconRef = useRef<HTMLSpanElement>(null);
-  const textInnerRef = useRef<HTMLDivElement>(null);
 
-  const openTlRef = useRef<gsap.core.Timeline | null>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      const panel = panelRef.current;
-      const preContainer = preLayersRef.current;
-      const icon = iconRef.current;
-      const textInner = textInnerRef.current;
-      if (!panel || !icon || !textInner) return;
-
-      let preLayers: HTMLElement[] = [];
-      if (preContainer) {
-        preLayers = Array.from(preContainer.querySelectorAll('.sm-prelayer'));
-      }
-      preLayerElsRef.current = preLayers;
-
-      const offscreen = position === 'left' ? -100 : 100;
-      gsap.set([panel, ...preLayers], { xPercent: offscreen });
-      gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
-      gsap.set(textInner, { yPercent: 0 });
-    });
-    return () => ctx.revert();
-  }, [position]);
-
-  const buildOpenTimeline = useCallback(() => {
-    const panel = panelRef.current;
-    const layers = preLayerElsRef.current;
-    if (!panel) return null;
-
-    openTlRef.current?.kill();
-    const itemLabels = Array.from(panel.querySelectorAll('.sm-panel-itemLabel'));
-    const contactInfo = panel.querySelector('.sm-panel-contact');
-
-    const layerStates = layers.map(el => ({ el, start: Number(gsap.getProperty(el, 'xPercent')) }));
-    const panelStart = Number(gsap.getProperty(panel, 'xPercent'));
-
-    if (itemLabels.length) {
-      gsap.set(itemLabels, { yPercent: 140, rotate: 5 });
-    }
-    if (contactInfo) {
-      gsap.set(contactInfo, { opacity: 0, y: 20 });
-    }
-
-    const tl = gsap.timeline({ paused: true });
-    layerStates.forEach((ls, i) => {
-      tl.fromTo(ls.el, { xPercent: ls.start }, { xPercent: 0, duration: 0.5, ease: 'power4.out' }, i * 0.07);
-    });
-    tl.fromTo(panel, { xPercent: panelStart }, { xPercent: 0, duration: 0.65, ease: 'power4.out' }, (layerStates.length * 0.07) + 0.05);
-
-    if (itemLabels.length) {
-      tl.to(itemLabels, { yPercent: 0, rotate: 0, duration: 0.8, ease: 'power4.out', stagger: 0.1 }, "-=0.3");
-    }
-    if (contactInfo) {
-      tl.to(contactInfo, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, "-=0.4");
-    }
-
-    openTlRef.current = tl;
-    return tl;
-  }, []);
-
-  const toggleMenu = useCallback(() => {
-    const target = !openRef.current;
-    openRef.current = target;
-    setOpen(target);
-
-    if (target) {
-      onMenuOpen?.();
-      const tl = buildOpenTimeline();
-      tl?.play(0);
-    } else {
-      onMenuClose?.();
-      const panel = panelRef.current;
-      const layers = preLayerElsRef.current;
-      if (!panel) return;
-      const offscreen = position === 'left' ? -100 : 100;
-      gsap.to([...layers, panel], { xPercent: offscreen, duration: 0.4, ease: 'power3.inOut' });
-    }
-
-    const icon = iconRef.current;
-    if (icon) gsap.to(icon, { rotate: target ? 225 : 0, duration: 0.6, ease: 'power3.out' });
-
-    const inner = textInnerRef.current;
-    if (inner) {
-      gsap.to(inner, { yPercent: target ? -50 : 0, duration: 0.4, ease: 'power2.inOut' });
-    }
-  }, [buildOpenTimeline, position, onMenuOpen, onMenuClose]);
+  const toggleMenu = () => setOpen(!open);
 
   return (
-    <div className={`staggered-menu-root ${isFixed ? 'is-fixed' : ''} ${open ? 'menu-is-open' : ''}`}>
-      <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true">
-        {colors.map((c, i) => <div key={i} className="sm-prelayer" style={{ background: c }} />)}
-      </div>
-
+    <div className={`staggered-menu-root ${open ? 'menu-is-open' : ''}`}>
       <header className="sm-header">
-        <div className={`sm-header-inner flex ${logoUrl ? 'justify-between' : 'justify-end'} items-center`}>
-          {logoUrl && (
-            <div className="flex items-center gap-3">
-              <img
-                src={logoUrl}
-                alt="Logo"
-                className="h-16 md:h-24 w-auto object-contain"
-                style={{ mixBlendMode: 'screen', filter: 'invert(1) grayscale(100%) brightness(200%) contrast(150%)' }}
-              />
-            </div>
-          )}
-          <button className="sm-menu-trigger" onClick={toggleMenu} aria-label="Menu">
+        <div className="sm-header-inner flex justify-end items-center">
+
+          <button className="sm-menu-trigger" onClick={toggleMenu} aria-label="Menu" style={{ position: 'relative', zIndex: 99999 }}>
             <div className="sm-trigger-text-box">
-              <div ref={textInnerRef} className="sm-trigger-text-inner">
-                <span className="sm-label">MENU</span>
-                <span className="sm-label">CLOSE</span>
+              <div className="sm-trigger-text-inner">
+                <span className="sm-label text-white">{open ? 'CLOSE' : 'MENU'}</span>
               </div>
             </div>
-            <span ref={iconRef} className="sm-plus-icon">
-              <span className="sm-plus-line sm-h" />
-              <span className="sm-plus-line sm-v" />
+            <span className={`sm-plus-icon ${open ? 'rotate-45' : ''} transition-transform duration-300`}>
+              <span className="sm-plus-line sm-h bg-white" />
+              <span className="sm-plus-line sm-v bg-white" />
             </span>
           </button>
         </div>
       </header>
 
-      <aside ref={panelRef} className="sm-side-panel">
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <LetterGlitch glitchColors={['#2563eb', '#3b82f6', '#0f172a']} />
-        </div>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9990] bg-[#020617]"
+          >
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
 
-        <div className="sm-panel-content relative z-10">
-          <div className="sm-panel-grid">
-            <div className="sm-panel-contact order-2 md:order-1">
-              <div className="mb-10">
-                <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] block mb-4">Direct Ops Contact</span>
+            <div className="h-full flex flex-col justify-center px-6 md:px-20 relative z-10 overflow-y-auto">
+              <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center py-20">
+
+                {/* MENU LINKS */}
                 <div className="space-y-6">
-                  <a href="tel:+34691708138" className="group block">
-                    <p className="text-slate-400 text-[10px] font-bold uppercase mb-1">PHONE</p>
-                    <p className="text-[20px] md:text-[24px] font-black text-white group-hover:text-blue-400 transition-colors tracking-tight">+34 691 708 138</p>
-                  </a>
-                  <a href="mailto:info@buildersops.xyz" className="group block">
-                    <p className="text-slate-400 text-[10px] font-bold uppercase mb-1">EMAIL</p>
-                    <p className="text-[20px] md:text-[24px] font-black text-white group-hover:text-blue-400 transition-colors tracking-tight">info@buildersops.xyz</p>
-                  </a>
+                  {items.map((item, i) => (
+                    <motion.div
+                      key={item.label}
+                      custom={i}
+                      variants={menuItemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                    >
+                      <a
+                        href={item.link}
+                        onClick={toggleMenu}
+                        className="block text-[48px] md:text-[80px] font-[1000] text-transparent stroke-text hover:text-white transition-all duration-300 uppercase tracking-tighter leading-[0.9]"
+                        style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}
+                      >
+                        {item.label}
+                      </a>
+                    </motion.div>
+                  ))}
                 </div>
-              </div>
 
-              <div className="pt-8 border-t border-slate-800 mt-auto">
-                <p className="text-[9px] text-slate-300 font-black uppercase tracking-[0.5em]">BUILDERSOPS © 2026</p>
+                {/* INFO */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="hidden lg:block space-y-12 text-left"
+                >
+                  <div>
+                    <h4 className="text-blue-500 font-black text-[14px] uppercase tracking-[0.2em] mb-4">Direct Ops Contact</h4>
+                    <p className="text-[12px] font-bold text-slate-500 uppercase mb-2">Phone</p>
+                    <a href="tel:+34691708138" className="text-[32px] font-[900] text-white tracking-tight hover:text-blue-500 transition-colors">+34 691 708 138</a>
+                  </div>
+
+                  <div>
+                    <p className="12px] font-bold text-slate-500 uppercase mb-2">Email</p>
+                    <a href="mailto:info@buildersops.xyz" className="text-[32px] font-[900] text-white tracking-tight hover:text-blue-500 transition-colors">
+                      info@buildersops.xyz
+                    </a>
+                  </div>
+
+                  <div className="pt-12 border-t border-slate-800">
+                    <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">BuildersOps © 2026</p>
+                  </div>
+                </motion.div>
+
               </div>
             </div>
-
-            <nav className="sm-nav order-1 md:order-2">
-              {items.map((it, idx) => (
-                <a key={idx} className="sm-nav-link" href={it.link} onClick={() => toggleMenu()}>
-                  <span className="sm-panel-itemLabel">{it.label}</span>
-                </a>
-              ))}
-            </nav>
-          </div>
-        </div>
-      </aside>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

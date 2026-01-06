@@ -11,7 +11,7 @@ const Hero: React.FC = () => {
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-0"></div>
 
-      <div className="relative z-10 w-full max-w-6xl flex flex-col items-center">
+      <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center pt-24 md:pt-32">
 
         {/* Headline Premium - Uniform Blue */}
         <h1 className="text-5xl md:text-8xl font-[900] tracking-tight text-white mb-8 animate-in fade-in zoom-in-95 duration-1000 leading-tight">
@@ -29,15 +29,19 @@ const Hero: React.FC = () => {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-5 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-300">
-          <a href="mailto:info@buildersops.xyz?subject=Solicitud%20de%20Diagnóstico%20Gratuito" className="group relative px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-500 transition-all hover:scale-105 active:scale-95 text-center">
-            <span className="relative z-10">Agenda Diagnóstico Gratuito</span>
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 relative z-20">
+          <a
+            href="https://wa.me/34691708138?text=Hola,%20quiero%20agendar%20una%20auditoría%20técnica%20de%20mis%20sistemas."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:bg-blue-500 transition-all hover:scale-105 active:scale-95"
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              Agenda Auditoría Técnica
+              <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+            </span>
             <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-md"></div>
           </a>
-
-          <button className="px-8 py-4 bg-transparent border border-slate-700 text-slate-300 font-medium rounded-xl hover:bg-slate-900 hover:border-blue-900 transition-all hover:text-white">
-            Ver Casos de Éxito
-          </button>
         </div>
 
       </div>

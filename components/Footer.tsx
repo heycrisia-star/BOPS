@@ -16,9 +16,12 @@ const Footer: React.FC = () => {
         </p>
 
         <div className="flex flex-col items-center gap-8">
-          <button className="px-12 py-5 bg-blue-600 text-white rounded-2xl font-black text-[14px] uppercase tracking-widest hover:bg-blue-500 transition-all shadow-2xl hover:-translate-y-1 active:scale-95 shadow-blue-500/20">
-            AGENDAR AUDITORÍA TÉCNICA
-          </button>
+          <a
+            href="mailto:info@buildersops.xyz"
+            className="px-12 py-5 bg-blue-600 text-white rounded-2xl font-black text-[14px] uppercase tracking-widest hover:bg-blue-500 transition-all shadow-2xl hover:-translate-y-1 active:scale-95 shadow-blue-500/20 inline-block"
+          >
+            CONTACTAR POR EMAIL
+          </a>
 
           {/* Datos de Contacto Directos */}
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12 mt-4">
