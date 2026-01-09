@@ -1,5 +1,7 @@
 
+
 import React, { useState, useMemo, useRef } from 'react';
+import { supabase } from '../lib/supabase';
 
 interface Task {
   id: string;
@@ -9,20 +11,29 @@ interface Task {
   daysPerWeek: number;
 }
 
-const PRESET_TASKS = [
-  { id: 'sales', name: 'Ventas automatizadas', mins: 20 },
-  { id: 'atc', name: 'Atención al cliente', mins: 30 },
-  { id: 'budget', name: 'Presupuestos', mins: 25 },
-  { id: 'billing', name: 'Facturación y cobros', mins: 20 },
+const TASKS_SALES = [
+  { id: 'sales', name: 'Prospección y Ventas', mins: 20 },
   { id: 'qual', name: 'Cualificación de leads', mins: 15 },
   { id: 'onb', name: 'Onboarding de clientes', mins: 45 },
-  { id: 'citas', name: 'Control de citas', mins: 15 },
-  { id: 'data', name: 'Extracción de datos', mins: 50 },
-  { id: 'reviews', name: 'Reseñas online', mins: 20 },
-  { id: 'dash', name: 'Reportes y dashboards', mins: 40 },
-  { id: 'wpp', name: 'Agente WhatsApp', mins: 45 },
-  { id: 'tg', name: 'Agente Telegram', mins: 45 },
+  { id: 'citas', name: 'Agendamiento de citas', mins: 15 },
 ];
+
+const TASKS_OPS = [
+  { id: 'atc', name: 'Atención al cliente', mins: 30 },
+  { id: 'billing', name: 'Facturación y cobros', mins: 20 },
+  { id: 'budget', name: 'Presupuestos', mins: 25 },
+  { id: 'reviews', name: 'Gestión de Reseñas', mins: 20 },
+];
+
+const TASKS_ENG = [
+  { id: 'web', name: 'Diseño y Mant. Web', mins: 40 },
+  { id: 'dash', name: 'Diseño de Dashboards', mins: 40 },
+  { id: 'data', name: 'Extracción de datos', mins: 50 },
+  { id: 'wpp', name: 'Agentes IA (Wpp/Tg)', mins: 45 },
+];
+
+// Combine for helper lookups if needed, or just iterate groups
+const ALL_TASKS = [...TASKS_SALES, ...TASKS_OPS, ...TASKS_ENG];
 
 const LOGO_URL = 'https://res.cloudinary.com/dk7xpxrvh/image/upload/v1767147299/asasasasasa_uyedrh.jpg';
 
@@ -30,8 +41,14 @@ const AIArchitectAssistant: React.FC = () => {
   const [employeeCost, setEmployeeCost] = useState<number>(1800);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState('');
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false); // Added isUnlocked state
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+
 
   const formatNum = (num: number | string) => {
     return new Intl.NumberFormat('es-ES').format(Math.round(Number(num)));
@@ -74,7 +91,33 @@ const AIArchitectAssistant: React.FC = () => {
     };
   }, [tasks, employeeCost]);
 
-  const generateAndDownload = async () => {
+  const handleLeadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setIsSaving(true);
+
+    // Extract only the names of active tasks (improvements)
+    const selectedImprovements = tasks
+      .filter(t => t.minutes > 0)
+      .map(t => t.name);
+
+    // Save strictly email + improvements array
+    await supabase.from('calculator_leads').insert({
+      email,
+      improvements: selectedImprovements
+    });
+
+    setShowEmailModal(false);
+    setIsSaving(false);
+    generateAndDownload(true);
+  };
+
+  const generateAndDownload = async (bypassCheck = false) => {
+    if (!bypassCheck && !email) {
+      setShowEmailModal(true);
+      return;
+    }
+
     setIsSubmitting(true);
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -214,73 +257,73 @@ const AIArchitectAssistant: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-6">
-                <p className="text-[11px] font-black text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[16px]">edit_square</span>
-                  Introduce tus tiempos actuales (Estimación):
-                </p>
+              <div className="space-y-12">
+                {[
+                  { title: 'BLOQUE 1: VENTAS & EXPANSIÓN', items: TASKS_SALES, color: 'text-blue-400' },
+                  { title: 'BLOQUE 2: GESTIÓN & OPERACIONES', items: TASKS_OPS, color: 'text-emerald-400' },
+                  { title: 'BLOQUE 3: INGENIERÍA & PRODUCTO', items: TASKS_ENG, color: 'text-violet-400' }
+                ].map((block) => (
+                  <div key={block.title}>
+                    <p className={`text-[11px] font-black ${block.color} uppercase tracking-widest mb-6 flex items-center gap-2 border-b border-slate-800 pb-2`}>
+                      <span className="material-symbols-outlined text-[16px]">layers</span>
+                      {block.title}
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {block.items.map(preset => {
+                        const activeTask = tasks.find(t => t.id === preset.id);
+                        const isZero = !activeTask || (activeTask.minutes === 0);
+                        const getValue = (field: keyof Task) => activeTask ? activeTask[field] : 0;
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {PRESET_TASKS.map(preset => {
-                    const activeTask = tasks.find(t => t.id === preset.id);
-                    // Active if ANY field has value > 0 (or simply existence in array?) 
-                    // Better: Active if minutes > 0 OR user started typing? 
-                    // Let's stick to: isZero if minutes is 0. 
-                    const isZero = !activeTask || (activeTask.minutes === 0);
-
-                    // Helper to get value safely. Defaults to 0 for everything now.
-                    const getValue = (field: keyof Task) => activeTask ? activeTask[field] : 0;
-
-                    const handleChange = (field: keyof Task, val: number) => {
-                      if (!activeTask) {
-                        // First interaction: Create task with 0 defaults
-                        const newTask: Task = {
-                          id: preset.id,
-                          name: preset.name,
-                          minutes: field === 'minutes' ? val : 0,
-                          frequency: field === 'frequency' ? val : 0, // Default 0
-                          daysPerWeek: field === 'daysPerWeek' ? val : 0 // Default 0
+                        const handleChange = (field: keyof Task, val: number) => {
+                          if (!activeTask) {
+                            const newTask: Task = {
+                              id: preset.id,
+                              name: preset.name,
+                              minutes: field === 'minutes' ? val : 0,
+                              frequency: field === 'frequency' ? val : 0,
+                              daysPerWeek: field === 'daysPerWeek' ? val : 0
+                            };
+                            setTasks(prev => [...prev, newTask]);
+                          } else {
+                            updateTask(preset.id, field, val);
+                          }
                         };
-                        setTasks(prev => [...prev, newTask]);
-                      } else {
-                        // Update existing
-                        updateTask(preset.id, field, val);
-                      }
-                    };
 
-                    return (
-                      <div key={preset.id} className={`p-5 rounded-[24px] border transition-all duration-300 ${!isZero ? 'bg-slate-900 border-blue-500 shadow-lg shadow-blue-500/20 ring-1 ring-blue-500/40 relative z-10 scale-[1.02]' : 'bg-slate-950 border-slate-800 opacity-60 hover:opacity-100 hover:border-slate-700'}`}>
-                        <div className="flex items-center justify-between mb-4">
-                          <span className={`text-[13px] font-bold ${!isZero ? 'text-white' : 'text-slate-400'}`}>{preset.name}</span>
-                          {!isZero && (
-                            <span className="text-[10px] font-black text-blue-300 bg-blue-900/40 px-2 py-1 rounded-lg animate-in fade-in zoom-in border border-blue-500/30">
-                              +{formatNum((getValue('minutes') * getValue('frequency') * getValue('daysPerWeek') * 4.33 / 60).toFixed(0))} h/mes
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex gap-2">
-                          {[
-                            { label: 'MINUTOS', field: 'minutes', ph: '' },
-                            { label: 'VECES/DÍA', field: 'frequency', ph: '' },
-                            { label: 'DÍAS/SEM', field: 'daysPerWeek', ph: '' }
-                          ].map((cfg) => (
-                            <div key={cfg.field} className="flex-1">
-                              <label className={`text-[8px] font-black block mb-1 text-center transition-colors ${!isZero ? 'text-blue-400' : 'text-slate-600'}`}>{cfg.label}</label>
-                              <input
-                                type="number"
-                                placeholder={cfg.ph}
-                                value={activeTask ? (activeTask[cfg.field as keyof Task] || '') : ''}
-                                onChange={(e) => handleChange(cfg.field as keyof Task, Number(e.target.value))}
-                                className={`w-full h-10 rounded-xl text-center font-bold text-[14px] outline-none transition-all border ${!isZero ? 'bg-blue-950/20 border-blue-500 text-blue-100 focus:bg-blue-900/40 shadow-inner' : 'bg-slate-900 border-slate-800 text-slate-500 focus:bg-slate-950 focus:text-white focus:border-blue-500'}`}
-                              />
+                        return (
+                          <div key={preset.id} className={`p-5 rounded-[24px] border transition-all duration-300 ${!isZero ? 'bg-slate-900 border-blue-500 shadow-lg shadow-blue-500/20 ring-1 ring-blue-500/40 relative z-10 scale-[1.02]' : 'bg-slate-950 border-slate-800 opacity-60 hover:opacity-100 hover:border-slate-700'}`}>
+                            <div className="flex items-center justify-between mb-4">
+                              <span className={`text-[13px] font-bold ${!isZero ? 'text-white' : 'text-slate-400'}`}>{preset.name}</span>
+                              {!isZero && (
+                                <span className="text-[10px] font-black text-blue-300 bg-blue-900/40 px-2 py-1 rounded-lg animate-in fade-in zoom-in border border-blue-500/30">
+                                  +{formatNum((getValue('minutes') * getValue('frequency') * getValue('daysPerWeek') * 4.33 / 60).toFixed(0))} h/mes
+                                </span>
+                              )}
                             </div>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+
+                            <div className="flex gap-2">
+                              {[
+                                { label: 'MINUTOS', field: 'minutes', ph: '' },
+                                { label: 'VECES/DÍA', field: 'frequency', ph: '' },
+                                { label: 'DÍAS/SEM', field: 'daysPerWeek', ph: '' }
+                              ].map((cfg) => (
+                                <div key={cfg.field} className="flex-1">
+                                  <label className={`text-[8px] font-black block mb-1 text-center transition-colors ${!isZero ? 'text-blue-400' : 'text-slate-600'}`}>{cfg.label}</label>
+                                  <input
+                                    type="number"
+                                    placeholder={cfg.ph}
+                                    value={activeTask ? (activeTask[cfg.field as keyof Task] || '') : ''}
+                                    onChange={(e) => handleChange(cfg.field as keyof Task, Number(e.target.value))}
+                                    className={`w-full h-10 rounded-xl text-center font-bold text-[14px] outline-none transition-all border ${!isZero ? 'bg-blue-950/20 border-blue-500 text-blue-100 focus:bg-blue-900/40 shadow-inner' : 'bg-slate-900 border-slate-800 text-slate-500 focus:bg-slate-950 focus:text-white focus:border-blue-500'}`}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -290,64 +333,135 @@ const AIArchitectAssistant: React.FC = () => {
                 {tasks.length > 0 ? (
                   <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
 
-                    {/* Hero FTE & MONEY Card */}
-                    <div className="p-10 md:p-12 rounded-[56px] bg-[#020617] text-white shadow-[0_30px_90px_-20px_rgba(2,6,23,0.8)] relative overflow-hidden flex flex-col items-center text-center border-b-[16px] border-blue-600 group ring-1 ring-white/10">
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-                      <p className="text-[12px] font-black text-blue-400 uppercase tracking-[0.4em] mb-8 opacity-80">Impacto Mensual Recuperado</p>
+                    {/* BLUR WRAPPER */}
+                    <div className={`transition-all duration-700 ${!isUnlocked ? 'filter blur-xl select-none pointer-events-none opacity-80' : 'filter blur-0 opacity-100'}`}>
 
-                      <div className="flex flex-col items-center gap-1 mb-8">
-                        <div className="flex items-baseline justify-center">
-                          <span className="text-[32px] md:text-[40px] font-black text-blue-500 mr-2">€</span>
-                          <span className="text-[72px] md:text-[100px] font-[1000] leading-none tracking-tighter text-white">
-                            {formatNum(stats.money.month)}
-                          </span>
+                      {/* Hero FTE & MONEY Card */}
+                      <div className="p-10 md:p-12 rounded-[56px] bg-[#020617] text-white shadow-[0_30px_90px_-20px_rgba(2,6,23,0.8)] relative overflow-hidden flex flex-col items-center text-center border-b-[16px] border-blue-600 group ring-1 ring-white/10">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+                        <p className="text-[12px] font-black text-blue-400 uppercase tracking-[0.4em] mb-8 opacity-80">Impacto Mensual Recuperado</p>
+
+                        <div className="flex flex-col items-center gap-1 mb-8">
+                          <div className="flex items-baseline justify-center">
+                            <span className="text-[32px] md:text-[40px] font-black text-blue-500 mr-2">€</span>
+                            <span className="text-[72px] md:text-[100px] font-[1000] leading-none tracking-tighter text-white">
+                              {formatNum(stats.money.month)}
+                            </span>
+                          </div>
+                          <span className="text-[14px] font-black text-slate-500 uppercase tracking-[0.2em]">CAPITAL MENSUAL LIBERADO</span>
                         </div>
-                        <span className="text-[14px] font-black text-slate-500 uppercase tracking-[0.2em]">CAPITAL MENSUAL LIBERADO</span>
-                      </div>
 
-                      <div className="w-48 h-px bg-slate-800 mb-8"></div>
+                        <div className="w-48 h-px bg-slate-800 mb-8"></div>
 
-                      <div className="flex items-center gap-6 mb-8">
-                        <div className="text-center">
-                          <p className="text-[44px] font-[1000] leading-none text-blue-400">{stats.fte}</p>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">FTEs (TIEMPO)</p>
-                        </div>
-                        <div className="w-px h-12 bg-slate-800"></div>
-                        <div className="text-center">
-                          <p className="text-[44px] font-[1000] leading-none text-emerald-400">{stats.percent}%</p>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">CAPACIDAD</p>
-                        </div>
-                      </div>
-
-                      <p className="text-[14px] text-slate-400 font-bold leading-relaxed max-w-xs">
-                        Al año recuperas un total de <span className="text-blue-400 font-black text-[18px]">{formatNum(stats.money.year)}€</span> netos.
-                      </p>
-                    </div>
-
-                    {/* Matriz de Ahorro Real-Time */}
-                    <div className="grid grid-cols-2 gap-4">
-                      {summaryCards.map((card, i) => (
-                        <div key={i} className={`group p-6 md:p-8 rounded-[40px] border ${card.bg.replace('bg-', 'bg-opacity-10 bg-')} ${card.border.replace('border-', 'border-opacity-20 border-')} flex flex-col justify-between shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 relative overflow-hidden bg-slate-900/50 backdrop-blur-sm`}>
-                          <div className={`absolute top-0 right-0 w-16 h-16 ${card.accent} opacity-[0.1] rounded-bl-full`}></div>
-                          <p className={`text-[10px] font-black ${card.color} uppercase tracking-widest mb-6`}>{card.label}</p>
-                          <div className="space-y-1">
-                            <div className="flex items-baseline gap-1">
-                              <span className="text-[28px] font-[1000] text-white leading-none">{card.time}</span>
-                            </div>
-                            <div className={`text-[22px] font-black ${card.color} tracking-tighter`}>{card.money}</div>
+                        <div className="flex items-center gap-6 mb-8">
+                          <div className="text-center">
+                            <p className="text-[44px] font-[1000] leading-none text-blue-400">{stats.fte}</p>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">FTEs (TIEMPO)</p>
+                          </div>
+                          <div className="w-px h-12 bg-slate-800"></div>
+                          <div className="text-center">
+                            <p className="text-[44px] font-[1000] leading-none text-emerald-400">{stats.percent}%</p>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">CAPACIDAD</p>
                           </div>
                         </div>
-                      ))}
-                    </div>
 
+                        <p className="text-[14px] text-slate-400 font-bold leading-relaxed max-w-xs">
+                          Al año recuperas un total de <span className="text-blue-400 font-black text-[18px]">{formatNum(stats.money.year)}€</span> netos.
+                        </p>
+                      </div>
+
+                      {/* Matriz de Ahorro Real-Time */}
+                      <div className="grid grid-cols-2 gap-4 mt-8">
+                        {summaryCards.map((card, i) => (
+                          <div key={i} className={`group p-6 md:p-8 rounded-[40px] border ${card.bg.replace('bg-', 'bg-opacity-10 bg-')} ${card.border.replace('border-', 'border-opacity-20 border-')} flex flex-col justify-between shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 relative overflow-hidden bg-slate-900/50 backdrop-blur-sm`}>
+                            <div className={`absolute top-0 right-0 w-16 h-16 ${card.accent} opacity-[0.1] rounded-bl-full`}></div>
+                            <p className={`text-[10px] font-black ${card.color} uppercase tracking-widest mb-6`}>{card.label}</p>
+                            <div className="space-y-1">
+                              <div className="flex items-baseline gap-1">
+                                <span className="text-[28px] font-[1000] text-white leading-none">{card.time}</span>
+                              </div>
+                              <div className={`text-[22px] font-black ${card.color} tracking-tighter`}>{card.money}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                    </div>
+                    {/* END BLUR WRAPPER */}
+
+                    {/* LOCK OVERLAY MESSAGE (Icon Only) */}
+                    {!isUnlocked && (
+                      <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-20 pointer-events-none pb-32">
+                        <div className="w-32 h-32 bg-slate-900/50 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/10 shadow-2xl">
+                          <span className="material-symbols-outlined text-6xl text-white/50">lock</span>
+                        </div>
+                      </div>
+                    )}
+
+
+                    {/* Button and Modal Section */}
                     <button
-                      onClick={generateAndDownload}
+                      onClick={() => generateAndDownload()}
                       disabled={isSubmitting}
-                      className="w-full py-8 bg-blue-600 text-white rounded-[40px] font-[1000] text-[16px] uppercase tracking-widest hover:bg-blue-500 hover:scale-[1.02] transition-all shadow-[0_20px_50px_-15px_rgba(37,99,235,0.4)] flex items-center justify-center gap-4 active:scale-95 disabled:opacity-50"
+                      className="w-full py-8 bg-blue-600 text-white rounded-[40px] font-[1000] text-[16px] uppercase tracking-widest hover:bg-blue-500 hover:scale-[1.02] transition-all shadow-[0_20px_50px_-15px_rgba(37,99,235,0.4)] flex items-center justify-center gap-4 active:scale-95 disabled:opacity-50 relative z-30"
                     >
-                      <span className="material-symbols-outlined text-[28px]">{isSubmitting ? 'sync' : 'clinical_notes'}</span>
-                      {isSubmitting ? 'DISEÑANDO...' : 'DESCARGAR AUDITORÍA COMPLETA'}
+                      <span className="material-symbols-outlined text-[28px]">{isUnlocked ? 'download' : 'lock_open'}</span>
+                      {isSubmitting ? 'GENERANDO...' : (isUnlocked ? 'DESCARGAR INFORME' : 'DESBLOQUEAR Y DESCARGAR')}
                     </button>
+
+                    {/* EMAIL CAPTURE MODAL */}
+                    {showEmailModal && (
+                      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#020617]/90 backdrop-blur-sm animate-in fade-in duration-200">
+                        <div className="w-full max-w-md bg-slate-900 border border-slate-700 p-8 rounded-[32px] shadow-2xl relative animate-in zoom-in-95 duration-200">
+                          <button
+                            onClick={() => setShowEmailModal(false)}
+                            className="absolute top-6 right-6 text-slate-500 hover:text-white transition-colors"
+                          >
+                            <span className="material-symbols-outlined">close</span>
+                          </button>
+
+                          <div className="text-center mb-8">
+                            <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                              <span className="material-symbols-outlined text-blue-500 text-[32px]">forward_to_inbox</span>
+                            </div>
+                            <h3 className="text-2xl font-[900] text-white  mb-2">¿Dónde te enviamos el informe?</h3>
+                            <p className="text-slate-400 text-sm">
+                              Recibirás tu auditoría de rentabilidad detallada y una copia en alta calidad para tu equipo.
+                            </p>
+                          </div>
+
+                          <form onSubmit={handleLeadSubmit} className="space-y-4">
+                            <div>
+                              <input
+                                type="email"
+                                required
+                                placeholder="tu@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full h-14 bg-slate-950 border border-slate-700 rounded-xl px-4 text-white placeholder-slate-600 focus:border-blue-500 outline-none transition-all font-medium text-center"
+                              />
+                            </div>
+                            <button
+                              type="submit"
+                              disabled={isSaving}
+                              className="w-full h-14 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {isSaving ? (
+                                'UN MOMENTO...'
+                              ) : (
+                                <>
+                                  <span>ENVIAR Y DESCARGAR</span>
+                                  <span className="material-symbols-outlined">download</span>
+                                </>
+                              )}
+                            </button>
+                            <p className="text-[10px] text-center text-slate-500 uppercase font-bold tracking-widest">
+                              Sin spam. Solo ingeniería.
+                            </p>
+                          </form>
+                        </div>
+                      </div>
+                    )}
 
                     <p className="text-[11px] text-center text-slate-500 font-bold px-12 leading-relaxed italic opacity-70">
                       Informe técnico certificado de eficiencia operativa. Basado en ingeniería de sistemas de alta disponibilidad.

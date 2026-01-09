@@ -11,8 +11,9 @@ import SuccessCases from './components/SuccessCases';
 
 const App: React.FC = () => {
   const menuItems = [
+    { label: 'SERVICIOS', link: '#method' },
     { label: 'CALCULADORA', link: '#ai-assistant' },
-    { label: 'MÉTODO', link: '#method' },
+    { label: 'TESTIMONIOS', link: '#testimonials' },
     { label: 'SOBRE MÍ', link: '#about' },
   ];
 
@@ -29,7 +30,9 @@ const App: React.FC = () => {
       <main className="flex-grow max-w-7xl mx-auto w-full border-x border-blue-900/10 shadow-2xl shadow-blue-900/10 bg-[#020617] relative z-10">
         <Hero />
 
-        <SuccessCases />
+        <div id="testimonials">
+          <SuccessCases />
+        </div>
 
         <div id="ai-assistant">
           <AIArchitectAssistant />
