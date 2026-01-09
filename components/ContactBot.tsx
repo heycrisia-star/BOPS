@@ -10,7 +10,7 @@ interface Message {
 const ContactBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', text: 'Hola, soy tu Arquitecto de IA. ¿Qué proceso de tu negocio quieres automatizar hoy?' }
+    { role: 'assistant', text: '🚧 Disculpa, mi cerebro digital aún está en construcción. Muy pronto estaré operativo para ayudarte a automatizar tu negocio.' }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -77,9 +77,9 @@ const ContactBot: React.FC = () => {
           <div className="p-5 md:p-6 bg-slate-950 text-white flex-shrink-0 border-b border-slate-800">
             <h4 className="font-black text-[12px] md:text-[14px] uppercase tracking-widest truncate">Asistente de Sistemas</h4>
             <div className="flex items-center gap-2 mt-1">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse flex-shrink-0"></span>
+              <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse flex-shrink-0"></span>
               <p className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-tighter truncate">
-                Gemini 3 Pro • Thinking On
+                EN CONSTRUCCIÓN • PRONTO DISPONIBLE
               </p>
             </div>
           </div>
@@ -89,8 +89,8 @@ const ContactBot: React.FC = () => {
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[90%] md:max-w-[85%] p-3 md:p-4 rounded-[20px] text-[13px] md:text-[14px] leading-relaxed shadow-sm break-words ${msg.role === 'user'
-                    ? 'bg-blue-600 text-white rounded-tr-none'
-                    : 'bg-slate-900 border border-slate-800 text-slate-300 rounded-tl-none'
+                  ? 'bg-blue-600 text-white rounded-tr-none'
+                  : 'bg-slate-900 border border-slate-800 text-slate-300 rounded-tl-none'
                   }`}>
                   {msg.text}
                 </div>

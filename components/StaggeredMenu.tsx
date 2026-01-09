@@ -105,8 +105,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
                   <div>
                     <p className="12px] font-bold text-slate-500 uppercase mb-2">Email</p>
-                    <a href="mailto:info@buildersops.xyz" className="text-[32px] font-[900] text-white tracking-tight hover:text-blue-500 transition-colors">
-                      info@buildersops.xyz
+                    <a href="mailto:cristiianguti@gmail.com" className="text-[32px] font-[900] text-white tracking-tight hover:text-blue-500 transition-colors">
+                      cristiianguti@gmail.com
                     </a>
                   </div>
 

@@ -22,16 +22,7 @@ const AboutMe: React.FC = () => {
           />
 
           {/* Founder Badge (Relocated) */}
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-slate-900 border border-slate-700/50 rounded-2xl mt-8 shadow-lg shadow-blue-500/10 hover:border-blue-500/30 transition-colors">
-            <img
-              src="https://res.cloudinary.com/dk7xpxrvh/image/upload/v1767147299/asasasasasa_uyedrh.jpg"
-              alt="BuildersOps Logo"
-              className="h-8 w-auto object-contain"
-              style={{ mixBlendMode: 'screen', filter: 'invert(1) grayscale(100%) brightness(200%) contrast(150%)' }}
-            />
-            <div className="h-4 w-[1px] bg-slate-700"></div>
-            <span className="text-xs font-black text-white tracking-widest uppercase">Founder Builders Ops</span>
-          </div>
+
         </div>
 
         <div className="max-w-md space-y-8">
@@ -51,14 +42,7 @@ const AboutMe: React.FC = () => {
             </p>
           </div>
 
-          <div className="pt-6">
-            <div className="p-8 rounded-[32px] bg-slate-900/50 border border-slate-800 shadow-sm relative group transition-all hover:border-blue-500/30 hover:shadow-xl hover:shadow-blue-500/5">
-              <span className="material-symbols-outlined text-blue-500 text-[32px] mb-4 opacity-40">engineering</span>
-              <p className="text-[17px] font-bold text-slate-300 leading-relaxed">
-                "La IA sin una base operativa sólida es solo un juguete. Yo te doy la ingeniería que tu rentabilidad necesita."
-              </p>
-            </div>
-          </div>
+
         </div>
       </div>
     </section>

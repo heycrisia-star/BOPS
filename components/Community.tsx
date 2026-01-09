@@ -14,10 +14,10 @@ const Community: React.FC = () => {
         <div className="flex items-center gap-4">
           <div className="flex -space-x-3">
             {[10, 11, 12, 13].map((i) => (
-              <img 
+              <img
                 key={i}
                 className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
-                src={`https://picsum.photos/seed/${i}/100/100`} 
+                src={`https://picsum.photos/seed/${i}/100/100`}
                 alt="Miembro"
               />
             ))}
@@ -27,17 +27,11 @@ const Community: React.FC = () => {
       </div>
 
       <div className="relative mt-20 p-8 rounded-[32px] bg-slate-50 border border-slate-100">
-        <div className="absolute -top-12 left-8">
-          <img 
-            className="w-24 h-24 rounded-3xl border-4 border-white shadow-2xl object-cover grayscale hover:grayscale-0 transition-all duration-500"
-            src="https://picsum.photos/seed/architect_founder/200/200" 
-            alt="El Arquitecto"
-          />
-        </div>
-        
+
+
         <div className="pt-10">
           <h4 className="text-[18px] font-black text-slate-900 leading-none">El Arquitecto</h4>
-          <p className="text-[11px] font-bold text-[#2b8cee] mb-5 uppercase tracking-[0.2em] mt-2">Fundador, BuildersOps</p>
+
           <p className="text-[15px] text-slate-600 italic leading-relaxed font-medium">
             "Mi misión no es venderte un curso. Es enseñarte a pensar en sistemas para que seas el dueño de una infraestructura que no para nunca."
           </p>

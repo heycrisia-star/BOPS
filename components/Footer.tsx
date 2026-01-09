@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
 
         <div className="flex flex-col items-center gap-8">
           <a
-            href="mailto:info@buildersops.xyz"
+            href="mailto:cristiianguti@gmail.com"
             className="px-12 py-5 bg-blue-600 text-white rounded-2xl font-black text-[14px] uppercase tracking-widest hover:bg-blue-500 transition-all shadow-2xl hover:-translate-y-1 active:scale-95 shadow-blue-500/20 inline-block"
           >
             CONTACTAR POR EMAIL
@@ -38,14 +38,14 @@ const Footer: React.FC = () => {
             </a>
 
             <a
-              href="mailto:info@buildersops.xyz"
+              href="mailto:cristiianguti@gmail.com"
               className="group flex items-center gap-3"
             >
               <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center group-hover:bg-blue-500/20 group-hover:border-blue-500/50 transition-colors">
                 <span className="material-symbols-outlined text-blue-500 text-[20px]">mail</span>
               </div>
               <span className="text-[18px] font-black text-slate-300 group-hover:text-blue-500 transition-colors tracking-tight">
-                info@buildersops.xyz
+                cristiianguti@gmail.com
               </span>
             </a>
           </div>
