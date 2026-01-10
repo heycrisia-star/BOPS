@@ -47,7 +47,7 @@ const Hero: React.FC = () => {
         {/* SUBHEADLINE */}
         <p className="text-slate-300 text-lg md:text-xl leading-relaxed max-w-2xl font-light mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
           Creamos automatizaciones con inteligencia artificial que impulsan tu negocio. <br />
-          <span className="text-white font-medium">Tecnología compleja, hecha simple para ti.</span>
+          <span className="text-white font-medium">Tecnología compleja, hecha simple para&nbsp;ti.</span>
         </p>
 
         {/* CTA BUTTONS - MATCHING SCREENSHOT */}

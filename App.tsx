@@ -37,9 +37,9 @@ const App: React.FC = () => {
       <div className="fixed inset-0 z-0 bg-[#0f172a]">
         <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
           <Threads
-            color={[0.2, 0.8, 0.9]}
-            amplitude={1.8}
-            distance={0.3}
+            color={[0.05, 0.2, 0.4]} // Even darker for mobile matching
+            amplitude={1.5}
+            distance={0.2}
             enableMouseInteraction={false}
           />
         </div>
