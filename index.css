@@ -3,6 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+    background-color: #0f172a;
+    /* Slate 950 base */
+    color: #f1f5f9;
+    overscroll-behavior: none;
+}
+
 @layer base {
     :root {
         --bg-primary: #0f172a;

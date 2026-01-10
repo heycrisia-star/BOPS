@@ -66,16 +66,16 @@ const SuccessCases: React.FC = () => {
                                 </p>
                             </div>
 
-                            <div className="relative z-10 flex items-center justify-between pt-6 border-t border-slate-700/50 gap-4">
+                            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t border-slate-700/50 gap-6 md:gap-4">
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 rounded-full bg-cyan-900/20 flex items-center justify-center text-cyan-500 font-black text-sm shrink-0">
                                         {c.title.charAt(0)}
                                     </div>
                                     <div>
-                                        <h4 className="text-white font-bold text-2xl leading-none mb-2">
+                                        <h4 className="text-white font-bold text-lg md:text-2xl leading-tight mb-1 md:mb-2">
                                             {c.title}
                                         </h4>
-                                        <span className="text-slate-500 text-xs font-bold uppercase tracking-widest">
+                                        <span className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-widest block">
                                             {c.metric}
                                         </span>
                                     </div>
@@ -86,7 +86,7 @@ const SuccessCases: React.FC = () => {
                                         href={c.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border border-slate-700/50 text-slate-400 hover:text-white hover:border-cyan-500 hover:bg-cyan-600 transition-all group/link"
+                                        className="w-full md:w-auto shrink-0 flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-slate-700/50 text-slate-400 hover:text-white hover:border-cyan-500 hover:bg-cyan-600 transition-all group/link"
                                         title="Ver Proyecto"
                                     >
                                         <span className="text-xs font-bold uppercase tracking-wider">Visitar Web</span>

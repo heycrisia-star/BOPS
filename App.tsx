@@ -75,7 +75,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <div className="max-w-7xl mx-auto w-full border-x border-white/5">
+      <div id="contact" className="max-w-7xl mx-auto w-full border-x border-white/5">
         <Footer />
       </div>
     </div>

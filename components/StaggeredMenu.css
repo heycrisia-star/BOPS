@@ -1,83 +1,51 @@
 .staggered-menu-root {
-  position: relative;
-  z-index: 9999;
-  width: 100%;
-}
-
-.staggered-menu-root.is-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
+  --text-active: #fff;
+  --text-inactive: rgba(255, 255, 255, 0.3);
+  --menu-bg: #0f172a;
 }
 
 .sm-header {
   position: absolute;
+  /* or fixed/relative depending on layout */
   top: 0;
-  left: 0;
-  width: 100%;
-  padding: 2.5rem 0;
-  pointer-events: none;
+  right: 0;
+  padding: 1rem;
   z-index: 10000;
+  pointer-events: none;
+  /* Let clicks pass through header area generally */
 }
 
 .sm-header-inner {
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
+  pointer-events: auto;
+  /* Re-enable clicks on the button */
 }
 
 .sm-menu-trigger {
-  pointer-events: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  background: rgba(37, 99, 235, 0.9);
-  /* Azul BuildersOps Vibrante */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0.9rem 1.8rem;
-  border-radius: 30px;
-  color: #ffffff;
-  cursor: pointer;
-  transition: all 0.5s cubic-bezier(0.2, 1, 0.2, 1);
-  box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.4),
-    inset 0 1px 1px rgba(255, 255, 255, 0.3);
-}
-
-.sm-menu-trigger:hover {
-  background: #0f172a;
-  /* Cambio a oscuro en hover */
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 25px 50px -10px rgba(15, 23, 42, 0.3);
+  gap: 12px;
 }
 
 .sm-trigger-text-box {
-  height: 1.2em;
   overflow: hidden;
-  position: relative;
-}
-
-.sm-trigger-text-inner {
-  display: flex;
-  flex-direction: column;
+  height: 1.25em;
+  /* Adjust based on font-size */
 }
 
 .sm-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   display: block;
-  font-size: 1.1rem;
-  font-weight: 1000;
-  letter-spacing: 0.15em;
-  line-height: 1.2;
 }
 
 .sm-plus-icon {
+  width: 24px;
+  height: 24px;
   position: relative;
-  width: 22px;
-  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,125 +53,31 @@
 
 .sm-plus-line {
   position: absolute;
-  background: #ffffff;
-  border-radius: 4px;
+  background-color: white;
+  transition: transform 0.3s ease;
 }
 
 .sm-h {
   width: 100%;
-  height: 3px;
+  height: 2px;
 }
 
 .sm-v {
-  width: 3px;
+  width: 2px;
   height: 100%;
 }
 
-.sm-prelayers {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 100;
-  visibility: hidden;
+.menu-is-open .sm-plus-icon {
+  transform: rotate(45deg);
 }
 
-.menu-is-open .sm-prelayers {
-  visibility: visible;
+/* Strok text utility if not using Tailwind's arbitrary values/plugin */
+.stroke-text {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  color: transparent;
 }
 
-.sm-prelayer {
-  position: absolute;
-  inset: 0;
-}
-
-.sm-side-panel {
-  position: fixed;
-  inset: 0;
-  background: #ffffff;
-  z-index: 110;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-.menu-is-open .sm-side-panel {
-  pointer-events: auto;
-  visibility: visible;
-}
-
-.sm-panel-content {
-  width: 100%;
-  max-width: 64rem;
-  padding: 4rem 2rem;
-}
-
-.sm-panel-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 4rem;
-}
-
-.sm-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  text-align: right;
-}
-
-.sm-nav-link {
-  text-decoration: none;
-  overflow: hidden;
-  display: block;
-}
-
-.sm-panel-itemLabel {
-  font-size: 5rem;
-  font-weight: 950;
-  color: #0f172a;
-  display: block;
-  letter-spacing: -0.05em;
-  line-height: 1;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.sm-nav-link:hover .sm-panel-itemLabel {
-  color: #2563eb;
-  transform: translateX(-15px);
-}
-
-.sm-panel-contact {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-@media (max-width: 768px) {
-  .sm-panel-grid {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  .sm-nav {
-    text-align: left;
-  }
-
-  .sm-panel-itemLabel {
-    font-size: 3rem;
-  }
-
-  .sm-panel-content {
-    padding-top: 8rem;
-  }
-
-  .sm-nav-link:hover .sm-panel-itemLabel {
-    transform: translateX(15px);
-  }
-
-  .sm-menu-trigger {
-    padding: 0.8rem 1.5rem;
-  }
+.stroke-text:hover {
+  -webkit-text-stroke: 1px #fff;
+  color: #fff;
 }

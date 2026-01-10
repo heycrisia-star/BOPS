@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
           ref={containerRef}
           className="relative min-h-[200px] flex flex-col justify-center items-center mb-8"
         >
-          <div className="text-6xl md:text-9xl font-[900] tracking-tighter text-white animate-in fade-in zoom-in-95 duration-1000 leading-[1] max-w-6xl drop-shadow-2xl text-center">
+          <div className="text-[42px] leading-[1.1] md:text-9xl font-[900] tracking-tighter text-white animate-in fade-in zoom-in-95 duration-1000 md:leading-[1] max-w-6xl drop-shadow-2xl text-center">
             Sistematiza tu <br />
             <span className="relative inline-block mt-2">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 inline-block min-h-[1.2em] font-[900]">
