@@ -1,7 +1,9 @@
 
 
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import jsPDF from 'jspdf';
 import { supabase } from '../lib/supabase';
+import ScrollVelocity from './ScrollVelocity';
 
 interface Task {
   id: string;
@@ -43,8 +45,19 @@ const AIArchitectAssistant: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState('');
   const [showEmailModal, setShowEmailModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('investment');
+  const [openSection, setOpenSection] = useState<string | null>('team');
   const [isSaving, setIsSaving] = useState(false);
-  const [isUnlocked, setIsUnlocked] = useState(false); // Added isUnlocked state
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>([]); // Default all closed
+
+  const toggleGroup = (title: string) => {
+    setExpandedGroups(prev =>
+      prev.includes(title)
+        ? prev.filter(t => t !== title)
+        : [...prev, title]
+    );
+  };
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -109,6 +122,7 @@ const AIArchitectAssistant: React.FC = () => {
 
     setShowEmailModal(false);
     setIsSaving(false);
+    setIsUnlocked(true);
     generateAndDownload(true);
   };
 
@@ -119,10 +133,18 @@ const AIArchitectAssistant: React.FC = () => {
     }
 
     setIsSubmitting(true);
+
+    // PDF Logic restored
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {
+      setIsSubmitting(false);
+      return;
+    }
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) {
+      setIsSubmitting(false);
+      return;
+    }
 
     canvas.width = 1200;
     canvas.height = 2800;
@@ -203,12 +225,29 @@ const AIArchitectAssistant: React.FC = () => {
       ctx.fillText('Ingeniería de Sistemas de alta disponibilidad. © BuildersOps 2026', canvas.width / 2, footerY);
       ctx.fillStyle = '#2563eb'; ctx.font = '900 52px Inter';
       ctx.fillText('+34 691 708 138   •   cristiianguti@gmail.com', canvas.width / 2, footerY + 80);
+
+      // Use jsPDF for better quality than simple canvas image if desired, but code used link.download from canvas.
+      // Replacing commented block with active code.
+      // Wait, the original code used link.href = canvas.toDataURL. That doesn't use jsPDF.
+      // Why did we install jsPDF? 
+      // User asked to fix "no se esta descargando". The alert said "PDF generator is being updated".
+      // Previous code used `canvas.toDataURL` which is just an image.
+      // Maybe I should actually implement jsPDF if I imported it?
+      // Or just enable the canvas download? 
+      // The user issue is likely just that the code was commented out. 
+      // I will sticking to restoring the code first (which downloads a .png).
+      // However, the file is named `AIArchitectAssistant.tsx` and imports `jsPDF`.
+      // Let's use `canvas.toDataURL` as it was there, but maybe the intention was to use jsPDF.
+      // I'll stick to restoring the commented code exactly as it's the safest "fix" for "it's not downloading".
+      // But wait, if I restore it, I need to remove the `*/` at the end.
+
       const link = document.createElement('a');
       link.download = `BuildersOps-ROI-${stats.fte}FTE-Report.png`;
       link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
       setIsSubmitting(false);
     };
+    setIsSubmitting(false);
   };
 
   const summaryCards = [
@@ -219,116 +258,182 @@ const AIArchitectAssistant: React.FC = () => {
   ];
 
   return (
-    <section className="px-6 py-24 bg-[#020617] overflow-hidden relative border-t border-slate-800">
+    <section className="py-24 px-6 relative bg-transparent">
       <canvas ref={canvasRef} className="hidden" />
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-16 text-left">
-          <span className="text-[14px] md:text-[16px] font-[900] text-blue-500 uppercase tracking-[0.15em] block mb-6">ROI OPERATIVO & INGENIERÍA</span>
-          <h2 className="text-[36px] md:text-[54px] font-[950] text-white tracking-[-0.05em] leading-[1.1] max-w-2xl">Calcula tu <br /><span className="text-blue-500">Eficiencia Real.</span></h2>
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-16 text-left overflow-hidden">
+          <span className="text-[12px] md:text-[14px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-6">ROI OPERATIVO & INGENIERÍA</span>
+          <div className="mb-16 text-center overflow-hidden">
+            <h3 className="text-[36px] md:text-[48px] font-[950] text-white tracking-tighter leading-none inline-block">
+              Descubre tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Potencial de Ahorro</span>
+            </h3>
+          </div>
         </div>
 
-        <div className="p-6 md:p-12 rounded-[48px] bg-slate-900/50 border border-slate-800 shadow-2xl relative">
+        <div className="p-0 md:p-6 relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-            {/* INPUTS COLUMN */}
-            <div className="lg:col-span-7 space-y-12">
-              <div className="max-w-md">
-                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest block mb-4">Inversión Bruta Mensual (FTE)</label>
-                <div className="relative group">
-                  <input
-                    type="number"
-                    value={employeeCost}
-                    onChange={(e) => setEmployeeCost(Number(e.target.value))}
-                    className="w-full h-20 pl-16 pr-8 rounded-3xl bg-slate-950 border-2 border-slate-800 font-black text-[26px] text-white focus:border-blue-600 focus:ring-4 focus:ring-blue-900/50 outline-none transition-all shadow-sm"
-                  />
-                  <span className="absolute left-7 top-1/2 -translate-y-1/2 text-blue-500 font-black text-[22px]">€</span>
-                  <span className="absolute left-7 top-1/2 -translate-y-1/2 text-blue-500 font-black text-[22px]">€</span>
-                  {/* CSS to hide number arrows (spinners) */}
-                  <style>{`
-                    input[type=number]::-webkit-inner-spin-button, 
-                    input[type=number]::-webkit-outer-spin-button { 
-                      -webkit-appearance: none; 
-                      margin: 0; 
-                    }
-                    input[type=number] {
-                        -moz-appearance: textfield;
-                    }
-                  `}</style>
+            {/* INPUTS COLUMN - ACCORDION (3 SECTIONS) */}
+            <div className="lg:col-span-7 flex flex-col gap-6">
+
+              {/* ACCORDION 1: ESTRUCTURA DEL EQUIPO */}
+              <div className="border border-white/10 rounded-3xl bg-black/20 backdrop-blur-md overflow-hidden hover:border-cyan-500/30 transition-colors">
+                <button
+                  onClick={() => setOpenSection(openSection === 'team' ? null : 'team')}
+                  className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors group"
+                >
+                  <div className="flex items-center gap-5">
+                    <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                      <span className="material-symbols-outlined text-3xl">groups</span>
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-[800] text-white uppercase tracking-tight text-left">Estructura del Equipo</h3>
+                  </div>
+                  <div className={`w-10 h-10 rounded-full border border-white/10 flex items-center justify-center transition-all duration-300 ${openSection === 'team' ? 'bg-cyan-500 text-black rotate-180' : 'text-slate-400'}`}>
+                    <span className="material-symbols-outlined">expand_more</span>
+                  </div>
+                </button>
+                <div className={`transition-[max-height] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${openSection === 'team' ? 'max-h-[300px]' : 'max-h-0'}`}>
+                  <div className="p-8 pt-2">
+                    <label className="text-[11px] font-[900] text-slate-400 uppercase tracking-[0.2em] block mb-4">Coste Operativo Mensual (Equipos)</label>
+                    <div className="relative group">
+                      <input
+                        type="number"
+                        value={employeeCost}
+                        onChange={(e) => setEmployeeCost(Number(e.target.value))}
+                        className="w-full bg-transparent border-b-2 border-slate-700/50 px-0 py-4 pr-24 text-white focus:outline-none focus:border-cyan-500 transition-all font-mono text-5xl font-bold tracking-tighter"
+                        placeholder="0"
+                      />
+                      <span className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-600 font-mono text-xl">€/mes</span>
+                    </div>
+                    <p className="text-slate-500 text-sm mt-4 font-medium leading-relaxed">Coste total mensual del equipo dedicado a estas tareas (Salarios + SS + Tools).</p>
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-12">
-                {[
-                  { title: 'BLOQUE 1: VENTAS & EXPANSIÓN', items: TASKS_SALES, color: 'text-blue-400' },
-                  { title: 'BLOQUE 2: GESTIÓN & OPERACIONES', items: TASKS_OPS, color: 'text-emerald-400' },
-                  { title: 'BLOQUE 3: INGENIERÍA & PRODUCTO', items: TASKS_ENG, color: 'text-violet-400' }
-                ].map((block) => (
-                  <div key={block.title}>
-                    <p className={`text-[11px] font-black ${block.color} uppercase tracking-widest mb-6 flex items-center gap-2 border-b border-slate-800 pb-2`}>
-                      <span className="material-symbols-outlined text-[16px]">layers</span>
-                      {block.title}
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {block.items.map(preset => {
-                        const activeTask = tasks.find(t => t.id === preset.id);
-                        const isZero = !activeTask || (activeTask.minutes === 0);
-                        const getValue = (field: keyof Task) => activeTask ? activeTask[field] : 0;
+              {/* SECTION 2: GESTIÓN DEL TIEMPO (ALWAYS VISIBLE) */}
+              <div className="border border-white/10 rounded-3xl bg-black/20 backdrop-blur-md overflow-hidden relative">
+                <div className="p-6 border-b border-white/5">
+                  <div className="flex items-center gap-5">
+                    <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                      <span className="material-symbols-outlined text-3xl">schedule</span>
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-[800] text-white uppercase tracking-tight text-left">Gestión del Tiempo</h3>
+                  </div>
+                </div>
 
-                        const handleChange = (field: keyof Task, val: number) => {
-                          if (!activeTask) {
-                            const newTask: Task = {
-                              id: preset.id,
-                              name: preset.name,
-                              minutes: field === 'minutes' ? val : 0,
-                              frequency: field === 'frequency' ? val : 0,
-                              daysPerWeek: field === 'daysPerWeek' ? val : 0
-                            };
-                            setTasks(prev => [...prev, newTask]);
-                          } else {
-                            updateTask(preset.id, field, val);
-                          }
-                        };
+                <div className="w-full">
+                  <div className="p-8 pt-6">
+                    <p className="text-slate-400 mb-6">Configura las horas dedicadas por tarea en los bloques inferiores.</p>
+                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-8">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-bold uppercase text-slate-400">Total Horas/Semana</span>
+                        <span className="font-mono text-cyan-400 font-bold text-xl">{stats.time.week}h</span>
+                      </div>
+                      <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div className="bg-cyan-500 h-full rounded-full" style={{ width: `${Math.min(stats.time.week / 40 * 100, 100)}%` }}></div>
+                      </div>
+                    </div>
 
+                    {/* TASKS LIST MOVED INSIDE ACCORDION */}
+                    <div className="space-y-8">
+                      {[
+                        { title: 'VENTAS & EXPANSIÓN', items: TASKS_SALES, color: 'text-blue-400', border: 'border-blue-400/20' },
+                        { title: 'GESTIÓN & OPERACIONES', items: TASKS_OPS, color: 'text-emerald-400', border: 'border-emerald-400/20' },
+                        { title: 'INGENIERÍA & PRODUCTO', items: TASKS_ENG, color: 'text-violet-400', border: 'border-violet-400/20' }
+                      ].map((block) => {
+                        const isOpen = expandedGroups.includes(block.title);
                         return (
-                          <div key={preset.id} className={`p-5 rounded-[24px] border transition-all duration-300 ${!isZero ? 'bg-slate-900 border-blue-500 shadow-lg shadow-blue-500/20 ring-1 ring-blue-500/40 relative z-10 scale-[1.02]' : 'bg-slate-950 border-slate-800 opacity-60 hover:opacity-100 hover:border-slate-700'}`}>
-                            <div className="flex items-center justify-between mb-4">
-                              <span className={`text-[13px] font-bold ${!isZero ? 'text-white' : 'text-slate-400'}`}>{preset.name}</span>
-                              {!isZero && (
-                                <span className="text-[10px] font-black text-blue-300 bg-blue-900/40 px-2 py-1 rounded-lg animate-in fade-in zoom-in border border-blue-500/30">
-                                  +{formatNum((getValue('minutes') * getValue('frequency') * getValue('daysPerWeek') * 4.33 / 60).toFixed(0))} h/mes
-                                </span>
-                              )}
-                            </div>
+                          <div key={block.title} className={`rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen ? 'bg-white/5 border-white/10' : 'bg-transparent border-transparent'}`}>
+                            <button
+                              onClick={() => toggleGroup(block.title)}
+                              className={`w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors group rounded-2xl border ${block.border} ${isOpen ? 'bg-white/5' : 'bg-transparent'}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className={`material-symbols-outlined text-[20px] ${block.color}`}>layers</span>
+                                <span className={`text-[12px] font-black ${block.color} uppercase tracking-widest`}>{block.title}</span>
+                              </div>
+                              <span className={`material-symbols-outlined text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                            </button>
 
-                            <div className="flex gap-2">
-                              {[
-                                { label: 'MINUTOS', field: 'minutes', ph: '' },
-                                { label: 'VECES/DÍA', field: 'frequency', ph: '' },
-                                { label: 'DÍAS/SEM', field: 'daysPerWeek', ph: '' }
-                              ].map((cfg) => (
-                                <div key={cfg.field} className="flex-1">
-                                  <label className={`text-[8px] font-black block mb-1 text-center transition-colors ${!isZero ? 'text-blue-400' : 'text-slate-600'}`}>{cfg.label}</label>
-                                  <input
-                                    type="number"
-                                    placeholder={cfg.ph}
-                                    value={activeTask ? (activeTask[cfg.field as keyof Task] || '') : ''}
-                                    onChange={(e) => handleChange(cfg.field as keyof Task, Number(e.target.value))}
-                                    className={`w-full h-10 rounded-xl text-center font-bold text-[14px] outline-none transition-all border ${!isZero ? 'bg-blue-950/20 border-blue-500 text-blue-100 focus:bg-blue-900/40 shadow-inner' : 'bg-slate-900 border-slate-800 text-slate-500 focus:bg-slate-950 focus:text-white focus:border-blue-500'}`}
-                                  />
-                                </div>
-                              ))}
+                            <div className={`transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                              <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                {block.items.map(preset => {
+                                  const activeTask = tasks.find(t => t.id === preset.id);
+                                  const isZero = !activeTask || (activeTask.minutes === 0);
+                                  const getValue = (field: keyof Task) => activeTask ? activeTask[field] : 0;
+
+                                  const handleChange = (field: keyof Task, val: number) => {
+                                    if (!activeTask) {
+                                      const newTask: Task = {
+                                        id: preset.id,
+                                        name: preset.name,
+                                        minutes: field === 'minutes' ? val : 0,
+                                        frequency: field === 'frequency' ? val : 0,
+                                        daysPerWeek: field === 'daysPerWeek' ? val : 0
+                                      };
+                                      setTasks(prev => [...prev, newTask]);
+                                    } else {
+                                      updateTask(preset.id, field, val);
+                                    }
+                                  };
+
+                                  return (
+                                    <div key={preset.id} className={`p-4 rounded-xl border transition-all duration-300 ${!isZero ? 'bg-cyan-950/30 border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.1)]' : 'bg-black/20 border-white/5 hover:bg-white/5'}`}>
+                                      <div className="flex items-center justify-between mb-3">
+                                        <span className={`text-[13px] font-bold ${!isZero ? 'text-cyan-100' : 'text-slate-400'}`}>{preset.name}</span>
+                                        {!isZero && (
+                                          <span className="text-[10px] font-black text-cyan-300 bg-cyan-900/40 px-2 py-1 rounded-lg">
+                                            +{formatNum((getValue('minutes') * getValue('frequency') * getValue('daysPerWeek') * 4.33 / 60).toFixed(0))} h/mes
+                                          </span>
+                                        )}
+                                      </div>
+
+                                      <div className="flex gap-2">
+                                        {[
+                                          { label: 'MINUTOS', field: 'minutes', ph: '0' },
+                                          { label: 'VECES/DÍA', field: 'frequency', ph: '0' },
+                                          { label: 'DÍAS/SEM', field: 'daysPerWeek', ph: '0' }
+                                        ].map((cfg) => (
+                                          <div key={cfg.field} className="flex-1">
+                                            <label className="text-[8px] font-black block mb-1 text-center text-slate-500">{cfg.label}</label>
+                                            <input
+                                              type="number"
+                                              placeholder={cfg.ph}
+                                              value={activeTask ? (activeTask[cfg.field as keyof Task] || '') : ''}
+                                              onChange={(e) => handleChange(cfg.field as keyof Task, Number(e.target.value))}
+                                              className={`w-full h-8 rounded-lg text-center font-bold text-[12px] outline-none transition-all border ${!isZero ? 'bg-cyan-950/40 border-cyan-500/30 text-cyan-100' : 'bg-black/20 border-white/10 text-slate-400 focus:bg-white/10 focus:text-white'}`}
+                                            />
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
                             </div>
                           </div>
                         );
                       })}
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
 
             {/* RESULTS COLUMN - DARK MODE */}
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-12 xl:col-span-5">
+              {/* CSS to hide number arrows (spinners) globally for this component */}
+              <style>{`
+                input[type=number]::-webkit-inner-spin-button, 
+                input[type=number]::-webkit-outer-spin-button { 
+                  -webkit-appearance: none; 
+                  margin: 0; 
+                }
+                input[type=number] {
+                    -moz-appearance: textfield;
+                }
+              `}</style>
+
               <div className="sticky top-32 space-y-8">
                 {tasks.length > 0 ? (
                   <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
@@ -336,32 +441,32 @@ const AIArchitectAssistant: React.FC = () => {
                     {/* BLUR WRAPPER */}
                     <div className={`transition-all duration-700 ${!isUnlocked ? 'filter blur-xl select-none pointer-events-none opacity-80' : 'filter blur-0 opacity-100'}`}>
 
-                      {/* Hero FTE & MONEY Card */}
-                      <div className="p-10 md:p-12 rounded-[56px] bg-[#020617] text-white shadow-[0_30px_90px_-20px_rgba(2,6,23,0.8)] relative overflow-hidden flex flex-col items-center text-center border-b-[16px] border-blue-600 group ring-1 ring-white/10">
+                      {/* Hero FTE & MONEY Card - NOW TRANSPARENT */}
+                      <div className="p-10 md:p-12 rounded-[56px] bg-slate-900/20 backdrop-blur-xl border border-white/10 text-white shadow-2xl relative overflow-hidden flex flex-col items-center text-center group ring-1 ring-white/5">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
                         <p className="text-[12px] font-black text-blue-400 uppercase tracking-[0.4em] mb-8 opacity-80">Impacto Mensual Recuperado</p>
 
                         <div className="flex flex-col items-center gap-1 mb-8">
                           <div className="flex items-baseline justify-center">
                             <span className="text-[32px] md:text-[40px] font-black text-blue-500 mr-2">€</span>
-                            <span className="text-[72px] md:text-[100px] font-[1000] leading-none tracking-tighter text-white">
+                            <span className="text-[72px] md:text-[100px] font-[1000] leading-none tracking-tighter text-white drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
                               {formatNum(stats.money.month)}
                             </span>
                           </div>
-                          <span className="text-[14px] font-black text-slate-500 uppercase tracking-[0.2em]">CAPITAL MENSUAL LIBERADO</span>
+                          <span className="text-[14px] font-black text-slate-400 uppercase tracking-[0.2em]">CAPITAL MENSUAL LIBERADO</span>
                         </div>
 
-                        <div className="w-48 h-px bg-slate-800 mb-8"></div>
+                        <div className="w-48 h-px bg-white/10 mb-8"></div>
 
                         <div className="flex items-center gap-6 mb-8">
                           <div className="text-center">
                             <p className="text-[44px] font-[1000] leading-none text-blue-400">{stats.fte}</p>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">FTEs (TIEMPO)</p>
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2">FTEs (TIEMPO)</p>
                           </div>
-                          <div className="w-px h-12 bg-slate-800"></div>
+                          <div className="w-px h-12 bg-white/10"></div>
                           <div className="text-center">
                             <p className="text-[44px] font-[1000] leading-none text-emerald-400">{stats.percent}%</p>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">CAPACIDAD</p>
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2">CAPACIDAD</p>
                           </div>
                         </div>
 
@@ -373,7 +478,7 @@ const AIArchitectAssistant: React.FC = () => {
                       {/* Matriz de Ahorro Real-Time */}
                       <div className="grid grid-cols-2 gap-4 mt-8">
                         {summaryCards.map((card, i) => (
-                          <div key={i} className={`group p-6 md:p-8 rounded-[40px] border ${card.bg.replace('bg-', 'bg-opacity-10 bg-')} ${card.border.replace('border-', 'border-opacity-20 border-')} flex flex-col justify-between shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 relative overflow-hidden bg-slate-900/50 backdrop-blur-sm`}>
+                          <div key={i} className={`group p-6 md:p-8 rounded-[40px] border ${card.bg.replace('bg-', 'bg-opacity-5 bg-')} ${card.border.replace('border-', 'border-opacity-10 border-')} flex flex-col justify-between shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 relative overflow-hidden bg-white/5 backdrop-blur-md`}>
                             <div className={`absolute top-0 right-0 w-16 h-16 ${card.accent} opacity-[0.1] rounded-bl-full`}></div>
                             <p className={`text-[10px] font-black ${card.color} uppercase tracking-widest mb-6`}>{card.label}</p>
                             <div className="space-y-1">
@@ -389,30 +494,42 @@ const AIArchitectAssistant: React.FC = () => {
                     </div>
                     {/* END BLUR WRAPPER */}
 
-                    {/* LOCK OVERLAY MESSAGE (Icon Only) */}
+                    {/* LOCK OVERLAY & BUTTON */}
                     {!isUnlocked && (
-                      <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center z-20 pointer-events-none pb-32">
-                        <div className="w-32 h-32 bg-slate-900/50 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/10 shadow-2xl">
-                          <span className="material-symbols-outlined text-6xl text-white/50">lock</span>
+                      <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-20 pb-0">
+                        <div className="w-24 h-24 bg-slate-900/50 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10 shadow-2xl mb-8">
+                          <span className="material-symbols-outlined text-5xl text-white/50">lock</span>
                         </div>
+                        <button
+                          onClick={() => generateAndDownload()}
+                          disabled={isSubmitting}
+                          className="px-8 py-4 bg-cyan-600/90 hover:bg-cyan-500 text-white rounded-full font-[800] text-[14px] uppercase tracking-widest backdrop-blur-xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50 border border-cyan-400/20 hover:scale-105"
+                        >
+                          <span className="material-symbols-outlined text-[20px]">lock_open</span>
+                          {isSubmitting ? 'GENERANDO...' : 'DESBLOQUEAR Y DESCARGAR'}
+                        </button>
                       </div>
                     )}
 
 
-                    {/* Button and Modal Section */}
-                    <button
-                      onClick={() => generateAndDownload()}
-                      disabled={isSubmitting}
-                      className="w-full py-8 bg-blue-600 text-white rounded-[40px] font-[1000] text-[16px] uppercase tracking-widest hover:bg-blue-500 hover:scale-[1.02] transition-all shadow-[0_20px_50px_-15px_rgba(37,99,235,0.4)] flex items-center justify-center gap-4 active:scale-95 disabled:opacity-50 relative z-30"
-                    >
-                      <span className="material-symbols-outlined text-[28px]">{isUnlocked ? 'download' : 'lock_open'}</span>
-                      {isSubmitting ? 'GENERANDO...' : (isUnlocked ? 'DESCARGAR INFORME' : 'DESBLOQUEAR Y DESCARGAR')}
-                    </button>
+                    {/* DOWNLOAD BUTTON (ONLY WHEN UNLOCKED) */}
+                    {isUnlocked && (
+                      <div className="flex justify-center w-full mt-8">
+                        <button
+                          onClick={() => generateAndDownload()}
+                          disabled={isSubmitting}
+                          className="px-8 py-4 bg-cyan-600/90 hover:bg-cyan-500 text-white rounded-full font-[800] text-[14px] uppercase tracking-widest backdrop-blur-xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50 relative z-30 border border-cyan-400/20 hover:scale-105"
+                        >
+                          <span className="material-symbols-outlined text-[20px]">download</span>
+                          {isSubmitting ? 'GENERANDO...' : 'DESCARGAR INFORME'}
+                        </button>
+                      </div>
+                    )}
 
-                    {/* EMAIL CAPTURE MODAL */}
+                    {/* EMAIL CAPTURE MODAL - Keep opaque for readability */}
                     {showEmailModal && (
-                      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#020617]/90 backdrop-blur-sm animate-in fade-in duration-200">
-                        <div className="w-full max-w-md bg-slate-900 border border-slate-700 p-8 rounded-[32px] shadow-2xl relative animate-in zoom-in-95 duration-200">
+                      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#020617]/80 backdrop-blur-xl animate-in fade-in duration-200">
+                        <div className="w-full max-w-md bg-slate-900/90 border border-white/10 p-8 rounded-[32px] shadow-2xl relative animate-in zoom-in-95 duration-200 backdrop-blur-2xl">
                           <button
                             onClick={() => setShowEmailModal(false)}
                             className="absolute top-6 right-6 text-slate-500 hover:text-white transition-colors"
@@ -438,7 +555,7 @@ const AIArchitectAssistant: React.FC = () => {
                                 placeholder="tu@email.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full h-14 bg-slate-950 border border-slate-700 rounded-xl px-4 text-white placeholder-slate-600 focus:border-blue-500 outline-none transition-all font-medium text-center"
+                                className="w-full h-14 bg-black/20 border border-white/10 rounded-xl px-4 text-white placeholder-slate-500 focus:border-blue-500 outline-none transition-all font-medium text-center"
                               />
                             </div>
                             <button
@@ -468,54 +585,47 @@ const AIArchitectAssistant: React.FC = () => {
                     </p>
                   </div>
                 ) : (
-                  <div className="p-8 md:p-10 bg-slate-900/80 rounded-[40px] border border-slate-700/50 text-left relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 opacity-10">
-                      <span className="material-symbols-outlined text-[100px] text-blue-500">info</span>
-                    </div>
+                  <div className="p-6 md:p-8 bg-white/5 backdrop-blur-3xl rounded-[40px] border border-white/10 text-left relative overflow-hidden transition-all duration-500 hover:bg-white/[0.07] h-full flex flex-col justify-center">
 
-                    <h3 className="text-[20px] font-[900] text-white uppercase tracking-tight mb-8 relative z-10 flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-[14px]">?</span>
-                      Cómo funciona el cálculo
+                    <h3 className="text-[20px] md:text-[24px] font-[900] text-white uppercase tracking-tight mb-8 relative z-10 flex items-center gap-4">
+                      <span className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-[18px] shadow-lg shadow-blue-500/30 flex-shrink-0">?</span>
+                      CÓMO FUNCIONA EL CÁLCULO
                     </h3>
 
-                    <div className="space-y-8 relative z-10">
-                      <div className="flex gap-4">
-                        <div className="w-1 min-h-full bg-blue-500/30 rounded-full"></div>
-                        <div>
-                          <h4 className="text-[14px] font-black text-blue-400 uppercase tracking-widest mb-2">1. Tu Coste Base</h4>
-                          <p className="text-slate-400 text-[14px] leading-relaxed">
-                            Introduce tu coste mensual total (Salario Bruto + Seguridad Social) en el campo superior.
-                            <br /><span className="text-slate-500 text-[12px] italic mt-1 block">Ejemplo: 2.500€</span>
-                          </p>
-                        </div>
+                    <div className="relative z-10 space-y-6">
+
+                      {/* SECTION 1 */}
+                      <div className="pl-4 border-l-4 border-blue-500">
+                        <h4 className="text-blue-400 font-black uppercase text-sm tracking-widest mb-2">1. Tu Coste Base</h4>
+                        <p className="text-slate-400 text-xs md:text-sm font-medium leading-relaxed">
+                          Introduce tu coste mensual total (Salario Bruto + Seguridad Social) en el campo superior.
+                          <span className="block mt-1 text-slate-500 italic text-[11px]">Ejemplo: 2.500€</span>
+                        </p>
                       </div>
 
-                      <div className="flex gap-4">
-                        <div className="w-1 min-h-full bg-emerald-500/30 rounded-full"></div>
-                        <div>
-                          <h4 className="text-[14px] font-black text-emerald-400 uppercase tracking-widest mb-2">2. Referencia Temporal</h4>
-                          <p className="text-slate-400 text-[14px] leading-relaxed">
-                            El sistema asume una jornada estándar de <strong className="text-white">40h/semana</strong> (aprox. 173h/mes).
-                            Calculamos tu <strong className="text-white">precio/hora real</strong> dividiendo tu coste entre estas horas.
-                          </p>
-                        </div>
+                      {/* SECTION 2 */}
+                      <div className="pl-4 border-l-4 border-emerald-500">
+                        <h4 className="text-emerald-400 font-black uppercase text-sm tracking-widest mb-2">2. Referencia Temporal</h4>
+                        <p className="text-slate-400 text-xs md:text-sm font-medium leading-relaxed">
+                          El sistema asume una jornada estándar de <strong className="text-white">40h/semana</strong> (aprox. 173h/mes). Calculamos tu <strong className="text-white">precio/hora real</strong> dividiendo tu coste entre estas horas.
+                        </p>
                       </div>
 
-                      <div className="flex gap-4">
-                        <div className="w-1 min-h-full bg-amber-500/30 rounded-full"></div>
-                        <div>
-                          <h4 className="text-[14px] font-black text-amber-400 uppercase tracking-widest mb-2">3. Tu Ahorro</h4>
-                          <p className="text-slate-400 text-[14px] leading-relaxed">
-                            Al introducir los minutos diarios que dedicas a una tarea, multiplicamos ese tiempo recuperado por tu precio/hora.
-                            <br /><span className="text-slate-300 font-bold mt-2 block">Menos tareas manuales = Más dinero recuperado.</span>
-                          </p>
-                        </div>
+                      {/* SECTION 3 */}
+                      <div className="pl-4 border-l-4 border-amber-500">
+                        <h4 className="text-amber-400 font-black uppercase text-sm tracking-widest mb-2">3. Tu Ahorro</h4>
+                        <p className="text-slate-400 text-xs md:text-sm font-medium leading-relaxed">
+                          Al introducir los minutos diarios que dedicas a una tarea, multiplicamos ese tiempo recuperado por tu precio/hora.
+                          <span className="block mt-2 text-amber-200/80 font-bold">Menos tareas manuales = Más dinero recuperado.</span>
+                        </p>
                       </div>
+
                     </div>
 
-                    <div className="mt-8 pt-8 border-t border-slate-800 text-center">
-                      <p className="text-[12px] font-bold text-slate-500 uppercase tracking-widest animate-pulse">
-                        Introduce un valor en las tarjetas para comenzar &darr;
+                    <div className="mt-8 text-center relative z-10 pt-6 border-t border-white/5">
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] animate-pulse flex flex-col items-center gap-2">
+                        <span>Introduce un valor para comenzar</span>
+                        <span className="material-symbols-outlined text-xl">arrow_downward</span>
                       </p>
                     </div>
                   </div>

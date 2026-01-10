@@ -1,132 +1,95 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { streamGeminiChat } from '../services/geminiService';
-
-interface Message {
-  role: 'user' | 'assistant';
-  text: string;
-}
+import React, { useState } from 'react';
 
 const ContactBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', text: '🚧 Disculpa, mi cerebro digital aún está en construcción. Muy pronto estaré operativo para ayudarte a automatizar tu negocio.' }
-  ]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  // Listen for navbar trigger
+  React.useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-contact', handleOpen);
+    return () => window.removeEventListener('open-contact', handleOpen);
+  }, []);
+
+  const contactOptions = [
+    {
+      label: 'Email',
+      icon: 'mail',
+      action: () => window.location.href = 'mailto:cristiianguti@gmail.com',
+      color: 'text-violet-400',
+      bg: 'hover:bg-violet-500/10 border-violet-500/30'
+    },
+    {
+      label: 'Móvil',
+      icon: 'call',
+      action: () => window.location.href = 'tel:+34691708138',
+      color: 'text-emerald-400',
+      bg: 'hover:bg-emerald-500/10 border-emerald-500/30'
+    },
+    {
+      label: 'Instagram',
+      icon: 'photo_camera',
+      action: () => window.open('https://www.instagram.com/heycrisia/', '_blank'),
+      color: 'text-pink-400',
+      bg: 'hover:bg-pink-500/10 border-pink-500/30'
+    },
+    {
+      label: 'YouTube',
+      icon: 'play_circle',
+      action: () => window.open('https://www.youtube.com/@Heycrisia', '_blank'),
+      color: 'text-red-400',
+      bg: 'hover:bg-red-500/10 border-red-500/30'
     }
-  }, [messages, isTyping]);
-
-  const handleSend = async () => {
-    if (!input.trim() || isTyping) return;
-
-    const userMsg = input;
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
-    setIsTyping(true);
-
-    let assistantText = '';
-    setMessages(prev => [...prev, { role: 'assistant', text: '' }]);
-
-    try {
-      const stream = streamGeminiChat(userMsg);
-      for await (const chunk of stream) {
-        assistantText += chunk;
-        setMessages(prev => {
-          const newMsgs = [...prev];
-          newMsgs[newMsgs.length - 1].text = assistantText;
-          return newMsgs;
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      setMessages(prev => [...prev, { role: 'assistant', text: 'Lo siento, he tenido un problema técnico. ¿Podemos intentarlo de nuevo?' }]);
-    } finally {
-      setIsTyping(false);
-    }
-  };
+  ];
 
   return (
     <>
-      {/* Botón Flotante - Color dinámico para mejor visibilidad */}
-      <div className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100]">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className={`w-14 h-14 md:w-16 md:h-16 rounded-full shadow-2xl flex items-center justify-center transition-all transform active:scale-90 ${isOpen ? 'bg-blue-600 text-white' : 'bg-slate-900 text-white hover:bg-blue-600'
-            }`}
-        >
-          <span className="material-symbols-outlined text-[24px] md:text-[28px]">
-            {isOpen ? 'close' : 'forum'}
-          </span>
-          {!isOpen && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full border-2 border-white animate-pulse"></span>
-          )}
-        </button>
-      </div>
+      {/* Botón Flotante */}
+      {/* Botón Flotante REMOVED per user request (triggered by Navbar now) */}
+      <div className="hidden"></div>
 
-      {/* Ventana de Chat - Mobile Responsive Fix */}
-      {isOpen && (
-        <div className="fixed bottom-24 left-4 right-4 md:left-auto md:right-8 md:w-[380px] h-[70vh] md:h-[550px] max-h-[85vh] bg-[#020617] z-[99] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] rounded-[28px] md:rounded-[32px] border border-slate-800 flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
+      {/* Menú de Contacto - TRANSPARENT GLASS */}
+      {
+        isOpen && (
+          <div className="fixed bottom-24 right-4 md:right-8 w-[300px] md:w-[320px] flex flex-col gap-3 z-[99] animate-in slide-in-from-bottom-10 fade-in duration-300 origin-bottom-right">
 
-          {/* Header - Ajustado para no cortarse */}
-          <div className="p-5 md:p-6 bg-slate-950 text-white flex-shrink-0 border-b border-slate-800">
-            <h4 className="font-black text-[12px] md:text-[14px] uppercase tracking-widest truncate">Asistente de Sistemas</h4>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse flex-shrink-0"></span>
-              <p className="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-tighter truncate">
-                EN CONSTRUCCIÓN • PRONTO DISPONIBLE
-              </p>
-            </div>
-          </div>
-
-          {/* Área de Mensajes - Scroll optimizado */}
-          <div ref={scrollRef} className="flex-grow overflow-y-auto p-4 md:p-6 space-y-4 bg-[#0f172a]">
-            {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[90%] md:max-w-[85%] p-3 md:p-4 rounded-[20px] text-[13px] md:text-[14px] leading-relaxed shadow-sm break-words ${msg.role === 'user'
-                  ? 'bg-blue-600 text-white rounded-tr-none'
-                  : 'bg-slate-900 border border-slate-800 text-slate-300 rounded-tl-none'
-                  }`}>
-                  {msg.text}
-                </div>
-              </div>
-            ))}
-            {isTyping && messages[messages.length - 1].text === '' && (
-              <div className="flex justify-start">
-                <div className="bg-slate-900 border border-slate-800 p-3 md:p-4 rounded-[20px] rounded-tl-none shadow-sm text-slate-500 text-[11px] md:text-[12px] italic">
-                  Analizando arquitectura...
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Input - Mejorado para móviles */}
-          <div className="p-3 md:p-4 bg-slate-950 border-t border-slate-800 flex-shrink-0">
-            <div className="flex gap-2 bg-slate-900 p-1.5 md:p-2 rounded-2xl border border-slate-800 items-center">
-              <input
-                type="text"
-                placeholder="Escribe tu consulta..."
-                className="flex-grow h-10 px-3 bg-transparent text-[13px] md:text-[14px] text-white outline-none min-w-0 placeholder:text-slate-600"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              />
+            <div className="p-1 rounded-2xl bg-slate-950/70 backdrop-blur-3xl border border-white/20 shadow-2xl overflow-hidden ring-1 ring-white/10 relative">
               <button
-                onClick={handleSend}
-                disabled={!input.trim() || isTyping}
-                className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center hover:bg-blue-500 transition-all disabled:opacity-30 flex-shrink-0"
+                onClick={() => setIsOpen(false)}
+                className="absolute top-3 right-3 text-slate-400 hover:text-white transition-colors z-50"
               >
-                <span className="material-symbols-outlined text-[18px] md:text-[20px]">send</span>
+                <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
+              <div className="px-6 py-4 border-b border-white/5 bg-white/5">
+                <h4 className="text-[12px] font-black uppercase tracking-[0.2em] text-cyan-400 pr-6">REVISAMOS TU CASO GRATIS</h4>
+              </div>
+              <div className="p-6 flex flex-col gap-4">
+                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Mensaje enviado (Simulado)"); setIsOpen(false); }}>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Nombre</label>
+                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none transition-colors" placeholder="Tu nombre" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Móvil o Email</label>
+                    <input type="text" className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none transition-colors" placeholder="Contacto directo" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">¿Qué te interesa diseñar?</label>
+                    <textarea className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none transition-colors h-20 resize-none" placeholder="Breve descripción..."></textarea>
+                  </div>
+                  <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-bold text-sm shadow-lg hover:shadow-cyan-500/25 transition-all hover:scale-[1.02]">
+                    ENVIAR SOLICITUD
+                  </button>
+                  <p className="text-[10px] text-slate-500 text-center">
+                    Te contactaremos en menos de 24h.
+                  </p>
+                </form>
+              </div>
             </div>
+
           </div>
-        </div>
-      )}
+        )
+      }
     </>
   );
 };

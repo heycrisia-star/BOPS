@@ -6,29 +6,57 @@ import Footer from './components/Footer';
 import AIArchitectAssistant from './components/AIArchitectAssistant';
 import AboutMe from './components/AboutMe';
 import ContactBot from './components/ContactBot';
-import StaggeredMenu from './components/StaggeredMenu';
+import Squares from './components/Squares';
+import Navbar from './components/Navbar';
+import Threads from './components/Threads';
+
 import SuccessCases from './components/SuccessCases';
+import Metrics from './components/Metrics';
+import PixelTrail from './components/PixelTrail';
 
 const App: React.FC = () => {
-  const menuItems = [
+  const menuItems = [ // This array is unused now with Navbar, but keeping to minimize diff noise if desired, or can remove.
     { label: 'SERVICIOS', link: '#method' },
     { label: 'CALCULADORA', link: '#ai-assistant' },
     { label: 'TESTIMONIOS', link: '#testimonials' },
-    { label: 'SOBRE MÍ', link: '#about' },
+    { label: 'SOBRE MÍ', href: '#about' }, // Fixed typo in previous array but irrelevant now as Navbar handles it.
   ];
 
   return (
-    <div id="top" className="min-h-screen flex flex-col bg-[#020617] text-blue-50 overflow-x-hidden relative selection:bg-blue-500/30 selection:text-blue-200">
-      <StaggeredMenu
-        items={menuItems}
-        colors={['#020617', '#0f172a', '#1e3a8a']}
-        logoUrl="https://res.cloudinary.com/dk7xpxrvh/image/upload/v1767147299/asasasasasa_uyedrh.jpg"
-      />
+    <div id="top" className="min-h-screen flex flex-col text-slate-100 overflow-x-hidden relative selection:bg-cyan-500/30 selection:text-cyan-200">
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 9999 }}>
+        <PixelTrail
+          gridSize={46}
+          trailSize={0.05}
+          maxAge={150}
+          interpolate={2.5}
+          color="#2d00f5"
+        />
+      </div>
+
+      <div className="fixed inset-0 z-0 bg-[#0f172a]">
+        <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
+          <Threads
+            color={[0.2, 0.8, 0.9]}
+            amplitude={1.8}
+            distance={0.3}
+            enableMouseInteraction={false}
+          />
+        </div>
+      </div>
+
+
+      <Navbar />
+
+      {/* HERO SECTION */}
+      <Hero />
+
+      {/* METRICS SECTION */}
+      <Metrics />
 
       <ContactBot />
 
-      <main className="flex-grow max-w-7xl mx-auto w-full border-x border-blue-900/10 shadow-2xl shadow-blue-900/10 bg-[#020617] relative z-10">
-        <Hero />
+      <main className="flex-grow max-w-7xl mx-auto w-full relative z-10">
 
         <div id="testimonials">
           <SuccessCases />

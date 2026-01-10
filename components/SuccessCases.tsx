@@ -1,4 +1,6 @@
 import React from 'react';
+import CountUp from './CountUp';
+import ScrollVelocity from './ScrollVelocity';
 
 const cases = [
     {
@@ -33,21 +35,25 @@ const cases = [
 
 const SuccessCases: React.FC = () => {
     return (
-        <section className="py-24 bg-slate-950 px-6 border-t border-white/5 relative overflow-hidden">
+        <section className="py-24 px-6 bg-transparent">
+            {/* Transparent Container */}
             <div className="max-w-6xl mx-auto">
 
-                <div className="mb-16 text-center">
-                    <h3 className="text-blue-500 font-mono text-sm tracking-[0.2em] uppercase mb-4">
-                        Testimonios
+                <div className="mb-20 text-center relative overflow-hidden">
+                    {/* Glow effect simplified or removed to avoid 'bad' aesthetic */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px] -z-10"></div>
+
+                    <span className="text-[12px] md:text-[14px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-4">
+                        RESULTADOS PROBADOS
+                    </span>
+                    <h3 className="text-[36px] md:text-[48px] font-[950] text-white tracking-tighter leading-none mx-auto max-w-3xl">
+                        Impacto que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Transforma Negocios</span>
                     </h3>
-                    <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
-                        Lo que dicen <span className="text-blue-500">nuestros clientes</span>
-                    </h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {cases.map((c, i) => (
-                        <div key={i} className="group p-8 rounded-3xl bg-slate-900/50 border border-white/5 hover:border-blue-500/30 transition-all hover:bg-slate-900 duration-300 relative overflow-hidden flex flex-col justify-between">
+                        <div key={i} className="group p-8 rounded-3xl bg-slate-900/50 border border-slate-700/50 hover:border-cyan-500/30 transition-all hover:bg-slate-900/80 duration-300 relative overflow-hidden flex flex-col justify-between backdrop-blur-md">
                             <div className="relative z-10 mb-6 flex gap-1">
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <span key={star} className="material-symbols-outlined text-yellow-500 text-xl">star</span>
@@ -60,13 +66,13 @@ const SuccessCases: React.FC = () => {
                                 </p>
                             </div>
 
-                            <div className="relative z-10 flex items-center justify-between pt-6 border-t border-white/5 gap-4">
+                            <div className="relative z-10 flex items-center justify-between pt-6 border-t border-slate-700/50 gap-4">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 font-black text-sm shrink-0">
+                                    <div className="w-10 h-10 rounded-full bg-cyan-900/20 flex items-center justify-center text-cyan-500 font-black text-sm shrink-0">
                                         {c.title.charAt(0)}
                                     </div>
                                     <div>
-                                        <h4 className="text-white font-bold text-base leading-none mb-1">
+                                        <h4 className="text-white font-bold text-2xl leading-none mb-2">
                                             {c.title}
                                         </h4>
                                         <span className="text-slate-500 text-xs font-bold uppercase tracking-widest">
@@ -80,7 +86,7 @@ const SuccessCases: React.FC = () => {
                                         href={c.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 text-slate-400 hover:text-white hover:border-blue-500 hover:bg-blue-600 transition-all group/link"
+                                        className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border border-slate-700/50 text-slate-400 hover:text-white hover:border-cyan-500 hover:bg-cyan-600 transition-all group/link"
                                         title="Ver Proyecto"
                                     >
                                         <span className="text-xs font-bold uppercase tracking-wider">Visitar Web</span>

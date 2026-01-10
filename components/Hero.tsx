@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Cubes from './Cubes';
-
+import VariableProximity from './VariableProximity';
 const Hero: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleScrollToCalc = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -9,64 +10,67 @@ const Hero: React.FC = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+
+
   return (
-    <section className="relative px-6 pt-32 pb-32 flex flex-col items-center text-center bg-[#020617] min-h-[90vh] justify-center overflow-hidden">
+    <section className="relative px-6 pt-32 pb-32 flex flex-col items-center text-center bg-transparent min-h-[90vh] justify-center overflow-hidden">
 
-      {/* 3D CUBES BACKGROUND - WOW EFFECT */}
-      {/* HERO BACKGROUND - Simple Gradient */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-blue-950/20 to-[#020617]"></div>
-
-      {/* GRADIENT OVERLAY FOR TEXT READABILITY */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/80 to-transparent z-0 pointer-events-none"></div>
+      {/* Hero-specific subtle scrim to make text pop against the global grid */}
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/10 to-slate-900/50 z-0"></div> */}
 
       <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center pt-12 md:pt-20">
 
         {/* PILL BADGE */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8 animate-in fade-in slide-in-from-top-4 duration-1000">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-8 animate-in fade-in slide-in-from-top-4 duration-1000 backdrop-blur-md">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
           </span>
-          <span className="text-blue-200 text-xs font-bold tracking-widest uppercase">Next-Gen Automation</span>
+          <span className="text-cyan-200 text-xs font-bold tracking-widest uppercase">Next-Gen Automation</span>
         </div>
 
         {/* HEADLINE */}
-        <h1 className="text-5xl md:text-8xl font-[900] tracking-tight text-white mb-8 animate-in fade-in zoom-in-95 duration-1000 leading-none">
-          No busques tiempo. <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 text-glow">
-            Créalo.
-          </span>
-        </h1>
+        <div
+          ref={containerRef}
+          className="relative min-h-[200px] flex flex-col justify-center items-center mb-8"
+        >
+          <div className="text-6xl md:text-9xl font-[900] tracking-tighter text-white animate-in fade-in zoom-in-95 duration-1000 leading-[1] max-w-6xl drop-shadow-2xl text-center">
+            Sistematiza tu <br />
+            <span className="relative inline-block mt-2">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 inline-block min-h-[1.2em] font-[900]">
+                Éxito Operativo
+              </span>
+            </span>
+          </div>
+        </div>
 
         {/* SUBHEADLINE */}
-        <p className="text-slate-300 text-lg md:text-2xl leading-relaxed max-w-3xl font-light mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
-          Transformamos negocios manuales en <span className="text-white font-medium">máquinas autónomas</span> usando IA, n8n y Vibe Coding. El futuro no espera, se programa.
+        <p className="text-slate-300 text-lg md:text-xl leading-relaxed max-w-2xl font-light mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
+          Creamos automatizaciones con inteligencia artificial que impulsan tu negocio. <br />
+          <span className="text-white font-medium">Tecnología compleja, hecha simple para ti.</span>
         </p>
 
-        {/* CTA BUTTONS - SOFTER APPROACH */}
+        {/* CTA BUTTONS - MATCHING SCREENSHOT */}
         <div className="flex flex-col sm:flex-row gap-5 justify-center items-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 relative z-20 w-full sm:w-auto">
 
-          {/* PRIMARY CTA - AUDIT/ACTION without CALL */}
-          <button
-            onClick={handleScrollToCalc}
-            className="w-full sm:w-auto group relative px-8 py-4 bg-blue-600 text-white font-bold rounded-full shadow-[0_0_40px_-10px_rgba(37,99,235,0.5)] hover:bg-blue-500 transition-all hover:scale-105 active:scale-95 overflow-hidden"
-          >
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              Calcula tu Ahorro
-              <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">savings</span>
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-white/20 to-blue-400/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"></div>
-          </button>
-
-          {/* SECONDARY CTA - SOCIAL PROOF */}
+          {/* PRIMARY CTA - CONSULTORIA */}
           <a
-            href="https://wa.me/34691708138?text=Hola,%20quisiera%20más%20información%20sin%20compromiso."
+            href="https://wa.me/34691708138"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-8 py-4 bg-slate-900 border border-slate-700 text-slate-300 font-bold rounded-full hover:bg-slate-800 hover:text-white hover:border-blue-500/50 transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-full shadow-[0_0_30px_-5px_rgba(34,211,238,0.5)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.7)] hover:scale-105 transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2"
           >
-            <span>Pedir Info por WhatsApp</span>
-            <span className="material-symbols-outlined text-[18px]">chat</span>
+            <span className="material-symbols-outlined text-[20px]">handshake</span>
+            Consultoría Estratégica
+          </a>
+
+          {/* SECONDARY CTA - FORMACION */}
+          <a
+            href="#about"
+            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-full shadow-[0_0_30px_-5px_rgba(34,211,238,0.5)] hover:shadow-[0_0_40px_-5px_rgba(34,211,238,0.7)] hover:scale-105 transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2"
+          >
+            <span className="material-symbols-outlined text-[20px] text-cyan-400">school</span>
+            Formación IA
           </a>
         </div>
 
