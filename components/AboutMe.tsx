@@ -1,6 +1,5 @@
 
 import React from 'react';
-import ReflectiveCard from './ReflectiveCard';
 import ScrollVelocity from './ScrollVelocity';
 import LightRays from './LightRays';
 
