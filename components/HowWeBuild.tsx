@@ -61,8 +61,8 @@ const HowWeBuild: React.FC = () => {
             Nuestros Servicios
           </span>
           <div className="py-4">
-            <h2 className="text-[36px] md:text-[54px] font-[900] text-white tracking-tight leading-[1.1] text-glow">
-              Soluciones que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Escalan</span>
+            <h2 className="text-[36px] md:text-[54px] font-[900] text-slate-900 tracking-tight leading-[1.1] text-glow">
+              Soluciones que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600">Escalan</span>
             </h2>
           </div>
         </div>
@@ -72,32 +72,32 @@ const HowWeBuild: React.FC = () => {
           {services.map((service, idx) => (
             <SpotlightCard
               key={idx}
-              className="h-full p-8 border border-white/10 bg-white/5 backdrop-blur-md hover:border-cyan-500/30 transition-all group flex flex-col"
+              className="h-full p-8 border border-slate-200 bg-white/60 backdrop-blur-md hover:border-cyan-500/30 transition-all group flex flex-col shadow-sm hover:shadow-md"
             >
               <div className="mb-6 relative">
-                <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-transparent border border-white/10 shadow-[0_0_15px_rgba(34,211,238,0.1)] group-hover:scale-110 transition-transform duration-300">
-                  <span className="material-symbols-outlined text-3xl text-cyan-400 group-hover:text-cyan-300 transition-colors">
+                <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-white border border-slate-200 shadow-[0_0_15px_rgba(6,182,212,0.1)] group-hover:scale-110 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-3xl text-cyan-600 group-hover:text-cyan-500 transition-colors">
                     {service.icon}
                   </span>
                 </div>
                 {/* Floating visual effect element */}
-                <div className="absolute -inset-2 bg-cyan-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
+                <div className="absolute -inset-2 bg-cyan-200/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
-              <p className="text-slate-400 leading-relaxed text-sm mb-8 flex-grow">{service.desc}</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
+              <p className="text-slate-600 leading-relaxed text-sm mb-8 flex-grow">{service.desc}</p>
 
               <div className="flex flex-col gap-3 mt-auto">
                 {service.tags.map((tag, i) => {
                   const colors = [
-                    "bg-cyan-500/10 border-cyan-500/20 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.1)]",
-                    "bg-violet-500/10 border-violet-500/20 text-violet-300 shadow-[0_0_10px_rgba(139,92,246,0.1)]",
-                    "bg-emerald-500/10 border-emerald-500/20 text-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.1)]",
-                    "bg-rose-500/10 border-rose-500/20 text-rose-300 shadow-[0_0_10px_rgba(244,63,94,0.1)]"
+                    "bg-cyan-50 border-cyan-100 text-cyan-700",
+                    "bg-violet-50 border-violet-100 text-violet-700",
+                    "bg-emerald-50 border-emerald-100 text-emerald-700",
+                    "bg-rose-50 border-rose-100 text-rose-700"
                   ];
                   const colorClass = colors[i % colors.length];
 
                   return (
-                    <span key={i} className={`px-4 py-2.5 rounded-xl border text-[11px] font-black uppercase tracking-widest text-center backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:bg-opacity-20 ${colorClass}`}>
+                    <span key={i} className={`px-4 py-2.5 rounded-xl border text-[11px] font-black uppercase tracking-widest text-center backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] ${colorClass}`}>
                       {tag}
                     </span>
                   );
@@ -113,41 +113,41 @@ const HowWeBuild: React.FC = () => {
             <span className="text-[12px] font-black text-cyan-600 uppercase tracking-[0.3em] block mb-4">
               Metodología
             </span>
-            <h3 className="text-[32px] font-[900] text-white tracking-tight leading-[1.1] mb-6">
+            <h3 className="text-[32px] font-[900] text-slate-900 tracking-tight leading-[1.1] mb-6">
               <ShinyText
                 text="Cómo transformamos tu operativa"
                 disabled={false}
                 speed={1}
                 delay={0.2}
-                shineColor="#2b2212"
-                color="#ffffff"
+                shineColor="#94a3b8"
+                color="#0f172a"
                 spread={150}
                 direction="right"
                 yoyo={true}
                 className="block"
               />
             </h3>
-            <p className="text-slate-400 text-lg leading-relaxed">
+            <p className="text-slate-600 text-lg leading-relaxed">
               No solo implementamos tecnología; ejecutamos un plan de transformación diseñado para que tu negocio escale sin romperse.
             </p>
-            <div className="h-1 w-20 bg-cyan-500 mt-8 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div>
+            <div className="h-1 w-20 bg-cyan-500 mt-8 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.5)]"></div>
           </div>
 
           <div className="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
             {steps.map((step, idx) => (
               <div key={idx} className="flex gap-6 group">
                 <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-center shadow-sm group-hover:border-cyan-500/50 group-hover:bg-slate-800 transition-all duration-500 relative z-10 backdrop-blur-sm">
-                    <span className="text-cyan-500 font-black text-[16px] leading-none">{step.num}</span>
+                  <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-lg group-hover:border-cyan-500/50 group-hover:bg-slate-50 transition-all duration-500 relative z-10 backdrop-blur-sm">
+                    <span className="text-cyan-600 font-black text-[16px] leading-none">{step.num}</span>
                   </div>
                   {/* Line connector vertically, conditional for last row if needed, but simple for now */}
                   {idx < steps.length - 2 && (
-                    <div className="w-[1px] h-full bg-slate-800 group-hover:bg-cyan-900/50 transition-colors mt-4 hidden md:block"></div>
+                    <div className="w-[1px] h-full bg-slate-200 group-hover:bg-cyan-500/30 transition-colors mt-4 hidden md:block"></div>
                   )}
                 </div>
                 <div className="pt-2">
-                  <h4 className="text-[18px] font-[800] text-white mb-2 tracking-tight group-hover:text-cyan-400 transition-colors">{step.title}</h4>
-                  <p className="text-[14px] text-slate-400 leading-relaxed font-medium">{step.desc}</p>
+                  <h4 className="text-[18px] font-[800] text-slate-900 mb-2 tracking-tight group-hover:text-cyan-600 transition-colors">{step.title}</h4>
+                  <p className="text-[14px] text-slate-600 leading-relaxed font-medium">{step.desc}</p>
                 </div>
               </div>
             ))}

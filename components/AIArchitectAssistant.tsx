@@ -264,8 +264,8 @@ const AIArchitectAssistant: React.FC = () => {
         <div className="mb-16 text-left overflow-hidden">
           <span className="text-[12px] md:text-[14px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-6">ROI OPERATIVO & INGENIERÍA</span>
           <div className="mb-16 text-center overflow-hidden">
-            <h3 className="text-[36px] md:text-[48px] font-[950] text-white tracking-tighter leading-none inline-block">
-              Descubre tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Potencial de Ahorro</span>
+            <h3 className="text-[36px] md:text-[48px] font-[950] text-slate-900 tracking-tighter leading-none inline-block">
+              Descubre tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">Potencial de Ahorro</span>
             </h3>
           </div>
         </div>
@@ -277,33 +277,33 @@ const AIArchitectAssistant: React.FC = () => {
             <div className="lg:col-span-7 flex flex-col gap-6">
 
               {/* ACCORDION 1: ESTRUCTURA DEL EQUIPO */}
-              <div className="border border-white/10 rounded-3xl bg-black/20 backdrop-blur-md overflow-hidden hover:border-cyan-500/30 transition-colors">
+              <div className="border border-slate-200 rounded-3xl bg-white/40 backdrop-blur-md overflow-hidden hover:border-cyan-500/30 transition-colors shadow-sm">
                 <button
                   onClick={() => setOpenSection(openSection === 'team' ? null : 'team')}
-                  className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors group"
+                  className="w-full flex items-center justify-between p-6 hover:bg-white/40 transition-colors group"
                 >
                   <div className="flex items-center gap-5">
-                    <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                    <div className="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center text-cyan-600 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.1)]">
                       <span className="material-symbols-outlined text-3xl">groups</span>
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-[800] text-white uppercase tracking-tight text-left">Estructura del Equipo</h3>
+                    <h3 className="text-2xl md:text-3xl font-[800] text-slate-900 uppercase tracking-tight text-left">Estructura del Equipo</h3>
                   </div>
-                  <div className={`w-10 h-10 rounded-full border border-white/10 flex items-center justify-center transition-all duration-300 ${openSection === 'team' ? 'bg-cyan-500 text-black rotate-180' : 'text-slate-400'}`}>
+                  <div className={`w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center transition-all duration-300 ${openSection === 'team' ? 'bg-cyan-500 text-white rotate-180' : 'text-slate-400'}`}>
                     <span className="material-symbols-outlined">expand_more</span>
                   </div>
                 </button>
                 <div className={`transition-[max-height] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${openSection === 'team' ? 'max-h-[300px]' : 'max-h-0'}`}>
                   <div className="p-8 pt-2">
-                    <label className="text-[11px] font-[900] text-slate-400 uppercase tracking-[0.2em] block mb-4">Coste Operativo Mensual (Equipos)</label>
+                    <label className="text-[11px] font-[900] text-slate-500 uppercase tracking-[0.2em] block mb-4">Coste Operativo Mensual (Equipos)</label>
                     <div className="relative group">
                       <input
                         type="number"
                         value={employeeCost}
                         onChange={(e) => setEmployeeCost(Number(e.target.value))}
-                        className="w-full bg-transparent border-b-2 border-slate-700/50 px-0 py-4 pr-24 text-white focus:outline-none focus:border-cyan-500 transition-all font-mono text-5xl font-bold tracking-tighter"
+                        className="w-full bg-transparent border-b-2 border-slate-300 px-0 py-4 pr-24 text-slate-900 focus:outline-none focus:border-cyan-500 transition-all font-mono text-5xl font-bold tracking-tighter"
                         placeholder="0"
                       />
-                      <span className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-600 font-mono text-xl">€/mes</span>
+                      <span className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 font-mono text-xl">€/mes</span>
                     </div>
                     <p className="text-slate-500 text-sm mt-4 font-medium leading-relaxed">Coste total mensual del equipo dedicado a estas tareas (Salarios + SS + Tools).</p>
                   </div>
@@ -311,25 +311,25 @@ const AIArchitectAssistant: React.FC = () => {
               </div>
 
               {/* SECTION 2: GESTIÓN DEL TIEMPO (ALWAYS VISIBLE) */}
-              <div className="border border-white/10 rounded-3xl bg-black/20 backdrop-blur-md overflow-hidden relative">
-                <div className="p-6 border-b border-white/5">
+              <div className="border border-slate-200 rounded-3xl bg-white/40 backdrop-blur-md overflow-hidden relative shadow-sm">
+                <div className="p-6 border-b border-slate-200/50">
                   <div className="flex items-center gap-5">
-                    <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                    <div className="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center text-cyan-600 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
                       <span className="material-symbols-outlined text-3xl">schedule</span>
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-[800] text-white uppercase tracking-tight text-left">Gestión del Tiempo</h3>
+                    <h3 className="text-2xl md:text-3xl font-[800] text-slate-900 uppercase tracking-tight text-left">Gestión del Tiempo</h3>
                   </div>
                 </div>
 
                 <div className="w-full">
                   <div className="p-8 pt-6">
-                    <p className="text-slate-400 mb-6">Configura las horas dedicadas por tarea en los bloques inferiores.</p>
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-8">
+                    <p className="text-slate-600 mb-6">Configura las horas dedicadas por tarea en los bloques inferiores.</p>
+                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 mb-8">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-bold uppercase text-slate-400">Total Horas/Semana</span>
-                        <span className="font-mono text-cyan-400 font-bold text-xl">{stats.time.week}h</span>
+                        <span className="text-xs font-bold uppercase text-slate-500">Total Horas/Semana</span>
+                        <span className="font-mono text-cyan-600 font-bold text-xl">{stats.time.week}h</span>
                       </div>
-                      <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                      <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
                         <div className="bg-cyan-500 h-full rounded-full" style={{ width: `${Math.min(stats.time.week / 40 * 100, 100)}%` }}></div>
                       </div>
                     </div>
@@ -337,16 +337,16 @@ const AIArchitectAssistant: React.FC = () => {
                     {/* TASKS LIST MOVED INSIDE ACCORDION */}
                     <div className="space-y-8">
                       {[
-                        { title: 'VENTAS & EXPANSIÓN', items: TASKS_SALES, color: 'text-blue-400', border: 'border-blue-400/20' },
-                        { title: 'GESTIÓN & OPERACIONES', items: TASKS_OPS, color: 'text-emerald-400', border: 'border-emerald-400/20' },
-                        { title: 'INGENIERÍA & PRODUCTO', items: TASKS_ENG, color: 'text-violet-400', border: 'border-violet-400/20' }
+                        { title: 'VENTAS & EXPANSIÓN', items: TASKS_SALES, color: 'text-blue-600', border: 'border-blue-200' },
+                        { title: 'GESTIÓN & OPERACIONES', items: TASKS_OPS, color: 'text-emerald-600', border: 'border-emerald-200' },
+                        { title: 'INGENIERÍA & PRODUCTO', items: TASKS_ENG, color: 'text-violet-600', border: 'border-violet-200' }
                       ].map((block) => {
                         const isOpen = expandedGroups.includes(block.title);
                         return (
-                          <div key={block.title} className={`rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen ? 'bg-white/5 border-white/10' : 'bg-transparent border-transparent'}`}>
+                          <div key={block.title} className={`rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen ? 'bg-white/60 border-slate-200' : 'bg-transparent border-transparent'}`}>
                             <button
                               onClick={() => toggleGroup(block.title)}
-                              className={`w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors group rounded-2xl border ${block.border} ${isOpen ? 'bg-white/5' : 'bg-transparent'}`}
+                              className={`w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors group rounded-2xl border ${block.border} ${isOpen ? 'bg-slate-50' : 'bg-transparent'}`}
                             >
                               <div className="flex items-center gap-3">
                                 <span className={`material-symbols-outlined text-[20px] ${block.color}`}>layers</span>
@@ -378,12 +378,12 @@ const AIArchitectAssistant: React.FC = () => {
                                   };
 
                                   return (
-                                    <div key={preset.id} className={`p-4 rounded-xl border transition-all duration-300 ${!isZero ? 'bg-cyan-950/30 border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.1)]' : 'bg-black/20 border-white/5 hover:bg-white/5'}`}>
+                                    <div key={preset.id} className={`p-4 rounded-xl border transition-all duration-300 ${!isZero ? 'bg-cyan-50 border-cyan-200 shadow-[0_0_15px_rgba(6,182,212,0.1)]' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}`}>
                                       <div className="flex items-center justify-between mb-3">
-                                        <span className={`text-[13px] font-bold ${!isZero ? 'text-cyan-100' : 'text-slate-400'}`}>{preset.name}</span>
+                                        <span className={`text-[13px] font-bold ${!isZero ? 'text-cyan-800' : 'text-slate-500'}`}>{preset.name}</span>
                                         {!isZero && (
-                                          <span className="text-[10px] font-black text-cyan-300 bg-cyan-900/40 px-2 py-1 rounded-lg">
-                                            +{formatNum((getValue('minutes') * getValue('frequency') * getValue('daysPerWeek') * 4.33 / 60).toFixed(0))} h/mes
+                                          <span className="text-[10px] font-black text-cyan-700 bg-cyan-100/60 px-2 py-1 rounded-lg">
+                                            +{formatNum((Number(getValue('minutes')) * Number(getValue('frequency')) * Number(getValue('daysPerWeek')) * 4.33 / 60).toFixed(0))} h/mes
                                           </span>
                                         )}
                                       </div>
@@ -395,13 +395,13 @@ const AIArchitectAssistant: React.FC = () => {
                                           { label: 'DÍAS/SEM', field: 'daysPerWeek', ph: '0' }
                                         ].map((cfg) => (
                                           <div key={cfg.field} className="flex-1">
-                                            <label className="text-[8px] font-black block mb-1 text-center text-slate-500">{cfg.label}</label>
+                                            <label className="text-[8px] font-black block mb-1 text-center text-slate-400">{cfg.label}</label>
                                             <input
                                               type="number"
                                               placeholder={cfg.ph}
                                               value={activeTask ? (activeTask[cfg.field as keyof Task] || '') : ''}
                                               onChange={(e) => handleChange(cfg.field as keyof Task, Number(e.target.value))}
-                                              className={`w-full h-8 rounded-lg text-center font-bold text-[12px] outline-none transition-all border ${!isZero ? 'bg-cyan-950/40 border-cyan-500/30 text-cyan-100' : 'bg-black/20 border-white/10 text-slate-400 focus:bg-white/10 focus:text-white'}`}
+                                              className={`w-full h-8 rounded-lg text-center font-bold text-[12px] outline-none transition-all border ${!isZero ? 'bg-white border-cyan-200 text-cyan-900' : 'bg-white border-slate-200 text-slate-400 focus:border-cyan-300 focus:text-slate-900'}`}
                                             />
                                           </div>
                                         ))}
@@ -442,48 +442,48 @@ const AIArchitectAssistant: React.FC = () => {
                     <div className={`transition-all duration-700 ${!isUnlocked ? 'filter blur-xl select-none pointer-events-none opacity-80' : 'filter blur-0 opacity-100'}`}>
 
                       {/* Hero FTE & MONEY Card - NOW TRANSPARENT */}
-                      <div className="p-10 md:p-12 rounded-[56px] bg-slate-900/20 backdrop-blur-xl border border-white/10 text-white shadow-2xl relative overflow-hidden flex flex-col items-center text-center group ring-1 ring-white/5">
+                      <div className="p-10 md:p-12 rounded-[56px] bg-white/80 backdrop-blur-xl border border-slate-200/60 text-slate-900 shadow-2xl relative overflow-hidden flex flex-col items-center text-center group ring-1 ring-slate-100">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-                        <p className="text-[12px] font-black text-blue-400 uppercase tracking-[0.4em] mb-8 opacity-80">Impacto Mensual Recuperado</p>
+                        <p className="text-[12px] font-black text-blue-600 uppercase tracking-[0.4em] mb-8 opacity-80">Impacto Mensual Recuperado</p>
 
                         <div className="flex flex-col items-center gap-1 mb-8">
                           <div className="flex items-baseline justify-center">
-                            <span className="text-[32px] md:text-[40px] font-black text-blue-500 mr-2">€</span>
-                            <span className="text-[72px] md:text-[100px] font-[1000] leading-none tracking-tighter text-white drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                            <span className="text-[32px] md:text-[40px] font-black text-blue-600 mr-2">€</span>
+                            <span className="text-[72px] md:text-[100px] font-[1000] leading-none tracking-tighter text-slate-900 drop-shadow-sm">
                               {formatNum(stats.money.month)}
                             </span>
                           </div>
                           <span className="text-[14px] font-black text-slate-400 uppercase tracking-[0.2em]">CAPITAL MENSUAL LIBERADO</span>
                         </div>
 
-                        <div className="w-48 h-px bg-white/10 mb-8"></div>
+                        <div className="w-48 h-px bg-slate-200 mb-8"></div>
 
                         <div className="flex items-center gap-6 mb-8">
                           <div className="text-center">
-                            <p className="text-[44px] font-[1000] leading-none text-blue-400">{stats.fte}</p>
+                            <p className="text-[44px] font-[1000] leading-none text-blue-600">{stats.fte}</p>
                             <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2">FTEs (TIEMPO)</p>
                           </div>
-                          <div className="w-px h-12 bg-white/10"></div>
+                          <div className="w-px h-12 bg-slate-200"></div>
                           <div className="text-center">
-                            <p className="text-[44px] font-[1000] leading-none text-emerald-400">{stats.percent}%</p>
+                            <p className="text-[44px] font-[1000] leading-none text-emerald-600">{stats.percent}%</p>
                             <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2">CAPACIDAD</p>
                           </div>
                         </div>
 
-                        <p className="text-[14px] text-slate-400 font-bold leading-relaxed max-w-xs">
-                          Al año recuperas un total de <span className="text-blue-400 font-black text-[18px]">{formatNum(stats.money.year)}€</span> netos.
+                        <p className="text-[14px] text-slate-500 font-bold leading-relaxed max-w-xs">
+                          Al año recuperas un total de <span className="text-blue-600 font-black text-[18px]">{formatNum(stats.money.year)}€</span> netos.
                         </p>
                       </div>
 
                       {/* Matriz de Ahorro Real-Time */}
                       <div className="grid grid-cols-2 gap-4 mt-8">
                         {summaryCards.map((card, i) => (
-                          <div key={i} className={`group p-6 md:p-8 rounded-[40px] border ${card.bg.replace('bg-', 'bg-opacity-5 bg-')} ${card.border.replace('border-', 'border-opacity-10 border-')} flex flex-col justify-between shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 relative overflow-hidden bg-white/5 backdrop-blur-md`}>
+                          <div key={i} className={`group p-6 md:p-8 rounded-[40px] border ${card.bg.replace('bg-', 'bg-opacity-40 bg-')} ${card.border} flex flex-col justify-between shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 relative overflow-hidden bg-white/60 backdrop-blur-md`}>
                             <div className={`absolute top-0 right-0 w-16 h-16 ${card.accent} opacity-[0.1] rounded-bl-full`}></div>
                             <p className={`text-[10px] font-black ${card.color} uppercase tracking-widest mb-6`}>{card.label}</p>
                             <div className="space-y-1">
                               <div className="flex items-baseline gap-1">
-                                <span className="text-[28px] font-[1000] text-white leading-none">{card.time}</span>
+                                <span className="text-[28px] font-[1000] text-slate-900 leading-none">{card.time}</span>
                               </div>
                               <div className={`text-[22px] font-black ${card.color} tracking-tighter`}>{card.money}</div>
                             </div>
@@ -585,10 +585,10 @@ const AIArchitectAssistant: React.FC = () => {
                     </p>
                   </div>
                 ) : (
-                  <div className="p-6 md:p-8 bg-white/5 backdrop-blur-3xl rounded-[40px] border border-white/10 text-left relative overflow-hidden transition-all duration-500 hover:bg-white/[0.07] h-full flex flex-col justify-center">
+                  <div className="p-6 md:p-8 bg-white/60 backdrop-blur-3xl rounded-[40px] border border-slate-200 text-left relative overflow-hidden transition-all duration-500 hover:bg-white/80 h-full flex flex-col justify-center shadow-sm">
 
-                    <h3 className="text-[20px] md:text-[24px] font-[900] text-white uppercase tracking-tight mb-8 relative z-10 flex items-center gap-4">
-                      <span className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-[18px] shadow-lg shadow-blue-500/30 flex-shrink-0">?</span>
+                    <h3 className="text-[20px] md:text-[24px] font-[900] text-slate-900 uppercase tracking-tight mb-8 relative z-10 flex items-center gap-4">
+                      <span className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-[18px] shadow-lg shadow-blue-500/30 flex-shrink-0">?</span>
                       CÓMO FUNCIONA EL CÁLCULO
                     </h3>
 
@@ -596,34 +596,34 @@ const AIArchitectAssistant: React.FC = () => {
 
                       {/* SECTION 1 */}
                       <div className="pl-4 border-l-4 border-blue-500">
-                        <h4 className="text-blue-400 font-black uppercase text-sm tracking-widest mb-2">1. Tu Coste Base</h4>
-                        <p className="text-slate-400 text-xs md:text-sm font-medium leading-relaxed">
+                        <h4 className="text-blue-600 font-black uppercase text-sm tracking-widest mb-2">1. Tu Coste Base</h4>
+                        <p className="text-slate-500 text-xs md:text-sm font-medium leading-relaxed">
                           Introduce tu coste mensual total (Salario Bruto + Seguridad Social) en el campo superior.
-                          <span className="block mt-1 text-slate-500 italic text-[11px]">Ejemplo: 2.500€</span>
+                          <span className="block mt-1 text-slate-400 italic text-[11px]">Ejemplo: 2.500€</span>
                         </p>
                       </div>
 
                       {/* SECTION 2 */}
                       <div className="pl-4 border-l-4 border-emerald-500">
-                        <h4 className="text-emerald-400 font-black uppercase text-sm tracking-widest mb-2">2. Referencia Temporal</h4>
-                        <p className="text-slate-400 text-xs md:text-sm font-medium leading-relaxed">
-                          El sistema asume una jornada estándar de <strong className="text-white">40h/semana</strong> (aprox. 173h/mes). Calculamos tu <strong className="text-white">precio/hora real</strong> dividiendo tu coste entre estas horas.
+                        <h4 className="text-emerald-600 font-black uppercase text-sm tracking-widest mb-2">2. Referencia Temporal</h4>
+                        <p className="text-slate-500 text-xs md:text-sm font-medium leading-relaxed">
+                          El sistema asume una jornada estándar de <strong className="text-slate-800">40h/semana</strong> (aprox. 173h/mes). Calculamos tu <strong className="text-slate-800">precio/hora real</strong> dividiendo tu coste entre estas horas.
                         </p>
                       </div>
 
                       {/* SECTION 3 */}
                       <div className="pl-4 border-l-4 border-amber-500">
-                        <h4 className="text-amber-400 font-black uppercase text-sm tracking-widest mb-2">3. Tu Ahorro</h4>
-                        <p className="text-slate-400 text-xs md:text-sm font-medium leading-relaxed">
+                        <h4 className="text-amber-600 font-black uppercase text-sm tracking-widest mb-2">3. Tu Ahorro</h4>
+                        <p className="text-slate-500 text-xs md:text-sm font-medium leading-relaxed">
                           Al introducir los minutos diarios que dedicas a una tarea, multiplicamos ese tiempo recuperado por tu precio/hora.
-                          <span className="block mt-2 text-amber-200/80 font-bold">Menos tareas manuales = Más dinero recuperado.</span>
+                          <span className="block mt-2 text-amber-600/80 font-bold">Menos tareas manuales = Más dinero recuperado.</span>
                         </p>
                       </div>
 
                     </div>
 
-                    <div className="mt-8 text-center relative z-10 pt-6 border-t border-white/5">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] animate-pulse flex flex-col items-center gap-2">
+                    <div className="mt-8 text-center relative z-10 pt-6 border-t border-slate-200">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] animate-pulse flex flex-col items-center gap-2">
                         <span>Introduce un valor para comenzar</span>
                         <span className="material-symbols-outlined text-xl">arrow_downward</span>
                       </p>

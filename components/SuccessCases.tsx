@@ -46,14 +46,14 @@ const SuccessCases: React.FC = () => {
                     <span className="text-[12px] md:text-[14px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-4">
                         RESULTADOS PROBADOS
                     </span>
-                    <h3 className="text-[36px] md:text-[48px] font-[950] text-white tracking-tighter leading-none mx-auto max-w-3xl">
-                        Impacto que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Transforma Negocios</span>
+                    <h3 className="text-[36px] md:text-[48px] font-[950] text-slate-900 tracking-tighter leading-none mx-auto max-w-3xl">
+                        Impacto que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">Transforma Negocios</span>
                     </h3>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {cases.map((c, i) => (
-                        <div key={i} className="group p-8 rounded-3xl bg-slate-900/50 border border-slate-700/50 hover:border-cyan-500/30 transition-all hover:bg-slate-900/80 duration-300 relative overflow-hidden flex flex-col justify-between backdrop-blur-md">
+                        <div key={i} className="group p-8 rounded-3xl bg-white/60 border border-slate-200/60 hover:border-cyan-500/30 transition-all hover:bg-white/90 duration-300 relative overflow-hidden flex flex-col justify-between backdrop-blur-md shadow-sm hover:shadow-md">
                             <div className="relative z-10 mb-6 flex gap-1">
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <span key={star} className="material-symbols-outlined text-yellow-500 text-xl">star</span>
@@ -61,18 +61,18 @@ const SuccessCases: React.FC = () => {
                             </div>
 
                             <div className="relative z-10 mb-8">
-                                <p className="text-slate-300 text-lg leading-relaxed italic font-medium">
+                                <p className="text-slate-600 text-lg leading-relaxed italic font-medium">
                                     "{c.desc}"
                                 </p>
                             </div>
 
-                            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t border-slate-700/50 gap-6 md:gap-4">
+                            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t border-slate-200/60 gap-6 md:gap-4">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-cyan-900/20 flex items-center justify-center text-cyan-500 font-black text-sm shrink-0">
+                                    <div className="w-10 h-10 rounded-full bg-cyan-100/50 flex items-center justify-center text-cyan-700 font-black text-sm shrink-0">
                                         {c.title.charAt(0)}
                                     </div>
                                     <div>
-                                        <h4 className="text-white font-bold text-lg md:text-2xl leading-tight mb-1 md:mb-2">
+                                        <h4 className="text-slate-900 font-bold text-lg md:text-2xl leading-tight mb-1 md:mb-2">
                                             {c.title}
                                         </h4>
                                         <span className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-widest block">
@@ -86,7 +86,7 @@ const SuccessCases: React.FC = () => {
                                         href={c.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="w-full md:w-auto shrink-0 flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-slate-700/50 text-slate-400 hover:text-white hover:border-cyan-500 hover:bg-cyan-600 transition-all group/link"
+                                        className="w-full md:w-auto shrink-0 flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-slate-500 hover:text-white hover:border-cyan-500 hover:bg-cyan-600 transition-all group/link"
                                         title="Ver Proyecto"
                                     >
                                         <span className="text-xs font-bold uppercase tracking-wider">Visitar Web</span>

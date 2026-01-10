@@ -43,12 +43,12 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           <button className="sm-menu-trigger" onClick={toggleMenu} aria-label="Menu" style={{ position: 'relative', zIndex: 99999 }}>
             <div className="sm-trigger-text-box">
               <div className="sm-trigger-text-inner">
-                <span className="sm-label text-white">{open ? 'CLOSE' : 'MENU'}</span>
+                <span className="sm-label text-slate-900">{open ? 'CLOSE' : 'MENU'}</span>
               </div>
             </div>
             <span className={`sm-plus-icon ${open ? 'rotate-45' : ''} transition-transform duration-300`}>
-              <span className="sm-plus-line sm-h bg-white" />
-              <span className="sm-plus-line sm-v bg-white" />
+              <span className="sm-plus-line sm-h bg-slate-900" />
+              <span className="sm-plus-line sm-v bg-slate-900" />
             </span>
           </button>
         </div>
@@ -60,9 +60,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9990] bg-[#020617]"
+            className="fixed inset-0 z-[9990] bg-slate-50"
           >
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
 
             <div className="h-full flex flex-col justify-center px-6 md:px-20 relative z-10 overflow-y-auto">
               <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center py-20">
@@ -73,7 +73,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                     <motion.div
                       key={item.label}
                       custom={i}
-                      variants={menuItemVariants}
+                      variants={menuItemVariants as any}
                       initial="hidden"
                       animate="visible"
                       exit="exit"
@@ -81,8 +81,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       <a
                         href={item.link}
                         onClick={toggleMenu}
-                        className="block text-[48px] md:text-[80px] font-[1000] text-transparent stroke-text hover:text-white transition-all duration-300 uppercase tracking-tighter leading-[0.9]"
-                        style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}
+                        className="block text-[48px] md:text-[80px] font-[1000] text-transparent stroke-text hover:text-slate-900 transition-all duration-300 uppercase tracking-tighter leading-[0.9]"
+                        style={{ WebkitTextStroke: '1px rgba(15, 23, 42, 0.3)' }}
                       >
                         {item.label}
                       </a>
@@ -98,20 +98,20 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                   className="hidden lg:block space-y-12 text-left"
                 >
                   <div>
-                    <h4 className="text-blue-500 font-black text-[14px] uppercase tracking-[0.2em] mb-4">Direct Ops Contact</h4>
+                    <h4 className="text-blue-600 font-black text-[14px] uppercase tracking-[0.2em] mb-4">Direct Ops Contact</h4>
                     <p className="text-[12px] font-bold text-slate-500 uppercase mb-2">Phone</p>
-                    <a href="tel:+34691708138" className="text-[32px] font-[900] text-white tracking-tight hover:text-blue-500 transition-colors">+34 691 708 138</a>
+                    <a href="tel:+34691708138" className="text-[32px] font-[900] text-slate-900 tracking-tight hover:text-blue-600 transition-colors">+34 691 708 138</a>
                   </div>
 
                   <div>
                     <p className="12px] font-bold text-slate-500 uppercase mb-2">Email</p>
-                    <a href="mailto:cristiianguti@gmail.com" className="text-[32px] font-[900] text-white tracking-tight hover:text-blue-500 transition-colors">
+                    <a href="mailto:cristiianguti@gmail.com" className="text-[32px] font-[900] text-slate-900 tracking-tight hover:text-blue-600 transition-colors">
                       cristiianguti@gmail.com
                     </a>
                   </div>
 
-                  <div className="pt-12 border-t border-slate-800">
-                    <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">BuildersOps © 2026</p>
+                  <div className="pt-12 border-t border-slate-200">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">BuildersOps © 2026</p>
                   </div>
                 </motion.div>
 

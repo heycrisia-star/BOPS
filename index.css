@@ -5,23 +5,25 @@
 
 html,
 body {
-    background-color: #0f172a;
-    /* Slate 950 base */
-    color: #f1f5f9;
+    background-color: #f8fafc;
+    /* Slate 50 - Light base */
+    color: #0f172a;
+    /* Slate 900 - Dark text */
     overscroll-behavior: none;
 }
 
 @layer base {
     :root {
-        --bg-primary: #0f172a;
-        /* Slate 900 - Darker base for better contrast */
-        --text-primary: #f8fafc;
+        --bg-primary: #f8fafc;
         /* Slate 50 */
-        --accent-cyan: #22d3ee;
-        /* Cyan 400 */
-        --accent-blue: #60a5fa;
-        /* Blue 400 */
-        --glass-border: rgba(34, 211, 238, 0.2);
+        --text-primary: #0f172a;
+        /* Slate 900 */
+        --accent-cyan: #06b6d4;
+        /* Cyan 500 - Slightly darker for contrast on white */
+        --accent-blue: #3b82f6;
+        /* Blue 500 */
+        --glass-border: rgba(15, 23, 42, 0.1);
+        /* Dark border for glass effect */
     }
 
     body {
@@ -52,10 +54,10 @@ body {
     }
 
     .glass-panel {
-        background: rgba(15, 23, 42, 0.6);
+        background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(12px);
         border: 1px solid var(--glass-border);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     }
 
     .tech-border {

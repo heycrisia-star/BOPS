@@ -32,10 +32,19 @@ const Navbar: React.FC = () => {
         >
             <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-center">
 
+                {/* LOGO */}
+                <div className="flex-shrink-0 mr-8 md:mr-10">
+                    <img
+                        src="/buildersops-logo.png"
+                        alt="BuildersOps"
+                        className="h-24 md:h-28 w-auto object-contain hover:scale-105 transition-transform duration-300 drop-shadow-sm"
+                    />
+                </div>
+
                 {/* DESKTOP PILL MENU */}
                 <div className={`
                     hidden md:flex items-center p-1.5 rounded-full border transition-all duration-300
-                    ${scrolled ? 'bg-slate-900/80 border-slate-700/50 backdrop-blur-md shadow-lg shadow-black/20' : 'bg-slate-900/40 border-slate-700/30 backdrop-blur-sm'}
+                    ${scrolled ? 'bg-white/80 border-slate-200/50 backdrop-blur-md shadow-lg shadow-black/5' : 'bg-white/40 border-slate-200/30 backdrop-blur-sm'}
                 `}>
                     {menuItems.map((item) => (
                         <a
@@ -47,15 +56,15 @@ const Navbar: React.FC = () => {
                             {activeTab === item.label && (
                                 <motion.div
                                     layoutId="active-pill"
-                                    className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full border border-cyan-500/30"
+                                    className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full border border-cyan-500/20"
                                     transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                                 />
                             )}
-                            <span className={`relative z-10 ${activeTab === item.label ? 'text-cyan-100' : 'text-slate-300 hover:text-white'}`}>
+                            <span className={`relative z-10 ${activeTab === item.label ? 'text-cyan-700 font-bold' : 'text-slate-600 hover:text-slate-900'}`}>
                                 {item.label}
                             </span>
                             {activeTab === item.label && (
-                                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1/3 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.8)]"></span>
+                                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1/3 h-0.5 bg-cyan-500 rounded-full shadow-[0_0_8px_rgba(6,182,212,0.4)]"></span>
                             )}
                         </a>
                     ))}

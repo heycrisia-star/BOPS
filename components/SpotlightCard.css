@@ -1,17 +1,15 @@
 .card-spotlight {
     position: relative;
     border-radius: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    /* Subtle default border */
-    background-color: rgba(15, 23, 42, 0.6);
-    /* Slate 900 with opacity */
+    border: 1px solid rgba(203, 213, 225, 0.2);
+    /* Slate 200/30 */
     padding: 2rem;
     overflow: hidden;
     --mouse-x: 50%;
     --mouse-y: 50%;
     --spotlight-color: rgba(34, 211, 238, 0.05);
-    backdrop-filter: blur(10px);
-    /* Added glass effect */
+    /* Light cyan spotlight */
+    /* Background handled by utility classes */
 }
 
 .card-spotlight::before {

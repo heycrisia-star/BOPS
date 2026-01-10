@@ -23,21 +23,21 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div id="top" className="min-h-screen flex flex-col text-slate-100 overflow-x-hidden relative selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div id="top" className="min-h-screen flex flex-col text-slate-900 overflow-x-hidden relative selection:bg-cyan-500/30 selection:text-cyan-900 bg-slate-50">
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 9999 }}>
         <PixelTrail
           gridSize={46}
           trailSize={0.05}
           maxAge={150}
           interpolate={2.5}
-          color="#2d00f5"
+          color="#3b82f6" // Blue 500
         />
       </div>
 
-      <div className="fixed inset-0 z-0 bg-[#0f172a]">
+      <div className="fixed inset-0 z-0 bg-slate-50">
         <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
           <Threads
-            color={[0.05, 0.2, 0.4]} // Even darker for mobile matching
+            color={[0.8, 0.85, 0.9]} // Very light grey/blue for subtle background
             amplitude={1.5}
             distance={0.2}
             enableMouseInteraction={false}
@@ -75,7 +75,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <div id="contact" className="max-w-7xl mx-auto w-full border-x border-white/5">
+      <div id="contact" className="max-w-7xl mx-auto w-full border-x border-slate-200/50">
         <Footer />
       </div>
     </div>
