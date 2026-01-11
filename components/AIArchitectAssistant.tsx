@@ -93,10 +93,10 @@ const AIArchitectAssistant: React.FC = () => {
               {/* SLIDER 3: MONTHLY COST (CHANGED) */}
               <div>
                 <div className="flex justify-between items-center mb-4">
-                  <label className="text-slate-900 font-bold text-lg">Coste laboral mensual (Bruto + SS)</label>
+                  <label className="text-slate-900 font-bold text-lg">Coste medio de empresa (€/mes)</label>
                   <span className="text-cyan-600 font-black text-3xl">{formatNum(monthlyCost)}€</span>
                 </div>
-                <p className="text-slate-500 text-sm mb-4 font-medium">Salario bruto + Seguridad Social (Coste Empresa)</p>
+                <p className="text-slate-500 text-sm mb-4 font-medium">Euros brutos + coste de seguridad social</p>
                 <input
                   type="range"
                   min="1500"
