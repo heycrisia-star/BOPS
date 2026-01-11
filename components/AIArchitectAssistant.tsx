@@ -3,8 +3,8 @@ import React, { useState, useMemo, useRef } from 'react';
 const AIArchitectAssistant: React.FC = () => {
   // State for the 3 sliders
   const [teamSize, setTeamSize] = useState<number>(5);
-  const [hoursLost, setHoursLost] = useState<number>(2);
-  const [monthlyCost, setMonthlyCost] = useState<number>(3600); // Changed from hourlyCost
+  const [hoursLost, setHoursLost] = useState<number>(3);
+  const [monthlyCost, setMonthlyCost] = useState<number>(2500); // Changed from hourlyCost
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Derived calculations
