@@ -14,12 +14,18 @@ import SuccessCases from './components/SuccessCases';
 import Metrics from './components/Metrics';
 import PixelTrail from './components/PixelTrail';
 import SalesAutomationLanding from './components/SalesAutomationLanding';
+import CustomerSupportLanding from './components/CustomerSupportLanding';
 
 const App: React.FC = () => {
-  const [view, setView] = React.useState<'home' | 'sales-automation'>('home');
+  const [view, setView] = React.useState<'home' | 'sales-automation' | 'customer-support'>('home');
 
   const handleNavigateToSales = () => {
     setView('sales-automation');
+    window.scrollTo(0, 0);
+  };
+
+  const handleNavigateToSupport = () => {
+    setView('customer-support');
     window.scrollTo(0, 0);
   };
 
@@ -93,7 +99,10 @@ const App: React.FC = () => {
             </div>
 
             <div id="method">
-              <HowWeBuild onNavigateToSales={handleNavigateToSales} />
+              <HowWeBuild
+                onNavigateToSales={handleNavigateToSales}
+                onNavigateToSupport={handleNavigateToSupport}
+              />
             </div>
 
             <div id="about">
@@ -105,8 +114,13 @@ const App: React.FC = () => {
             <Footer />
           </div>
         </>
-      ) : (
+      ) : view === 'sales-automation' ? (
         <SalesAutomationLanding
+          onBack={handleBackToHome}
+          onNavigateToContact={handleNavigateToContact}
+        />
+      ) : (
+        <CustomerSupportLanding
           onBack={handleBackToHome}
           onNavigateToContact={handleNavigateToContact}
         />

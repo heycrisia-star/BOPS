@@ -5,9 +5,10 @@ import ShinyText from './ShinyText';
 
 interface HowWeBuildProps {
   onNavigateToSales: () => void;
+  onNavigateToSupport: () => void;
 }
 
-const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales }) => {
+const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateToSupport }) => {
   const services = [
     {
       icon: "smart_toy",
@@ -17,10 +18,11 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales }) => {
       action: onNavigateToSales // Special action for this card
     },
     {
-      icon: "account_tree",
-      title: "Optimización de Procesos",
-      desc: "Elimina el trabajo manual repetitivo conectando tus herramientas para que los datos fluyan solos.",
-      tags: ["Facturación Auto", "Sincro CRM", "Sin Errores"]
+      icon: "support_agent",
+      title: "Atención al Cliente y Soporte",
+      desc: "Automatizamos la atención al cliente y el soporte para resolver consultas frecuentes, incidencias y dudas técnicas.",
+      tags: ["Soporte 24/7", "Incidencias Auto", "Happy Clients"],
+      action: onNavigateToSupport
     },
     {
       icon: "monitoring",
