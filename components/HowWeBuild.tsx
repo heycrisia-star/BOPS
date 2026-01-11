@@ -3,13 +3,18 @@ import SpotlightCard from './SpotlightCard';
 import ScrollVelocity from './ScrollVelocity';
 import ShinyText from './ShinyText';
 
-const HowWeBuild: React.FC = () => {
+interface HowWeBuildProps {
+  onNavigateToSales: () => void;
+}
+
+const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales }) => {
   const services = [
     {
       icon: "smart_toy",
-      title: "Chatbots Inteligentes",
-      desc: "Asistentes virtuales que atienden a tus clientes 24/7, responden preguntas y generan ventas automáticamente.",
-      tags: ["Integracion WhatsApp", "Respuestas IA", "Multi-idioma"]
+      title: "Captación y Ventas Automáticas",
+      desc: "Automatizamos todo el proceso desde la entrada del lead hasta la agenda, sin intervención manual.",
+      tags: ["Integracion WhatsApp", "Respuestas IA", "Multi-idioma"],
+      action: onNavigateToSales // Special action for this card
     },
     {
       icon: "account_tree",
@@ -71,7 +76,8 @@ const HowWeBuild: React.FC = () => {
           {services.map((service, idx) => (
             <div
               key={idx}
-              className="h-full p-8 rounded-[32px] border border-slate-200 bg-white hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-xl hover:-translate-y-1 relative overflow-hidden"
+              onClick={() => service.action && service.action()}
+              className={`h-full p-8 rounded-[32px] border border-slate-200 bg-white hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-xl hover:-translate-y-1 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
             >
               {/* Active Stripe Effect */}
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
