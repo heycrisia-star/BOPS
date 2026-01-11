@@ -71,7 +71,7 @@ const Navbar: React.FC = () => {
                 </div>
 
                 {/* MOBILE MENU (StaggeredMenu) */}
-                <div className="md:hidden pt-4">
+                <div className="md:hidden pt-7">
                     <StaggeredMenu items={menuItems} />
                 </div>
 

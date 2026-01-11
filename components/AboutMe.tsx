@@ -5,21 +5,8 @@ import LightRays from './LightRays';
 
 const AboutMe: React.FC = () => {
   return (
-    <section className="px-6 py-32 bg-transparent border-t border-slate-800/50 relative overflow-hidden backdrop-blur-sm">
-      <div className="absolute inset-0 bg-transparent -z-10">
-        <LightRays
-          raysColor="#eddee3"
-          raysSpeed={0.6}
-          lightSpread={1}
-          rayLength={1.9}
-          fadeDistance={1.5}
-          saturation={1.3}
-          mouseInfluence={0.7}
-          noiseAmount={0.29}
-          className="custom-rays opacity-40"
-        />
-      </div>
-      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -z-10"></div>
+    <section className="px-6 py-32 relative">
+      {/* Removed LightRays and background blobs as requested */}
 
       <div className="mb-16 text-center overflow-hidden">
         <h3 className="text-[36px] md:text-[48px] font-[950] text-slate-900 tracking-tighter leading-none">

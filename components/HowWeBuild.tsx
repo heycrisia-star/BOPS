@@ -49,9 +49,8 @@ const HowWeBuild: React.FC = () => {
   ];
 
   return (
-    <section className="px-6 py-24 bg-transparent border-t border-slate-800/50 backdrop-blur-sm relative" id="method">
-      {/* GRID OVERLAY FOR SECTION DISTINCTIVENESS */}
-      {/* GRID OVERLAY REMOVED FOR TRANSPARENCY */}
+    <section className="px-6 py-24 bg-transparent relative" id="method">
+      {/* GRID OVERLAY REMOVED FOR CLEAN DESIGN */}
       <div className="hidden"></div>
 
       <div className="max-w-6xl mx-auto">
