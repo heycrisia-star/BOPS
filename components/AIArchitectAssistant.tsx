@@ -4,14 +4,23 @@ const AIArchitectAssistant: React.FC = () => {
   // State for the 3 sliders
   const [teamSize, setTeamSize] = useState<number>(5);
   const [hoursLost, setHoursLost] = useState<number>(2);
-  const [hourlyCost, setHourlyCost] = useState<number>(25);
+  const [monthlyCost, setMonthlyCost] = useState<number>(2500); // Changed from hourlyCost
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Derived calculations
   const stats = useMemo(() => {
     const workingDaysPerMonth = 22; // Standard avg
+    const dailyWorkHours = 8; // Standard 40h week / 5 days
+
+    // Hours freed calculation remains the same (physical hours lost)
     const monthlyHoursFreed = teamSize * hoursLost * workingDaysPerMonth;
-    const monthlySavings = monthlyHoursFreed * hourlyCost;
+
+    // Savings calculation based on Monthly Cost (Coste Empresa)
+    // Formula: (Hours Lost / Daily Hours) * Monthly Cost * Team Size
+    // This represents the % of the salary wasted on lost time.
+    const productivityLostPercent = hoursLost / dailyWorkHours;
+    const monthlySavings = teamSize * monthlyCost * productivityLostPercent;
+
     const annualSavings = monthlySavings * 12;
 
     return {
@@ -20,7 +29,7 @@ const AIArchitectAssistant: React.FC = () => {
       monthlySavings: Math.round(monthlySavings),
       annualSavings: Math.round(annualSavings)
     };
-  }, [teamSize, hoursLost, hourlyCost]);
+  }, [teamSize, hoursLost, monthlyCost]);
 
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
@@ -73,7 +82,7 @@ const AIArchitectAssistant: React.FC = () => {
                 <input
                   type="range"
                   min="0.5"
-                  max="8"
+                  max="6" // Capped at 6h because losing 8h is unrealistic/scary
                   step="0.5"
                   value={hoursLost}
                   onChange={(e) => setHoursLost(Number(e.target.value))}
@@ -81,21 +90,26 @@ const AIArchitectAssistant: React.FC = () => {
                 />
               </div>
 
-              {/* SLIDER 3: HOURLY COST */}
+              {/* SLIDER 3: MONTHLY COST (CHANGED) */}
               <div>
                 <div className="flex justify-between items-center mb-4">
-                  <label className="text-slate-900 font-bold text-lg">Coste promedio por hora</label>
-                  <span className="text-cyan-600 font-black text-3xl">{hourlyCost}€</span>
+                  <label className="text-slate-900 font-bold text-lg">Coste laboral mensual (Bruto + SS)</label>
+                  <span className="text-cyan-600 font-black text-3xl">{formatNum(monthlyCost)}€</span>
                 </div>
+                <p className="text-slate-500 text-sm mb-4 font-medium">Salario bruto + Seguridad Social (Coste Empresa)</p>
                 <input
                   type="range"
-                  min="10"
-                  max="100"
-                  step="5"
-                  value={hourlyCost}
-                  onChange={(e) => setHourlyCost(Number(e.target.value))}
+                  min="1500"
+                  max="8000"
+                  step="100"
+                  value={monthlyCost}
+                  onChange={(e) => setMonthlyCost(Number(e.target.value))}
                   className="w-full h-3 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-cyan-600 hover:accent-cyan-500 transition-all"
                 />
+                <div className="flex justify-between mt-2 text-xs text-slate-400 font-bold">
+                  <span>1.500€</span>
+                  <span>8.000€+</span>
+                </div>
               </div>
             </div>
           </div>
