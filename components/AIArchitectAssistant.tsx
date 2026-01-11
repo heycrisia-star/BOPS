@@ -1,9 +1,7 @@
-
-import React, { useState, useMemo } from 'react';
-import jsPDF from 'jspdf';
+import React, { useState, useMemo, useRef } from 'react';
 import { supabase } from '../lib/supabase';
-import ScrollVelocity from './ScrollVelocity';
 
+// TYPES
 interface Task {
   id: string;
   name: string;
@@ -12,62 +10,145 @@ interface Task {
   daysPerWeek: number;
 }
 
-const TASKS_SALES = [
-  { id: 'sales', name: 'Prospección y Ventas', mins: 20 },
-  { id: 'qual', name: 'Cualificación de leads', mins: 15 },
-  { id: 'onb', name: 'Onboarding de clientes', mins: 45 },
-  { id: 'citas', name: 'Agendamiento de citas', mins: 15 },
+// DATA STRUCTURES
+const CATEGORIES = [
+  {
+    id: 'chatbots',
+    title: 'Chatbots Inteligentes',
+    icon: 'smart_toy',
+    description: 'Asistentes virtuales que atienden a tus clientes 24/7, responden preguntas y generan ventas automáticamente.',
+    tags: ['Integracion WhatsApp', 'Respuestas IA', 'Multi-idioma'],
+    color: 'text-cyan-400',
+    bg: 'bg-slate-700', // Inner icon bg
+    richContent: {
+      headline: 'Asistentes de IA que <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">realmente entienden</span> a tus clientes',
+      subtext: 'Olvídate de los chatbots antiguos. Creamos cerebros digitales entrenados con tu información para ofrecer conversaciones fluidas, humanas y resolutivas.',
+      features: [
+        {
+          id: 'chat_support',
+          icon: 'support_agent',
+          name: 'Atención al Cliente',
+          desc: 'Resuelve dudas, gestiona pedidos y devoluciones en cualquier idioma 24/7.',
+          mins: 30
+        },
+        {
+          id: 'chat_onboarding',
+          icon: 'badge',
+          name: 'Asistente Onboarding',
+          desc: 'Guía a nuevos empleados por la documentación y procesos internos.',
+          mins: 20
+        },
+        {
+          id: 'chat_tech',
+          icon: 'precision_manufacturing',
+          name: 'Soporte Técnico',
+          desc: 'Ayuda a técnicos a resolver incidencias complejas paso a paso.',
+          mins: 15
+        },
+      ]
+    }
+  },
+  {
+    id: 'optimization',
+    title: 'Optimización de Procesos',
+    icon: 'account_tree',
+    description: 'Elimina el trabajo manual repetitivo conectando tus herramientas para que los datos fluyan solos.',
+    tags: ['Facturación Auto', 'Sincro CRM', 'Sin Errores'],
+    color: 'text-emerald-400',
+    bg: 'bg-slate-700',
+    richContent: {
+      headline: 'Procesos que funcionan en <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">piloto automático</span>',
+      subtext: 'Conectamos tus herramientas (CRM, ERP, Email) para que los datos fluyan solos y tu equipo se centre en aportar valor.',
+      features: [
+        {
+          id: 'auto_invoice',
+          icon: 'receipt_long',
+          name: 'Facturación Automática',
+          desc: 'Emisión, envío y reclamación de facturas sin tocar un botón.',
+          mins: 25
+        },
+        {
+          id: 'auto_docs',
+          icon: 'cloud_upload',
+          name: 'Gestión Documental',
+          desc: 'Clasificación y extracción de datos de documentos automática.',
+          mins: 20
+        },
+        {
+          id: 'auto_crm',
+          icon: 'sync_alt',
+          name: 'Sincronización CRM',
+          desc: 'Mantén tus bases de datos de clientes siempre actualizadas.',
+          mins: 30
+        },
+      ]
+    }
+  },
+  {
+    id: 'web_dash',
+    title: 'Análisis y Desarrollo Web con IA',
+    icon: 'monitoring',
+    description: 'Transformamos datos en decisiones y creamos experiencias web de alto impacto.',
+    tags: ['Dashboards KPI', 'Web Apps', 'Scraping'],
+    color: 'text-violet-400',
+    bg: 'bg-slate-700',
+    richContent: {
+      headline: 'Visualiza el futuro de tu negocio con <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-500">claridad total</span>',
+      subtext: 'Transformamos datos brutos en decisiones inteligentes. Webs de alto rendimiento y dashboards que te dicen la verdad.',
+      features: [
+        {
+          id: 'dash_kpi',
+          icon: 'bar_chart',
+          name: 'Dashboards KPI',
+          desc: 'Controla métricas clave en tiempo real para tomar decisiones rápidas.',
+          mins: 40
+        },
+        {
+          id: 'web_app',
+          icon: 'web',
+          name: 'Webs Corporativas',
+          desc: 'Presencia digital moderna, rápida y optimizada para conversión.',
+          mins: 45
+        },
+        {
+          id: 'data_extract',
+          icon: 'dataset',
+          name: 'Scraping de Datos',
+          desc: 'Monitoriza a tu competencia y captura leads automáticamente.',
+          mins: 15
+        },
+      ]
+    }
+  }
 ];
-
-const TASKS_OPS = [
-  { id: 'atc', name: 'Atención al cliente', mins: 30 },
-  { id: 'billing', name: 'Facturación y cobros', mins: 20 },
-  { id: 'budget', name: 'Presupuestos', mins: 25 },
-  { id: 'reviews', name: 'Gestión de Reseñas', mins: 20 },
-];
-
-const TASKS_ENG = [
-  { id: 'web', name: 'Diseño y Mant. Web', mins: 40 },
-  { id: 'dash', name: 'Diseño de Dashboards', mins: 40 },
-  { id: 'data', name: 'Extracción de datos', mins: 50 },
-  { id: 'wpp', name: 'Agentes IA (Wpp/Tg)', mins: 45 },
-];
-
-// Combine for helper lookups if needed, or just iterate groups
-const ALL_TASKS = [...TASKS_SALES, ...TASKS_OPS, ...TASKS_ENG];
-
-const LOGO_URL = 'https://res.cloudinary.com/dk7xpxrvh/image/upload/v1767147299/asasasasasa_uyedrh.jpg';
 
 const AIArchitectAssistant: React.FC = () => {
   const [employeeCost, setEmployeeCost] = useState<number>(1800);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  // Keep these for email modal logic
   const [email, setEmail] = useState('');
   const [showEmailModal, setShowEmailModal] = useState(false);
-  const [activeTab, setActiveTab] = useState('investment');
-  const [openSection, setOpenSection] = useState<string | null>('team');
   const [isSaving, setIsSaving] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<string[]>([]); // Default all closed
-
-  const toggleGroup = (title: string) => {
-    setExpandedGroups(prev =>
-      prev.includes(title)
-        ? prev.filter(t => t !== title)
-        : [...prev, title]
-    );
-  };
-
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-
-
-  const formatNum = (num: number | string) => {
-    return new Intl.NumberFormat('es-ES').format(Math.round(Number(num)));
-  };
-
-  const updateTask = (id: string, field: keyof Task, value: number) => {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, [field]: value } : t));
+  const updateTask = (id: string, field: keyof Task, value: number, name: string) => {
+    setTasks(prev => {
+      const exists = prev.find(t => t.id === id);
+      if (!exists) {
+        return [...prev, {
+          id,
+          name,
+          minutes: field === 'minutes' ? value : 0,
+          frequency: field === 'frequency' ? value : 1,
+          daysPerWeek: field === 'daysPerWeek' ? value : 5
+        }];
+      }
+      return prev.map(t => t.id === id ? { ...t, [field]: value } : t);
+    });
   };
 
   const stats = useMemo(() => {
@@ -82,43 +163,30 @@ const AIArchitectAssistant: React.FC = () => {
     const weeklyHours = totalWeeklyMins / 60;
     const dailyHours = weeklyHours / 5;
     const monthlyHours = weeklyHours * 4.33;
-    const yearlyHours = monthlyHours * 12;
+    const annualHours = monthlyHours * 12;
+    const monthlySavings = monthlyHours * hourlyRate;
+    const annualSavings = monthlySavings * 12;
 
     return {
-      hourlyRate: hourlyRate.toFixed(2),
-      time: {
-        day: dailyHours.toFixed(1),
-        week: Math.round(weeklyHours),
-        month: Math.round(monthlyHours),
-        year: Math.round(yearlyHours)
-      },
-      money: {
-        day: Math.round(dailyHours * hourlyRate),
-        week: Math.round(weeklyHours * hourlyRate),
-        month: Math.round(monthlyHours * hourlyRate),
-        year: Math.round(yearlyHours * hourlyRate)
-      },
+      monthlyHours: Math.round(monthlyHours),
+      annualHours: Math.round(annualHours),
+      monthlySavings: Math.round(monthlySavings),
+      annualSavings: Math.round(annualSavings),
       fte: (monthlyHours / fteMonthlyHours).toFixed(2),
       percent: Math.round((monthlyHours / fteMonthlyHours) * 100)
     };
   }, [tasks, employeeCost]);
 
+  const formatCurrency = (val: number) => {
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
+  };
+
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setIsSaving(true);
-
-    // Extract only the names of active tasks (improvements)
-    const selectedImprovements = tasks
-      .filter(t => t.minutes > 0)
-      .map(t => t.name);
-
-    // Save strictly email + improvements array
-    await supabase.from('calculator_leads').insert({
-      email,
-      improvements: selectedImprovements
-    });
-
+    const selectedImprovements = tasks.filter(t => t.minutes > 0).map(t => t.name);
+    await supabase.from('calculator_leads').insert({ email, improvements: selectedImprovements });
     setShowEmailModal(false);
     setIsSaving(false);
     setIsUnlocked(true);
@@ -130,510 +198,245 @@ const AIArchitectAssistant: React.FC = () => {
       setShowEmailModal(true);
       return;
     }
-
     setIsSubmitting(true);
-
-    // PDF Logic restored
     const canvas = canvasRef.current;
-    if (!canvas) {
-      setIsSubmitting(false);
-      return;
-    }
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      setIsSubmitting(false);
-      return;
-    }
-
-    canvas.width = 1200;
-    canvas.height = 2800;
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = LOGO_URL;
-    img.onload = () => {
-      // Logo removed as per request
-      // const logoW = 450;
-      // ctx.drawImage(img, (canvas.width - logoW) / 2, 40, logoW, logoW);
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#0f172a';
-      ctx.font = '900 80px Inter';
-      ctx.fillText('AUDITORÍA DE RENTABILIDAD', canvas.width / 2, 540);
-      ctx.font = '700 24px Inter';
-      ctx.fillStyle = '#94a3b8';
-      ctx.fillText('BUILDERSOPS • INGENIERÍA DE SISTEMAS OPERATIVOS', canvas.width / 2, 585);
-      ctx.fillStyle = '#2563eb';
-      ctx.beginPath(); ctx.roundRect(350, 620, 500, 60, 30); ctx.fill();
-      ctx.fillStyle = '#ffffff'; ctx.font = '900 22px Inter';
-      ctx.fillText(`COSTE EMPLEADO BASE: ${employeeCost}€ / MES`, canvas.width / 2, 658);
-      const bX = 100, bY = 740, bW = 1000, bH = 480;
-      ctx.fillStyle = '#0f172a';
-      ctx.beginPath(); ctx.roundRect(bX, bY, bW, bH, 60); ctx.fill();
-      ctx.fillStyle = '#3b82f6'; ctx.font = '900 32px Inter';
-      ctx.fillText('CAPACIDAD OPERATIVA RECUPERADA (MENSUAL)', canvas.width / 2, bY + 100);
-      ctx.fillStyle = '#ffffff'; ctx.font = '900 260px Inter';
-      ctx.fillText(`${stats.fte}`, canvas.width / 2, bY + 330);
-      ctx.font = 'bold 36px Inter'; ctx.fillStyle = '#64748b';
-      ctx.fillText(`EQUIVALE AL ${stats.percent}% DE UN EMPLEADO AL MES`, canvas.width / 2, bY + 415);
-      let listY = bY + bH + 110;
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#0f172a'; ctx.font = '900 38px Inter';
-      ctx.fillText('ESTRATEGIA TÉCNICA DETALLADA:', 100, listY);
-      listY += 80;
-      const colors = ['#eff6ff', '#f0fdf4', '#fffbeb', '#fef2f2'];
-      const borderColors = ['#2563eb', '#10b981', '#f59e0b', '#ef4444'];
-      tasks.forEach((task, idx) => {
-        const tHours = ((task.minutes * task.frequency * task.daysPerWeek * 4.33) / 60);
-        const colorIdx = idx % colors.length;
-        ctx.fillStyle = colors[colorIdx];
-        ctx.beginPath(); ctx.roundRect(100, listY, 1000, 120, 24); ctx.fill();
-        ctx.strokeStyle = borderColors[colorIdx]; ctx.lineWidth = 3; ctx.stroke();
-        ctx.fillStyle = '#0f172a'; ctx.font = '900 26px Inter';
-        ctx.fillText(task.name.toUpperCase(), 140, listY + 50);
-        ctx.fillStyle = '#475569'; ctx.font = '700 19px Inter';
-        ctx.fillText(`INPUT: ${task.minutes} min  •  ${task.frequency} veces/día  •  ${task.daysPerWeek} días/sem`, 140, listY + 90);
-        ctx.textAlign = 'right';
-        ctx.fillStyle = borderColors[colorIdx]; ctx.font = '900 36px Inter';
-        ctx.fillText(`+${tHours.toFixed(1)} h/mes`, 1060, listY + 70);
-        ctx.textAlign = 'left';
-        listY += 145;
-      });
-      let tableY = listY + 90;
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#0f172a'; ctx.font = '900 38px Inter';
-      ctx.fillText('RESUMEN DE AHORRO NETO:', 100, tableY);
-      tableY += 90;
-      const drawColorRow = (label: string, time: string, money: string, y: number, color: string, bg: string) => {
-        ctx.fillStyle = bg; ctx.beginPath(); ctx.roundRect(100, y, 1000, 160, 32); ctx.fill();
-        ctx.textAlign = 'left'; ctx.fillStyle = '#0f172a'; ctx.font = '900 28px Inter';
-        ctx.fillText(label.toUpperCase(), 150, y + 95);
-        ctx.textAlign = 'center'; ctx.fillStyle = '#0f172a'; ctx.font = '900 86px Inter';
-        ctx.fillText(`${time}h`, 580, y + 105);
-        ctx.textAlign = 'right'; ctx.fillStyle = color; ctx.font = '900 78px Inter';
-        ctx.fillText(`${formatNum(money)}€`, 1050, y + 105);
-      };
-      drawColorRow('Ahorro Día', stats.time.day, stats.money.day.toString(), tableY, '#10b981', '#f0fdf4');
-      drawColorRow('Ahorro Semana', stats.time.week.toString(), stats.money.week.toString(), tableY + 195, '#f59e0b', '#fffbeb');
-      drawColorRow('Ahorro Mes', stats.time.month.toString(), stats.money.month.toString(), tableY + 390, '#3b82f6', '#eff6ff');
-      drawColorRow('Ahorro Año', stats.time.year.toString(), stats.money.year.toString(), tableY + 585, '#8b5cf6', '#f5f3ff');
-      const footerY = 2650;
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#94a3b8'; ctx.font = '700 24px Inter';
-      ctx.fillText('Ingeniería de Sistemas de alta disponibilidad. © BuildersOps 2026', canvas.width / 2, footerY);
-      ctx.fillStyle = '#2563eb'; ctx.font = '900 52px Inter';
-      ctx.fillText('+34 691 708 138   •   cristiianguti@gmail.com', canvas.width / 2, footerY + 80);
-
-      // Use jsPDF for better quality than simple canvas image if desired, but code used link.download from canvas.
-      // Replacing commented block with active code.
-      // Wait, the original code used link.href = canvas.toDataURL. That doesn't use jsPDF.
-      // Why did we install jsPDF? 
-      // User asked to fix "no se esta descargando". The alert said "PDF generator is being updated".
-      // Previous code used `canvas.toDataURL` which is just an image.
-      // Maybe I should actually implement jsPDF if I imported it?
-      // Or just enable the canvas download? 
-      // The user issue is likely just that the code was commented out. 
-      // I will sticking to restoring the code first (which downloads a .png).
-      // However, the file is named `AIArchitectAssistant.tsx` and imports `jsPDF`.
-      // Let's use `canvas.toDataURL` as it was there, but maybe the intention was to use jsPDF.
-      // I'll stick to restoring the commented code exactly as it's the safest "fix" for "it's not downloading".
-      // But wait, if I restore it, I need to remove the `*/` at the end.
-
+    if (canvas) {
       const link = document.createElement('a');
-      link.download = `BuildersOps-ROI-${stats.fte}FTE-Report.png`;
+      link.download = `BuildersOps-ROI.png`;
       link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
-      setIsSubmitting(false);
-    };
+    }
     setIsSubmitting(false);
   };
 
-  const summaryCards = [
-    { label: 'AHORRO DÍA', time: `${stats.time.day}h`, money: `${formatNum(stats.money.day)}€`, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100', accent: 'bg-emerald-600' },
-    { label: 'AHORRO SEMANA', time: `${stats.time.week}h`, money: `${formatNum(stats.money.week)}€`, color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100', accent: 'bg-amber-600' },
-    { label: 'AHORRO MES', time: `${stats.time.month}h`, money: `${formatNum(stats.money.month)}€`, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', accent: 'bg-blue-600' },
-    { label: 'AHORRO AÑO', time: `${stats.time.year}h`, money: `${formatNum(stats.money.year)}€`, color: 'text-violet-600', bg: 'bg-violet-50', border: 'border-violet-100', accent: 'bg-violet-600' },
-  ];
 
   return (
-    <section className="py-24 px-6 relative bg-transparent">
+    <section className="py-24 px-6 bg-transparent relative" id="calculator">
       <canvas ref={canvasRef} className="hidden" />
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-16 text-left overflow-hidden">
-          <span className="text-[12px] md:text-[14px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-6">ROI OPERATIVO & INGENIERÍA</span>
-          <div className="mb-16 text-center overflow-hidden">
-            <h3 className="text-[36px] md:text-[48px] font-[950] text-slate-900 tracking-tighter leading-none inline-block">
-              Descubre tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">Potencial de Ahorro</span>
-            </h3>
-          </div>
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="mb-16 text-center">
+          <span className="text-[12px] md:text-[14px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-4">
+            RENTABILIDAD
+          </span>
+          <h3 className="text-[36px] md:text-[54px] font-[900] text-slate-900 tracking-tight leading-none mb-6">
+            Calcula tu <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">Impacto</span>
+          </h3>
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
+            Descubre cuánto dinero está perdiendo tu empresa en tareas repetitivas.
+          </p>
         </div>
 
-        <div className="p-0 md:p-6 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-start">
 
-            {/* INPUTS COLUMN - ACCORDION (3 SECTIONS) */}
-            <div className="lg:col-span-7 flex flex-col gap-6">
+          {/* LEFT COLUMN: INTERACTIVE CARDS */}
+          <div className="lg:col-span-7 flex flex-col gap-6">
 
-              {/* ACCORDION 1: ESTRUCTURA DEL EQUIPO */}
-              <div className="border border-slate-200 rounded-3xl bg-white/40 backdrop-blur-md overflow-hidden hover:border-cyan-500/30 transition-colors shadow-sm">
-                <button
-                  onClick={() => setOpenSection(openSection === 'team' ? null : 'team')}
-                  className="w-full flex items-center justify-between p-6 hover:bg-white/40 transition-colors group"
-                >
-                  <div className="flex items-center gap-5">
-                    <div className="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center text-cyan-600 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.1)]">
-                      <span className="material-symbols-outlined text-3xl">groups</span>
+            {/* Cost Configuration Card */}
+            <div className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm relative overflow-hidden">
+              <label className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-4">Tu Coste Promedio</label>
+              <div className="flex items-end gap-2">
+                <input
+                  type="number"
+                  value={employeeCost}
+                  onChange={(e) => setEmployeeCost(Number(e.target.value))}
+                  className="bg-transparent border-b-2 border-slate-200 text-5xl font-[900] text-slate-900 w-48 focus:border-cyan-500 outline-none transition-colors"
+                />
+                <span className="text-xl font-bold text-slate-400 mb-2">€ / mes</span>
+              </div>
+            </div>
+
+            {/* 3 FEATURE CARDS - DARK THEME */}
+            <div className="grid grid-cols-1 gap-6">
+              {CATEGORIES.map((cat) => {
+                const activeCount = tasks.filter(t => cat.richContent.features.some(f => f.id === t.id) && t.minutes > 0).length;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setOpenSection(cat.id)}
+                    className={`text-left p-8 rounded-[32px] border transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl relative overflow-hidden bg-slate-800 border-slate-700 hover:border-cyan-500/50`}
+                  >
+                    {/* Active Indicator Stripe */}
+                    {activeCount > 0 && <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500"></div>}
+
+                    <div className="flex items-start justify-between mb-6">
+                      <div className={`w-14 h-14 rounded-2xl ${cat.bg} border border-slate-600 flex items-center justify-center transition-transform group-hover:scale-110`}>
+                        <span className={`material-symbols-outlined text-3xl ${cat.color}`}>{cat.icon}</span>
+                      </div>
+                      {activeCount > 0 && (
+                        <span className="text-[10px] font-black bg-cyan-500 text-slate-900 px-3 py-1 rounded-full">
+                          {activeCount} ACTIVOS
+                        </span>
+                      )}
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-[800] text-slate-900 uppercase tracking-tight text-left">Estructura del Equipo</h3>
-                  </div>
-                  <div className={`w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center transition-all duration-300 ${openSection === 'team' ? 'bg-cyan-500 text-white rotate-180' : 'text-slate-400'}`}>
-                    <span className="material-symbols-outlined">expand_more</span>
-                  </div>
-                </button>
-                <div className={`transition-[max-height] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${openSection === 'team' ? 'max-h-[300px]' : 'max-h-0'}`}>
-                  <div className="p-8 pt-2">
-                    <label className="text-[11px] font-[900] text-slate-500 uppercase tracking-[0.2em] block mb-4">Coste Operativo Mensual (Equipos)</label>
-                    <div className="relative group">
-                      <input
-                        type="number"
-                        value={employeeCost}
-                        onChange={(e) => setEmployeeCost(Number(e.target.value))}
-                        className="w-full bg-transparent border-b-2 border-slate-300 px-0 py-4 pr-24 text-slate-900 focus:outline-none focus:border-cyan-500 transition-all font-mono text-5xl font-bold tracking-tighter"
-                        placeholder="0"
-                      />
-                      <span className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 font-mono text-xl">€/mes</span>
+
+                    <h4 className={`text-2xl font-bold mb-3 ${cat.color}`}>{cat.title}</h4>
+                    <p className="text-slate-400 text-base mb-6 leading-relaxed">{cat.description}</p>
+
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {cat.tags?.map((tag, i) => (
+                        <span key={i} className="px-3 py-1 rounded-full bg-slate-700/50 border border-slate-600 text-slate-300 text-xs font-medium">
+                          {tag}
+                        </span>
+                      ))}
                     </div>
-                    <p className="text-slate-500 text-sm mt-4 font-medium leading-relaxed">Coste total mensual del equipo dedicado a estas tareas (Salarios + SS + Tools).</p>
+
+                    <div className="flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
+                      <span className="text-sm font-bold text-cyan-400">Ver más</span>
+                      <span className="material-symbols-outlined text-cyan-400 text-lg">arrow_forward</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: RESULTS */}
+          <div className="lg:col-span-5 sticky top-8">
+            <div className="p-8 md:p-10 rounded-[32px] bg-white border border-slate-200 shadow-2xl flex flex-col justify-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-white -z-10"></div>
+              <div className="absolute -right-20 -bottom-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-colors duration-700"></div>
+
+              <div className="text-center mb-12 relative z-10">
+                <span className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-2 block">Ahorro Potencial Anual</span>
+                <h2 className="text-[64px] md:text-[80px] font-[1000] text-slate-900 leading-none tracking-tighter">
+                  {formatCurrency(stats.annualSavings)}
+                </h2>
+              </div>
+
+              <div className="flex justify-between items-end border-b border-slate-100 pb-8 mb-8 relative z-10">
+                <span className="text-slate-500 font-bold text-lg">Ahorro Mensual</span>
+                <span className="text-4xl font-[900] text-cyan-600 tracking-tight">{formatCurrency(stats.monthlySavings)}</span>
+              </div>
+
+              <div className="bg-cyan-50/50 border border-cyan-100 rounded-2xl p-6 relative z-10 overflow-hidden backdrop-blur-sm">
+                <div className="flex items-center gap-2 mb-6">
+                  <span className="material-symbols-outlined text-cyan-600 text-xl">schedule</span>
+                  <span className="text-xs font-bold text-cyan-600 uppercase tracking-widest">Tiempo Recuperado</span>
+                </div>
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-[40px] font-[1000] text-slate-900 leading-none tracking-tight">{stats.annualHours.toLocaleString()} h</p>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase mt-2">ANUALES</p>
+                  </div>
+                  <div className="text-right pb-1">
+                    <p className="text-3xl font-[900] text-cyan-600 leading-none">{stats.monthlyHours} h</p>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase mt-2">MENSUALES</p>
                   </div>
                 </div>
               </div>
 
-              {/* SECTION 2: GESTIÓN DEL TIEMPO (ALWAYS VISIBLE) */}
-              <div className="border border-slate-200 rounded-3xl bg-white/40 backdrop-blur-md overflow-hidden relative shadow-sm">
-                <div className="p-6 border-b border-slate-200/50">
-                  <div className="flex items-center gap-5">
-                    <div className="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center text-cyan-600 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
-                      <span className="material-symbols-outlined text-3xl">schedule</span>
+              <button className="mt-10 w-full py-5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-[900] text-lg uppercase tracking-widest transition-all shadow-lg hover:shadow-cyan-500/30 hover:-translate-y-1 active:scale-95">
+                Recuperar este dinero ahora
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* RICH MODAL */}
+      {openSection && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-white w-full max-w-5xl rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh] animate-in slide-in-from-bottom-10 duration-500">
+
+            {(() => {
+              const cat = CATEGORIES.find(c => c.id === openSection);
+              if (!cat) return null;
+
+              return (
+                <div className="flex flex-col h-full">
+                  {/* Modal Header */}
+                  <div className="p-10 pb-6 relative overflow-hidden bg-slate-50 border-b border-slate-100 shrink-0">
+                    <button
+                      onClick={() => setOpenSection(null)}
+                      className="absolute top-8 right-8 w-10 h-10 rounded-full bg-white text-slate-400 hover:text-slate-900 hover:bg-slate-100 flex items-center justify-center transition-all z-20 shadow-sm"
+                    >
+                      <span className="material-symbols-outlined">close</span>
+                    </button>
+
+                    <div className="max-w-3xl mx-auto text-center relative z-10">
+                      <div className={`w-16 h-16 rounded-2xl ${cat.bg} mx-auto flex items-center justify-center mb-6`}>
+                        <span className={`material-symbols-outlined text-4xl ${cat.color}`}>{cat.icon}</span>
+                      </div>
+                      <h2 className="text-4xl md:text-5xl font-[1000] text-slate-900 mb-6 leading-tight" dangerouslySetInnerHTML={{ __html: cat.richContent.headline }} />
+                      <p className="text-lg text-slate-600 font-medium leading-relaxed">{cat.richContent.subtext}</p>
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-[800] text-slate-900 uppercase tracking-tight text-left">Gestión del Tiempo</h3>
                   </div>
-                </div>
 
-                <div className="w-full">
-                  <div className="p-8 pt-6">
-                    <p className="text-slate-600 mb-6">Configura las horas dedicadas por tarea en los bloques inferiores.</p>
-                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 mb-8">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-bold uppercase text-slate-500">Total Horas/Semana</span>
-                        <span className="font-mono text-cyan-600 font-bold text-xl">{stats.time.week}h</span>
-                      </div>
-                      <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-                        <div className="bg-cyan-500 h-full rounded-full" style={{ width: `${Math.min(stats.time.week / 40 * 100, 100)}%` }}></div>
-                      </div>
-                    </div>
+                  {/* Modal Content - 3 Rich Cards */}
+                  <div className="flex-1 overflow-y-auto p-6 md:p-10 bg-white">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                      {cat.richContent.features.map((feature) => {
+                        const activeTask = tasks.find(t => t.id === feature.id);
+                        const val = activeTask ? activeTask.minutes : 0;
+                        const freq = activeTask ? activeTask.frequency : 1;
 
-                    {/* TASKS LIST MOVED INSIDE ACCORDION */}
-                    <div className="space-y-8">
-                      {[
-                        { title: 'VENTAS & EXPANSIÓN', items: TASKS_SALES, color: 'text-blue-600', border: 'border-blue-200' },
-                        { title: 'GESTIÓN & OPERACIONES', items: TASKS_OPS, color: 'text-emerald-600', border: 'border-emerald-200' },
-                        { title: 'INGENIERÍA & PRODUCTO', items: TASKS_ENG, color: 'text-violet-600', border: 'border-violet-200' }
-                      ].map((block) => {
-                        const isOpen = expandedGroups.includes(block.title);
                         return (
-                          <div key={block.title} className={`rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen ? 'bg-white/60 border-slate-200' : 'bg-transparent border-transparent'}`}>
-                            <button
-                              onClick={() => toggleGroup(block.title)}
-                              className={`w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors group rounded-2xl border ${block.border} ${isOpen ? 'bg-slate-50' : 'bg-transparent'}`}
-                            >
-                              <div className="flex items-center gap-3">
-                                <span className={`material-symbols-outlined text-[20px] ${block.color}`}>layers</span>
-                                <span className={`text-[12px] font-black ${block.color} uppercase tracking-widest`}>{block.title}</span>
+                          <div key={feature.id} className={`p-8 rounded-[32px] border transition-all duration-300 relative group flex flex-col ${val > 0 ? 'bg-cyan-50/50 border-cyan-200 shadow-lg shadow-cyan-500/10' : 'bg-slate-50 border-slate-100 hover:border-cyan-200 hover:shadow-lg'}`}>
+                            <div className={`w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-6 shadow-sm border border-slate-100 ${val > 0 ? 'text-cyan-600' : 'text-slate-400'} group-hover:scale-110 transition-transform`}>
+                              <span className="material-symbols-outlined text-2xl">{feature.icon}</span>
+                            </div>
+
+                            <h3 className="text-xl font-[900] text-slate-900 mb-3">{feature.name}</h3>
+                            <p className="text-sm text-slate-500 font-medium leading-relaxed mb-6 min-h-[60px]">{feature.desc}</p>
+
+                            <div className="mt-auto space-y-4">
+                              <div>
+                                <div className="flex justify-between items-center mb-2">
+                                  <label className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Duración (min)</label>
+                                  <span className="text-xs font-bold text-slate-900">{val} min</span>
+                                </div>
+                                <input
+                                  type="range"
+                                  min="0" max="120" step="5"
+                                  value={val}
+                                  onChange={(e) => updateTask(feature.id, 'minutes', Number(e.target.value), feature.name)}
+                                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                                />
                               </div>
-                              <span className={`material-symbols-outlined text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>expand_more</span>
-                            </button>
 
-                            <div className={`transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                              <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                                {block.items.map(preset => {
-                                  const activeTask = tasks.find(t => t.id === preset.id);
-                                  const isZero = !activeTask || (activeTask.minutes === 0);
-                                  const getValue = (field: keyof Task) => activeTask ? activeTask[field] : 0;
-
-                                  const handleChange = (field: keyof Task, val: number) => {
-                                    if (!activeTask) {
-                                      const newTask: Task = {
-                                        id: preset.id,
-                                        name: preset.name,
-                                        minutes: field === 'minutes' ? val : 0,
-                                        frequency: field === 'frequency' ? val : 0,
-                                        daysPerWeek: field === 'daysPerWeek' ? val : 0
-                                      };
-                                      setTasks(prev => [...prev, newTask]);
-                                    } else {
-                                      updateTask(preset.id, field, val);
-                                    }
-                                  };
-
-                                  return (
-                                    <div key={preset.id} className={`p-4 rounded-xl border transition-all duration-300 ${!isZero ? 'bg-cyan-50 border-cyan-200 shadow-[0_0_15px_rgba(6,182,212,0.1)]' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}`}>
-                                      <div className="flex items-center justify-between mb-3">
-                                        <span className={`text-[13px] font-bold ${!isZero ? 'text-cyan-800' : 'text-slate-500'}`}>{preset.name}</span>
-                                        {!isZero && (
-                                          <span className="text-[10px] font-black text-cyan-700 bg-cyan-100/60 px-2 py-1 rounded-lg">
-                                            +{formatNum((Number(getValue('minutes')) * Number(getValue('frequency')) * Number(getValue('daysPerWeek')) * 4.33 / 60).toFixed(0))} h/mes
-                                          </span>
-                                        )}
-                                      </div>
-
-                                      <div className="flex gap-2">
-                                        {[
-                                          { label: 'MINUTOS', field: 'minutes', ph: '0' },
-                                          { label: 'VECES/DÍA', field: 'frequency', ph: '0' },
-                                          { label: 'DÍAS/SEM', field: 'daysPerWeek', ph: '0' }
-                                        ].map((cfg) => (
-                                          <div key={cfg.field} className="flex-1">
-                                            <label className="text-[8px] font-black block mb-1 text-center text-slate-400">{cfg.label}</label>
-                                            <input
-                                              type="number"
-                                              placeholder={cfg.ph}
-                                              value={activeTask ? (activeTask[cfg.field as keyof Task] || '') : ''}
-                                              onChange={(e) => handleChange(cfg.field as keyof Task, Number(e.target.value))}
-                                              className={`w-full h-8 rounded-lg text-center font-bold text-[12px] outline-none transition-all border ${!isZero ? 'bg-white border-cyan-200 text-cyan-900' : 'bg-white border-slate-200 text-slate-400 focus:border-cyan-300 focus:text-slate-900'}`}
-                                            />
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
+                              <div className={`transition-all duration-300 ${val > 0 ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                                <div className="flex justify-between items-center mb-2">
+                                  <label className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Frecuencia / día</label>
+                                  <span className="text-xs font-bold text-slate-900">{freq} veces</span>
+                                </div>
+                                <input
+                                  type="range"
+                                  min="1" max="20" step="1"
+                                  value={freq}
+                                  onChange={(e) => updateTask(feature.id, 'frequency', Number(e.target.value), feature.name)}
+                                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                                />
                               </div>
                             </div>
+
+                            {val > 0 && (
+                              <div className="absolute top-6 right-6">
+                                <span className="material-symbols-outlined text-cyan-500 animate-bounce">check_circle</span>
+                              </div>
+                            )}
                           </div>
                         );
                       })}
                     </div>
                   </div>
+
+                  {/* Feature Footer */}
+                  <div className="p-6 border-t border-slate-100 bg-white flex justify-center shrink-0">
+                    <button
+                      onClick={() => setOpenSection(null)}
+                      className="px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-full font-bold uppercase tracking-widest text-xs transition-all shadow-lg hover:shadow-slate-900/20 active:scale-95 flex items-center gap-2"
+                    >
+                      <span>Confirmar Selección</span>
+                      <span className="material-symbols-outlined text-base">check</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            {/* RESULTS COLUMN - DARK MODE */}
-            <div className="lg:col-span-12 xl:col-span-5">
-              {/* CSS to hide number arrows (spinners) globally for this component */}
-              <style>{`
-                input[type=number]::-webkit-inner-spin-button, 
-                input[type=number]::-webkit-outer-spin-button { 
-                  -webkit-appearance: none; 
-                  margin: 0; 
-                }
-                input[type=number] {
-                    -moz-appearance: textfield;
-                }
-              `}</style>
-
-              <div className="sticky top-32 space-y-8">
-                {tasks.length > 0 ? (
-                  <div className="space-y-8 animate-in fade-in slide-in-from-right-10 duration-700">
-
-                    {/* BLUR WRAPPER */}
-                    <div className={`transition-all duration-700 ${!isUnlocked ? 'filter blur-xl select-none pointer-events-none opacity-80' : 'filter blur-0 opacity-100'}`}>
-
-                      {/* Hero FTE & MONEY Card - NOW TRANSPARENT */}
-                      <div className="p-10 md:p-12 rounded-[56px] bg-white/80 backdrop-blur-xl border border-slate-200/60 text-slate-900 shadow-2xl relative overflow-hidden flex flex-col items-center text-center group ring-1 ring-slate-100">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
-                        <p className="text-[12px] font-black text-blue-600 uppercase tracking-[0.4em] mb-8 opacity-80">Impacto Mensual Recuperado</p>
-
-                        <div className="flex flex-col items-center gap-1 mb-8">
-                          <div className="flex items-baseline justify-center">
-                            <span className="text-[32px] md:text-[40px] font-black text-blue-600 mr-2">€</span>
-                            <span className="text-[72px] md:text-[100px] font-[1000] leading-none tracking-tighter text-slate-900 drop-shadow-sm">
-                              {formatNum(stats.money.month)}
-                            </span>
-                          </div>
-                          <span className="text-[14px] font-black text-slate-400 uppercase tracking-[0.2em]">CAPITAL MENSUAL LIBERADO</span>
-                        </div>
-
-                        <div className="w-48 h-px bg-slate-200 mb-8"></div>
-
-                        <div className="flex items-center gap-6 mb-8">
-                          <div className="text-center">
-                            <p className="text-[44px] font-[1000] leading-none text-blue-600">{stats.fte}</p>
-                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2">FTEs (TIEMPO)</p>
-                          </div>
-                          <div className="w-px h-12 bg-slate-200"></div>
-                          <div className="text-center">
-                            <p className="text-[44px] font-[1000] leading-none text-emerald-600">{stats.percent}%</p>
-                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2">CAPACIDAD</p>
-                          </div>
-                        </div>
-
-                        <p className="text-[14px] text-slate-500 font-bold leading-relaxed max-w-xs">
-                          Al año recuperas un total de <span className="text-blue-600 font-black text-[18px]">{formatNum(stats.money.year)}€</span> netos.
-                        </p>
-                      </div>
-
-                      {/* Matriz de Ahorro Real-Time */}
-                      <div className="grid grid-cols-2 gap-4 mt-8">
-                        {summaryCards.map((card, i) => (
-                          <div key={i} className={`group p-6 md:p-8 rounded-[40px] border ${card.bg.replace('bg-', 'bg-opacity-40 bg-')} ${card.border} flex flex-col justify-between shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 relative overflow-hidden bg-white/60 backdrop-blur-md`}>
-                            <div className={`absolute top-0 right-0 w-16 h-16 ${card.accent} opacity-[0.1] rounded-bl-full`}></div>
-                            <p className={`text-[10px] font-black ${card.color} uppercase tracking-widest mb-6`}>{card.label}</p>
-                            <div className="space-y-1">
-                              <div className="flex items-baseline gap-1">
-                                <span className="text-[28px] font-[1000] text-slate-900 leading-none">{card.time}</span>
-                              </div>
-                              <div className={`text-[22px] font-black ${card.color} tracking-tighter`}>{card.money}</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                    </div>
-                    {/* END BLUR WRAPPER */}
-
-                    {/* LOCK OVERLAY & BUTTON */}
-                    {!isUnlocked && (
-                      <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-20 pb-0">
-                        <div className="w-24 h-24 bg-slate-900/50 backdrop-blur-md rounded-full flex items-center justify-center border border-white/10 shadow-2xl mb-8">
-                          <span className="material-symbols-outlined text-5xl text-white/50">lock</span>
-                        </div>
-                        <button
-                          onClick={() => generateAndDownload()}
-                          disabled={isSubmitting}
-                          className="px-8 py-4 bg-cyan-600/90 hover:bg-cyan-500 text-white rounded-full font-[800] text-[14px] uppercase tracking-widest backdrop-blur-xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50 border border-cyan-400/20 hover:scale-105"
-                        >
-                          <span className="material-symbols-outlined text-[20px]">lock_open</span>
-                          {isSubmitting ? 'GENERANDO...' : 'DESBLOQUEAR Y DESCARGAR'}
-                        </button>
-                      </div>
-                    )}
-
-
-                    {/* DOWNLOAD BUTTON (ONLY WHEN UNLOCKED) */}
-                    {isUnlocked && (
-                      <div className="flex justify-center w-full mt-8">
-                        <button
-                          onClick={() => generateAndDownload()}
-                          disabled={isSubmitting}
-                          className="px-8 py-4 bg-cyan-600/90 hover:bg-cyan-500 text-white rounded-full font-[800] text-[14px] uppercase tracking-widest backdrop-blur-xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50 relative z-30 border border-cyan-400/20 hover:scale-105"
-                        >
-                          <span className="material-symbols-outlined text-[20px]">download</span>
-                          {isSubmitting ? 'GENERANDO...' : 'DESCARGAR INFORME'}
-                        </button>
-                      </div>
-                    )}
-
-                    {/* EMAIL CAPTURE MODAL - Keep opaque for readability */}
-                    {showEmailModal && (
-                      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#020617]/80 backdrop-blur-xl animate-in fade-in duration-200">
-                        <div className="w-full max-w-md bg-slate-900/90 border border-white/10 p-8 rounded-[32px] shadow-2xl relative animate-in zoom-in-95 duration-200 backdrop-blur-2xl">
-                          <button
-                            onClick={() => setShowEmailModal(false)}
-                            className="absolute top-6 right-6 text-slate-500 hover:text-white transition-colors"
-                          >
-                            <span className="material-symbols-outlined">close</span>
-                          </button>
-
-                          <div className="text-center mb-8">
-                            <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                              <span className="material-symbols-outlined text-blue-500 text-[32px]">forward_to_inbox</span>
-                            </div>
-                            <h3 className="text-2xl font-[900] text-white  mb-2">¿Dónde te enviamos el informe?</h3>
-                            <p className="text-slate-400 text-sm">
-                              Recibirás tu auditoría de rentabilidad detallada y una copia en alta calidad para tu equipo.
-                            </p>
-                          </div>
-
-                          <form onSubmit={handleLeadSubmit} className="space-y-4">
-                            <div>
-                              <input
-                                type="email"
-                                required
-                                placeholder="tu@email.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full h-14 bg-black/20 border border-white/10 rounded-xl px-4 text-white placeholder-slate-500 focus:border-blue-500 outline-none transition-all font-medium text-center"
-                              />
-                            </div>
-                            <button
-                              type="submit"
-                              disabled={isSaving}
-                              className="w-full h-14 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {isSaving ? (
-                                'UN MOMENTO...'
-                              ) : (
-                                <>
-                                  <span>ENVIAR Y DESCARGAR</span>
-                                  <span className="material-symbols-outlined">download</span>
-                                </>
-                              )}
-                            </button>
-                            <p className="text-[10px] text-center text-slate-500 uppercase font-bold tracking-widest">
-                              Sin spam. Solo ingeniería.
-                            </p>
-                          </form>
-                        </div>
-                      </div>
-                    )}
-
-                    <p className="text-[11px] text-center text-slate-500 font-bold px-12 leading-relaxed italic opacity-70">
-                      Informe técnico certificado de eficiencia operativa. Basado en ingeniería de sistemas de alta disponibilidad.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="p-6 md:p-8 bg-white/60 backdrop-blur-3xl rounded-[40px] border border-slate-200 text-left relative overflow-hidden transition-all duration-500 hover:bg-white/80 h-full flex flex-col justify-center shadow-sm">
-
-                    <h3 className="text-[20px] md:text-[24px] font-[900] text-slate-900 uppercase tracking-tight mb-8 relative z-10 flex items-center gap-4">
-                      <span className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-[18px] shadow-lg shadow-blue-500/30 flex-shrink-0">?</span>
-                      CÓMO FUNCIONA EL CÁLCULO
-                    </h3>
-
-                    <div className="relative z-10 space-y-6">
-
-                      {/* SECTION 1 */}
-                      <div className="pl-4 border-l-4 border-blue-500">
-                        <h4 className="text-blue-600 font-black uppercase text-sm tracking-widest mb-2">1. Tu Coste Base</h4>
-                        <p className="text-slate-500 text-xs md:text-sm font-medium leading-relaxed">
-                          Introduce tu coste mensual total (Salario Bruto + Seguridad Social) en el campo superior.
-                          <span className="block mt-1 text-slate-400 italic text-[11px]">Ejemplo: 2.500€</span>
-                        </p>
-                      </div>
-
-                      {/* SECTION 2 */}
-                      <div className="pl-4 border-l-4 border-emerald-500">
-                        <h4 className="text-emerald-600 font-black uppercase text-sm tracking-widest mb-2">2. Referencia Temporal</h4>
-                        <p className="text-slate-500 text-xs md:text-sm font-medium leading-relaxed">
-                          El sistema asume una jornada estándar de <strong className="text-slate-800">40h/semana</strong> (aprox. 173h/mes). Calculamos tu <strong className="text-slate-800">precio/hora real</strong> dividiendo tu coste entre estas horas.
-                        </p>
-                      </div>
-
-                      {/* SECTION 3 */}
-                      <div className="pl-4 border-l-4 border-amber-500">
-                        <h4 className="text-amber-600 font-black uppercase text-sm tracking-widest mb-2">3. Tu Ahorro</h4>
-                        <p className="text-slate-500 text-xs md:text-sm font-medium leading-relaxed">
-                          Al introducir los minutos diarios que dedicas a una tarea, multiplicamos ese tiempo recuperado por tu precio/hora.
-                          <span className="block mt-2 text-amber-600/80 font-bold">Menos tareas manuales = Más dinero recuperado.</span>
-                        </p>
-                      </div>
-
-                    </div>
-
-                    <div className="mt-8 text-center relative z-10 pt-6 border-t border-slate-200">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] animate-pulse flex flex-col items-center gap-2">
-                        <span>Introduce un valor para comenzar</span>
-                        <span className="material-symbols-outlined text-xl">arrow_downward</span>
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+              );
+            })()}
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };
