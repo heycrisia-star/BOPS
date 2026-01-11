@@ -254,37 +254,21 @@ const AIArchitectAssistant: React.FC = () => {
                   <button
                     key={cat.id}
                     onClick={() => setOpenSection(cat.id)}
-                    className={`text-left p-8 rounded-[32px] border transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl relative overflow-hidden bg-slate-800 border-slate-700 hover:border-cyan-500/50`}
+                    className={`text-left p-6 rounded-[24px] border transition-all duration-300 flex flex-col group hover:-translate-y-1 hover:shadow-lg ${activeCount > 0 ? 'bg-cyan-50 border-cyan-200 ring-1 ring-cyan-200' : 'bg-white border-slate-200 hover:border-cyan-300'}`}
                   >
-                    {/* Active Indicator Stripe */}
-                    {activeCount > 0 && <div className="absolute top-0 left-0 w-2 h-full bg-cyan-500"></div>}
-
-                    <div className="flex items-start justify-between mb-6">
-                      <div className={`w-14 h-14 rounded-2xl ${cat.bg} border border-slate-600 flex items-center justify-center transition-transform group-hover:scale-110`}>
-                        <span className={`material-symbols-outlined text-3xl ${cat.color}`}>{cat.icon}</span>
+                    <div className="flex items-start justify-between mb-4">
+                      <div className={`w-14 h-14 rounded-2xl ${activeCount > 0 ? 'bg-white' : cat.bg} flex items-center justify-center transition-transform group-hover:scale-110`}>
+                        <span className={`material-symbols-outlined text-3xl ${activeCount > 0 ? 'text-cyan-600' : 'text-slate-500'}`}>{cat.icon}</span>
                       </div>
                       {activeCount > 0 && (
-                        <span className="text-[10px] font-black bg-cyan-500 text-slate-900 px-3 py-1 rounded-full">
-                          {activeCount} ACTIVOS
+                        <span className="text-[10px] font-black bg-cyan-600 text-white px-3 py-1 rounded-full">
+                          {activeCount} ACTIVO{activeCount > 1 ? 'S' : ''}
                         </span>
                       )}
                     </div>
 
-                    <h4 className={`text-2xl font-bold mb-3 ${cat.color}`}>{cat.title}</h4>
-                    <p className="text-slate-400 text-base mb-6 leading-relaxed">{cat.description}</p>
-
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      {cat.tags?.map((tag, i) => (
-                        <span key={i} className="px-3 py-1 rounded-full bg-slate-700/50 border border-slate-600 text-slate-300 text-xs font-medium">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
-                      <span className="text-sm font-bold text-cyan-400">Ver más</span>
-                      <span className="material-symbols-outlined text-cyan-400 text-lg">arrow_forward</span>
-                    </div>
+                    <h4 className="text-lg font-[900] text-slate-900 mb-2 leading-tight">{cat.title}</h4>
+                    <p className="text-slate-500 text-sm leading-relaxed">{cat.description}</p>
                   </button>
                 );
               })}

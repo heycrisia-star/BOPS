@@ -7,21 +7,21 @@ const HowWeBuild: React.FC = () => {
   const services = [
     {
       icon: "smart_toy",
-      title: "Automatización & IA",
-      desc: "Multiplica tus ingresos con agentes que venden y atienden 24/7. Captura cada oportunidad al instante y libera a tu equipo para cerrar los tratos de mayor valor.",
-      tags: ["CHATBOT WHATSAPP", "AGENTES IA 24/7", "CUALIFICA & SIGUE TUS LEADS", "ATENCIÓN AL CLIENTE"]
+      title: "Chatbots Inteligentes",
+      desc: "Asistentes virtuales que atienden a tus clientes 24/7, responden preguntas y generan ventas automáticamente.",
+      tags: ["Integracion WhatsApp", "Respuestas IA", "Multi-idioma"]
     },
     {
-      icon: "code_blocks",
+      icon: "account_tree",
       title: "Optimización de Procesos",
-      desc: "Convierte el tiempo perdido en rentabilidad. Automatizamos el trabajo manual para que tu operativa cueste menos y produzca el doble, permitiendo a tu equipo brillar.",
-      tags: ["DISEÑO WEB & APPS", "AGENDAMIENTO AUTO", "PRESUPUESTOS & FACTURACIÓN", "ONBOARDING DIGITAL"]
+      desc: "Elimina el trabajo manual repetitivo conectando tus herramientas para que los datos fluyan solos.",
+      tags: ["Facturación Auto", "Sincro CRM", "Sin Errores"]
     },
     {
-      icon: "insights",
-      title: "Análisis con IA",
-      desc: "Domina tu mercado con certeza matemática. Detecta fugas de capital y patrones de venta ocultos en tiempo real para tomar decisiones que maximizan tu beneficio neto.",
-      tags: ["DASHBOARDS KPI", "EXTRACCIÓN DATOS", "ANÁLISIS RESEÑAS", "PREDICCIÓN VENTAS"]
+      icon: "monitoring",
+      title: "Análisis y Desarrollo Web con IA",
+      desc: "Transformamos datos en decisiones y creamos experiencias web de alto impacto.",
+      tags: ["Dashboards KPI", "Web Apps", "Scraping"]
     }
   ];
 
@@ -69,40 +69,37 @@ const HowWeBuild: React.FC = () => {
         {/* SERVICES GRID WITH SPOTLIGHT */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
           {services.map((service, idx) => (
-            <SpotlightCard
+            <div
               key={idx}
-              className="h-full p-8 border border-slate-200 bg-white/60 backdrop-blur-md hover:border-cyan-500/30 transition-all group flex flex-col shadow-sm hover:shadow-md"
+              className="h-full p-8 rounded-[32px] border border-slate-700 bg-slate-800 hover:border-cyan-500/50 transition-all group flex flex-col shadow-xl hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden"
             >
+              {/* Active Stripe Effect */}
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
               <div className="mb-6 relative">
-                <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-white border border-slate-200 shadow-[0_0_15px_rgba(6,182,212,0.1)] group-hover:scale-110 transition-transform duration-300">
-                  <span className="material-symbols-outlined text-3xl text-cyan-600 group-hover:text-cyan-500 transition-colors">
+                <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-slate-700 border border-slate-600 group-hover:scale-110 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-3xl text-cyan-400 group-hover:text-cyan-300 transition-colors">
                     {service.icon}
                   </span>
                 </div>
-                {/* Floating visual effect element */}
-                <div className="absolute -inset-2 bg-cyan-200/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
-              <p className="text-slate-600 leading-relaxed text-sm mb-8 flex-grow">{service.desc}</p>
 
-              <div className="flex flex-col gap-3 mt-auto">
-                {service.tags.map((tag, i) => {
-                  const colors = [
-                    "bg-cyan-50 border-cyan-100 text-cyan-700",
-                    "bg-violet-50 border-violet-100 text-violet-700",
-                    "bg-emerald-50 border-emerald-100 text-emerald-700",
-                    "bg-rose-50 border-rose-100 text-rose-700"
-                  ];
-                  const colorClass = colors[i % colors.length];
+              <h3 className="text-2xl font-bold text-cyan-400 mb-3">{service.title}</h3>
+              <p className="text-slate-400 leading-relaxed text-base mb-8 flex-grow">{service.desc}</p>
 
-                  return (
-                    <span key={i} className={`px-4 py-2.5 rounded-xl border text-[11px] font-black uppercase tracking-widest text-center backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] ${colorClass}`}>
-                      {tag}
-                    </span>
-                  );
-                })}
+              <div className="flex flex-wrap gap-2 mb-8">
+                {service.tags.map((tag, i) => (
+                  <span key={i} className="px-3 py-1 rounded-full bg-slate-700/50 border border-slate-600 text-slate-300 text-xs font-medium">
+                    {tag}
+                  </span>
+                ))}
               </div>
-            </SpotlightCard>
+
+              <div className="flex items-center gap-2 group-hover:gap-4 transition-all duration-300 mt-auto">
+                <span className="text-sm font-bold text-cyan-400">Ver más</span>
+                <span className="material-symbols-outlined text-cyan-400 text-lg">arrow_forward</span>
+              </div>
+            </div>
           ))}
         </div>
 
