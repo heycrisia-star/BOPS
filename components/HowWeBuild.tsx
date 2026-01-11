@@ -6,9 +6,10 @@ import ShinyText from './ShinyText';
 interface HowWeBuildProps {
   onNavigateToSales: () => void;
   onNavigateToSupport: () => void;
+  onNavigateToOperations: () => void;
 }
 
-const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateToSupport }) => {
+const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateToSupport, onNavigateToOperations }) => {
   const services = [
     {
       icon: "smart_toy",
@@ -25,10 +26,11 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
       action: onNavigateToSupport
     },
     {
-      icon: "monitoring",
-      title: "Análisis y Desarrollo Web con IA",
-      desc: "Transformamos datos en decisiones y creamos experiencias web de alto impacto.",
-      tags: ["Dashboards KPI", "Web Apps", "Scraping"]
+      icon: "settings_suggest",
+      title: "Operaciones y Control del Negocio",
+      desc: "Automatizamos tareas administrativas y operativas para reducir errores, ganar visibilidad y tomar mejores decisiones.",
+      tags: ["Dashboard KPIs", "Facturación Auto", "IDP"],
+      action: onNavigateToOperations
     }
   ];
 
