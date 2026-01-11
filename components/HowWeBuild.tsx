@@ -71,33 +71,33 @@ const HowWeBuild: React.FC = () => {
           {services.map((service, idx) => (
             <div
               key={idx}
-              className="h-full p-8 rounded-[32px] border border-slate-700 bg-slate-800 hover:border-cyan-500/50 transition-all group flex flex-col shadow-xl hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden"
+              className="h-full p-8 rounded-[32px] border border-slate-200 bg-white hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-xl hover:-translate-y-1 relative overflow-hidden"
             >
               {/* Active Stripe Effect */}
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
               <div className="mb-6 relative">
-                <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-slate-700 border border-slate-600 group-hover:scale-110 transition-transform duration-300">
-                  <span className="material-symbols-outlined text-3xl text-cyan-400 group-hover:text-cyan-300 transition-colors">
+                <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-slate-50 border border-slate-200 group-hover:scale-110 transition-transform duration-300">
+                  <span className="material-symbols-outlined text-3xl text-cyan-600 group-hover:text-cyan-500 transition-colors">
                     {service.icon}
                   </span>
                 </div>
               </div>
 
-              <h3 className="text-2xl font-bold text-cyan-400 mb-3">{service.title}</h3>
-              <p className="text-slate-400 leading-relaxed text-base mb-8 flex-grow">{service.desc}</p>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3">{service.title}</h3>
+              <p className="text-slate-600 leading-relaxed text-base mb-8 flex-grow">{service.desc}</p>
 
               <div className="flex flex-wrap gap-2 mb-8">
                 {service.tags.map((tag, i) => (
-                  <span key={i} className="px-3 py-1 rounded-full bg-slate-700/50 border border-slate-600 text-slate-300 text-xs font-medium">
+                  <span key={i} className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wide">
                     {tag}
                   </span>
                 ))}
               </div>
 
               <div className="flex items-center gap-2 group-hover:gap-4 transition-all duration-300 mt-auto">
-                <span className="text-sm font-bold text-cyan-400">Ver más</span>
-                <span className="material-symbols-outlined text-cyan-400 text-lg">arrow_forward</span>
+                <span className="text-sm font-bold text-cyan-600">Ver más</span>
+                <span className="material-symbols-outlined text-cyan-600 text-lg">arrow_forward</span>
               </div>
             </div>
           ))}
