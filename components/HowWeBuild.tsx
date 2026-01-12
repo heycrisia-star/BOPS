@@ -2,7 +2,7 @@ import React from 'react';
 import SpotlightCard from './SpotlightCard';
 import ScrollVelocity from './ScrollVelocity';
 import ShinyText from './ShinyText';
-import { PixelCanvas } from './ui/pixel-canvas';
+import PixelCard from './ui/PixelCard';
 
 interface HowWeBuildProps {
   onNavigateToSales: () => void;
@@ -80,22 +80,12 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
         {/* SERVICES GRID WITH SPOTLIGHT */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
           {services.map((service, idx) => (
-            <div
+            <PixelCard
               key={idx}
+              variant="blue"
               onClick={() => service.action && service.action()}
               className={`h-full p-8 rounded-[32px] border border-white/50 bg-white/40 backdrop-blur-xl hover:bg-white/60 hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
             >
-              {/* PIXEL CANVAS EFFECT */}
-              <div className="absolute inset-0 z-0 pointer-events-none">
-                <PixelCanvas
-                  gap={10}
-                  speed={25}
-                  colors={["#bae6fd", "#7dd3fc", "#0ea5e9"]}
-                  variant="default"
-                  noFocus={true}
-                />
-              </div>
-
               {/* Active Stripe Effect */}
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
 
@@ -125,7 +115,7 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
                   <span className="material-symbols-outlined text-lg">arrow_forward</span>
                 </button>
               </div>
-            </div>
+            </PixelCard>
           ))}
         </div>
 
