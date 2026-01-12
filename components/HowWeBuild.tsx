@@ -71,6 +71,9 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
               Soluciones que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600">Escalan</span>
             </h2>
           </div>
+          <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-600 font-medium leading-relaxed">
+            Diseñamos ecosistemas digitales que trabajan por ti. Desde la captación automática hasta el control operativo total.
+          </p>
         </div>
 
         {/* SERVICES GRID WITH SPOTLIGHT */}

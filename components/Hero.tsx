@@ -16,7 +16,7 @@ const Hero: React.FC = () => {
       {/* 1. VIDEO BACKGROUND (Full Screen) */}
       <div className="absolute inset-0 z-0">
         <video
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
           autoPlay
           muted
           loop
