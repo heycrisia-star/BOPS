@@ -1,26 +1,138 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+
+    <!-- Builders Ops Metadata (Adapted from Pioneer template) -->
     <title>BuildersOps - Build the Future</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Automatización inteligente y arquitectura de software para escalar tu negocio." />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="BuildersOps - Build the Future" />
+    <meta property="og:description"
+        content="Automatización inteligente y arquitectura de software para escalar tu negocio." />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/index.css">
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            /* Slate-50 fallback */
+        }
+
+        /* Unsupported Browser Styles (Reference from Pioneer) */
+        .unsupported {
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background-color: #0f172a;
+            /* Slate-900 */
+            color: white;
+            display: none;
+            /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .unsupported.active {
+            display: flex;
+        }
+
+        .unsupported h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .unsupported a {
+            color: #22d3ee;
+            /* Cyan-400 */
+            text-decoration: underline;
         }
     </style>
-
-<link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-white text-slate-900">
+
+<body>
+
+    <!-- React Root -->
     <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+
+    <!-- Unsupported Browser Fallback (Adapted) -->
+    <div id="unsupported" class="unsupported">
+        <div class="unsupported__inner">
+            <h2>
+                Tu navegador no es compatible.<br>
+                Esta experiencia requiere tecnología moderna.
+            </h2>
+            <p>
+                Por favor, actualiza a
+                <a href="https://www.google.com/chrome/" target="_blank">Chrome</a>,
+                <a href="https://www.mozilla.org/firefox/new/" target="_blank">Firefox</a>, o
+                <a href="https://www.apple.com/safari/" target="_blank">Safari</a>.
+            </p>
+        </div>
+    </div>
+
+    <!-- Browser Detection Script -->
+    <script>
+        function checkBrowser() {
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf('MSIE ');
+            // Check for IE 10 or older
+            if (msie > 0) return true;
+
+            var trident = ua.indexOf('Trident/');
+            // Check for IE 11
+            if (trident > 0) return true;
+
+            // Check for very old Edge
+            // Modern Edge (Edg/) is fine. Legacy Edge (Edge/) might be an issue depending on requirements.
+            // We'll trust modern React capabilities.
+
+            // Basic WebGL check (optional, but good for heavy 3D sites)
+            try {
+                var canvas = document.createElement('canvas');
+                var hasWebGL = !!(window.WebGLRenderingContext &&
+                    (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+                if (!hasWebGL) return true;
+            } catch (e) { return true; }
+
+            return false;
+        }
+
+        if (checkBrowser()) {
+            document.getElementById('unsupported').classList.add('active');
+            document.getElementById('root').style.display = 'none';
+        }
+    </script>
+
+    <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

@@ -41,7 +41,6 @@ const Navbar: React.FC = () => {
                     />
                 </div>
 
-                {/* DESKTOP PILL MENU */}
                 <div className={`
                     hidden md:flex items-center p-1.5 rounded-full border transition-all duration-300
                     ${scrolled ? 'bg-white/80 border-slate-200/50 backdrop-blur-md shadow-lg shadow-black/5' : 'bg-white/40 border-slate-200/30 backdrop-blur-sm'}

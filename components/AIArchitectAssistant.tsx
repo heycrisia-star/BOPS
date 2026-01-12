@@ -157,10 +157,7 @@ const AIArchitectAssistant: React.FC = () => {
                 </div>
               </div>
 
-              <button className="w-full py-5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-[900] text-lg uppercase tracking-widest transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 group/btn">
-                <span>Recuperar este dinero</span>
-                <span className="material-symbols-outlined group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
-              </button>
+
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import CountUp from './CountUp';
 import ScrollVelocity from './ScrollVelocity';
+import { GlassButton } from './ui/LiquidGlass';
 
 const cases = [
     {
@@ -34,69 +35,89 @@ const cases = [
 ];
 
 const SuccessCases: React.FC = () => {
+    const [isOpen, setIsOpen] = React.useState(false);
+
     return (
-        <section className="py-24 px-6 bg-transparent">
+        <section id="cases" className="py-12 px-6 md:px-12 max-w-7xl mx-auto relative">
             {/* Transparent Container */}
             <div className="max-w-6xl mx-auto">
 
-                <div className="mb-20 text-center relative overflow-hidden">
+                <div className="mb-6 text-center relative overflow-hidden">
                     {/* Glow effect simplified or removed to avoid 'bad' aesthetic */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px] -z-10"></div>
 
-                    <span className="text-[12px] md:text-[14px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-4">
+                    <span className="text-[10px] md:text-[12px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-2 opacity-80">
                         RESULTADOS PROBADOS
                     </span>
-                    <h3 className="text-[36px] md:text-[48px] font-[950] text-slate-900 tracking-tighter leading-none mx-auto max-w-3xl">
-                        Impacto que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">Transforma Negocios</span>
+                    <h3 className="text-3xl md:text-4xl font-[900] text-slate-900 tracking-tight leading-none mx-auto max-w-2xl mb-6">
+                        Impacto que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600">Transforma</span>
                     </h3>
+
+                    {/* Toggle Button - Glass Effect */}
+                    <div className="flex justify-center">
+                        <GlassButton
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="bg-white/50 px-8 py-4"
+                        >
+                            <span className="text-base font-bold uppercase tracking-wide text-slate-900 mr-2">
+                                {isOpen ? 'Ocultar Reseñas' : 'Ver Experiencias de Clientes'}
+                            </span>
+                            <span className={`material-symbols-outlined text-2xl transition-transform duration-500 text-cyan-600 ${isOpen ? 'rotate-180' : ''}`}>
+                                expand_more
+                            </span>
+                        </GlassButton>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {cases.map((c, i) => (
-                        <div key={i} className="group p-8 rounded-3xl bg-white/60 border border-slate-200/60 hover:border-cyan-500/30 transition-all hover:bg-white/90 duration-300 relative overflow-hidden flex flex-col justify-between backdrop-blur-md shadow-sm hover:shadow-md">
-                            <div className="relative z-10 mb-6 flex gap-1">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <span key={star} className="material-symbols-outlined text-yellow-500 text-xl">star</span>
-                                ))}
-                            </div>
-
-                            <div className="relative z-10 mb-8">
-                                <p className="text-slate-600 text-lg leading-relaxed italic font-medium">
-                                    "{c.desc}"
-                                </p>
-                            </div>
-
-                            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t border-slate-200/60 gap-6 md:gap-4">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-cyan-100/50 flex items-center justify-center text-cyan-700 font-black text-sm shrink-0">
-                                        {c.title.charAt(0)}
-                                    </div>
-                                    <div>
-                                        <h4 className="text-slate-900 font-bold text-lg md:text-2xl leading-tight mb-1 md:mb-2">
-                                            {c.title}
-                                        </h4>
-                                        <span className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-widest block">
-                                            {c.metric}
-                                        </span>
-                                    </div>
+                {/* Collapsible Grid */}
+                {isOpen && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                        {cases.map((c, i) => (
+                            <div key={i} className="group p-8 rounded-3xl bg-white/60 border border-slate-200/60 hover:border-cyan-500/30 transition-all hover:bg-white/90 duration-300 relative overflow-hidden flex flex-col justify-between backdrop-blur-md shadow-sm hover:shadow-md">
+                                <div className="relative z-10 mb-6 flex gap-1">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <span key={star} className="material-symbols-outlined text-yellow-500 text-xl">star</span>
+                                    ))}
                                 </div>
 
-                                {c.link && (
-                                    <a
-                                        href={c.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full md:w-auto shrink-0 flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-slate-500 hover:text-white hover:border-cyan-500 hover:bg-cyan-600 transition-all group/link"
-                                        title="Ver Proyecto"
-                                    >
-                                        <span className="text-xs font-bold uppercase tracking-wider">Visitar Web</span>
-                                        <span className="material-symbols-outlined text-lg group-hover/link:translate-x-0.5 transition-transform">arrow_outward</span>
-                                    </a>
-                                )}
+                                <div className="relative z-10 mb-8">
+                                    <p className="text-slate-600 text-lg leading-relaxed italic font-medium">
+                                        "{c.desc}"
+                                    </p>
+                                </div>
+
+                                <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t border-slate-200/60 gap-6 md:gap-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-cyan-100/50 flex items-center justify-center text-cyan-700 font-black text-sm shrink-0">
+                                            {c.title.charAt(0)}
+                                        </div>
+                                        <div>
+                                            <h4 className="text-slate-900 font-bold text-lg md:text-2xl leading-tight mb-1 md:mb-2">
+                                                {c.title}
+                                            </h4>
+                                            <span className="text-slate-500 text-[10px] md:text-xs font-bold uppercase tracking-widest block">
+                                                {c.metric}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {c.link && (
+                                        <a
+                                            href={c.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full md:w-auto shrink-0 flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-slate-500 hover:text-white hover:border-cyan-500 hover:bg-cyan-600 transition-all group/link"
+                                            title="Ver Proyecto"
+                                        >
+                                            <span className="text-xs font-bold uppercase tracking-wider">Visitar Web</span>
+                                            <span className="material-symbols-outlined text-lg group-hover/link:translate-x-0.5 transition-transform">arrow_outward</span>
+                                        </a>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
             </div>
         </section>

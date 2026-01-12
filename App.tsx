@@ -6,7 +6,6 @@ import Footer from './components/Footer';
 import AIArchitectAssistant from './components/AIArchitectAssistant';
 import AboutMe from './components/AboutMe';
 import ContactBot from './components/ContactBot';
-import Squares from './components/Squares';
 import Navbar from './components/Navbar';
 import Threads from './components/Threads';
 
@@ -37,13 +36,10 @@ const App: React.FC = () => {
 
   const handleBackToHome = () => {
     setView('home');
-    window.scrollTo(0, 0); // Or scroll to #method if preferred, but top is safer
+    window.scrollTo(0, 0);
   };
 
   const handleNavigateToContact = () => {
-    // If we are in landing, we might want to go to contact section of home, or just open bot
-    // Ideally, the "Agenda una demo" just opens the bot/contact form.
-    // For now, let's assume it scrolls to contact section on Home.
     setView('home');
     setTimeout(() => {
       const contactSection = document.getElementById('contact');
@@ -54,33 +50,16 @@ const App: React.FC = () => {
   return (
     <div id="top" className="min-h-screen flex flex-col text-slate-900 overflow-x-hidden relative selection:bg-cyan-500/30 selection:text-cyan-900 bg-slate-50">
 
-      {/* GLOBAL BACKGROUNDS - Keep pixel trail/threads only on Home or both? Landing has its own dark bg. */}
       {view === 'home' && (
         <>
-          <div className="hidden md:block" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 9999 }}>
-            <PixelTrail
-              gridSize={46}
-              trailSize={0.05}
-              maxAge={150}
-              interpolate={2.5}
-              color="#94a3b8"
-              gooeyFilter={undefined}
-            />
-          </div>
-
+          {/* GLOBAL BACKGROUNDS - Optional if Video covers Hero, but good for other sections */}
           <div className="fixed inset-0 z-0 bg-slate-50">
             <div className="absolute top-0 left-0 w-full h-screen overflow-hidden">
-              <Threads
-                color={[0.95, 0.95, 0.95]}
-                amplitude={1.5}
-                distance={0.2}
-                enableMouseInteraction={false}
-              />
+              <Threads color={[0.95, 0.95, 0.95]} amplitude={1.5} distance={0.2} enableMouseInteraction={false} />
             </div>
           </div>
         </>
       )}
-
 
       <Navbar />
 
@@ -92,18 +71,14 @@ const App: React.FC = () => {
           {/* METRICS SECTION */}
           <Metrics />
 
-          <ContactBot />
-
           <main className="flex-grow max-w-7xl mx-auto w-full relative z-10">
 
-            <div id="testimonials">
-              <SuccessCases />
-            </div>
-
+            {/* 1. CALCULADORA ROI (AI Architect) */}
             <div id="ai-assistant">
               <AIArchitectAssistant />
             </div>
 
+            {/* 2. SERVICIOS (How We Build) */}
             <div id="method">
               <HowWeBuild
                 onNavigateToSales={handleNavigateToSales}
@@ -112,10 +87,20 @@ const App: React.FC = () => {
               />
             </div>
 
+            {/* 3. RESEÑAS (Success Cases) */}
+            <div id="testimonials">
+              <SuccessCases />
+            </div>
+
+            {/* 4. SOBRE MÍ (About Me) */}
             <div id="about">
               <AboutMe />
             </div>
+
           </main>
+
+          {/* CONTACT SECTION */}
+          <ContactBot />
 
           <div id="contact" className="max-w-7xl mx-auto w-full border-x border-slate-200/50">
             <Footer />

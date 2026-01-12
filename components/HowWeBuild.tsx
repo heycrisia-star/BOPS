@@ -29,7 +29,7 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
       icon: "settings_suggest",
       title: "Operaciones y Control del Negocio",
       desc: "Automatizamos tareas administrativas y operativas para reducir errores, ganar visibilidad y tomar mejores decisiones.",
-      tags: ["Dashboard KPIs", "Facturación Auto", "IDP"],
+      tags: ["Desarrollo Web", "Dashboard KPIs", "Facturación Auto", "Sistemas IDP"],
       action: onNavigateToOperations
     }
   ];
@@ -58,18 +58,16 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
   ];
 
   return (
-    <section className="px-6 py-24 bg-transparent relative" id="method">
-      {/* GRID OVERLAY REMOVED FOR CLEAN DESIGN */}
-      <div className="hidden"></div>
+    <div id="services" className="relative w-full py-20 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden rounded-3xl my-8">
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* SERVICIOS */}
         <div className="mb-20 text-center overflow-hidden">
-          <span className="text-[12px] md:text-[14px] font-black text-cyan-500 uppercase tracking-[0.3em] block mb-8">
+          <span className="text-[12px] md:text-[14px] font-black text-cyan-600 uppercase tracking-[0.3em] block mb-8 bg-white/40 w-fit mx-auto px-4 py-1 rounded-full backdrop-blur-md border border-white/20">
             Nuestros Servicios
           </span>
           <div className="py-4">
-            <h2 className="text-[36px] md:text-[54px] font-[900] text-slate-900 tracking-tight leading-[1.1] text-glow">
+            <h2 className="text-[36px] md:text-[54px] font-[900] text-slate-900 tracking-tight leading-[1.1] text-glow drop-shadow-sm">
               Soluciones que <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600">Escalan</span>
             </h2>
           </div>
@@ -81,45 +79,45 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
             <div
               key={idx}
               onClick={() => service.action && service.action()}
-              className={`h-full p-8 rounded-[32px] border border-slate-200 bg-white hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-xl hover:-translate-y-1 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
+              className={`h-full p-8 rounded-[32px] border border-white/50 bg-white/40 backdrop-blur-xl hover:bg-white/60 hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-xl hover:-translate-y-1 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
             >
               {/* Active Stripe Effect */}
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
-              <div className="mb-6 relative">
-                <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-slate-50 border border-slate-200 group-hover:scale-110 transition-transform duration-300">
-                  <span className="material-symbols-outlined text-3xl text-cyan-600 group-hover:text-cyan-500 transition-colors">
+              <div className="mb-6 relative z-10">
+                <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-white/70 border border-white/60 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                  <span className="material-symbols-outlined text-3xl text-cyan-700 group-hover:text-cyan-600 transition-colors">
                     {service.icon}
                   </span>
                 </div>
               </div>
 
-              <h3 className="text-2xl font-bold text-slate-900 mb-3">{service.title}</h3>
-              <p className="text-slate-600 leading-relaxed text-base mb-8 flex-grow">{service.desc}</p>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3 z-10 relative drop-shadow-sm">{service.title}</h3>
+              <p className="text-slate-700 leading-relaxed text-base mb-8 flex-grow z-10 relative font-medium">{service.desc}</p>
 
-              <div className="flex flex-wrap gap-2 mb-8">
+              <div className="flex flex-wrap gap-2 mb-8 z-10 relative">
                 {service.tags.map((tag, i) => (
-                  <span key={i} className="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wide">
+                  <span key={i} className="px-3 py-1 rounded-full bg-white/50 border border-white/40 text-slate-700 text-xs font-bold uppercase tracking-wide backdrop-blur-md shadow-sm">
                     {tag}
                   </span>
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 group-hover:gap-4 transition-all duration-300 mt-auto">
-                <span className="text-sm font-bold text-cyan-600">Ver más</span>
-                <span className="material-symbols-outlined text-cyan-600 text-lg">arrow_forward</span>
+              <div className="flex items-center gap-2 group-hover:gap-4 transition-all duration-300 mt-auto z-10 relative">
+                <span className="text-sm font-bold text-cyan-800">Ver más</span>
+                <span className="material-symbols-outlined text-cyan-800 text-lg">arrow_forward</span>
               </div>
             </div>
           ))}
         </div>
 
         {/* METODOLOGÍA */}
-        <div className="flex flex-col md:flex-row gap-16 items-start">
+        <div className="flex flex-col md:flex-row gap-16 items-start p-12 rounded-[40px] bg-white/40 backdrop-blur-2xl border border-white/50 shadow-2xl mb-20">
           <div className="md:w-1/3 sticky top-24">
-            <span className="text-[12px] font-black text-cyan-600 uppercase tracking-[0.3em] block mb-4">
+            <span className="text-[12px] font-black text-cyan-700 uppercase tracking-[0.3em] block mb-4">
               Metodología
             </span>
-            <h3 className="text-[32px] font-[900] text-slate-900 tracking-tight leading-[1.1] mb-6">
+            <h3 className="text-[32px] font-[900] text-slate-900 tracking-tight leading-[1.1] mb-6 drop-shadow-sm">
               <ShinyText
                 text="Cómo transformamos tu operativa"
                 disabled={false}
@@ -133,7 +131,7 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
                 className="block"
               />
             </h3>
-            <p className="text-slate-600 text-lg leading-relaxed">
+            <p className="text-slate-800 text-lg leading-relaxed font-semibold drop-shadow-sm">
               No solo implementamos tecnología; ejecutamos un plan de transformación diseñado para que tu negocio escale sin romperse.
             </p>
             <div className="h-1 w-20 bg-cyan-500 mt-8 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.5)]"></div>
@@ -143,17 +141,17 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
             {steps.map((step, idx) => (
               <div key={idx} className="flex gap-6 group">
                 <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-lg group-hover:border-cyan-500/50 group-hover:bg-slate-50 transition-all duration-500 relative z-10 backdrop-blur-sm">
-                    <span className="text-cyan-600 font-black text-[16px] leading-none">{step.num}</span>
+                  <div className="w-12 h-12 rounded-xl bg-white/60 border border-white/50 flex items-center justify-center shadow-md group-hover:border-cyan-500/50 group-hover:bg-cyan-50/50 transition-all duration-500 relative z-10 backdrop-blur-md">
+                    <span className="text-cyan-800 font-black text-[16px] leading-none">{step.num}</span>
                   </div>
                   {/* Line connector vertically, conditional for last row if needed, but simple for now */}
                   {idx < steps.length - 2 && (
-                    <div className="w-[1px] h-full bg-slate-200 group-hover:bg-cyan-500/30 transition-colors mt-4 hidden md:block"></div>
+                    <div className="w-[1px] h-full bg-slate-400/30 group-hover:bg-cyan-500/50 transition-colors mt-4 hidden md:block"></div>
                   )}
                 </div>
                 <div className="pt-2">
-                  <h4 className="text-[18px] font-[800] text-slate-900 mb-2 tracking-tight group-hover:text-cyan-600 transition-colors">{step.title}</h4>
-                  <p className="text-[14px] text-slate-600 leading-relaxed font-medium">{step.desc}</p>
+                  <h4 className="text-[18px] font-[800] text-slate-900 mb-2 tracking-tight group-hover:text-cyan-700 transition-colors drop-shadow-sm">{step.title}</h4>
+                  <p className="text-[14px] text-slate-800 leading-relaxed font-semibold drop-shadow-sm">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -161,7 +159,7 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
         </div>
 
       </div>
-    </section>
+    </div>
   );
 };
 

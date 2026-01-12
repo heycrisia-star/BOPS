@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import Cubes from './Cubes';
-import VariableProximity from './VariableProximity';
+import { GlassButton, GlassFilter } from './ui/LiquidGlass';
+
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -10,75 +10,78 @@ const Hero: React.FC = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-
-
   return (
-    <section className="relative px-6 pt-32 pb-32 flex flex-col items-center text-center bg-transparent min-h-[90vh] justify-center overflow-hidden">
+    <section className="relative w-full h-screen overflow-hidden">
 
-      {/* Hero-specific subtle scrim to make text pop against the global grid */}
-      {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/10 to-slate-900/50 z-0"></div> */}
+      {/* 1. VIDEO BACKGROUND (Full Screen) */}
+      <div className="absolute inset-0 z-0">
+        <video
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          src="https://pppwfgqjnfdprcpbzudk.supabase.co/storage/v1/object/sign/bops/ezgif.com-video-to-webp-converter%20(1).mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9hY2Y3MDNhOS03NTRlLTQ3OGItYTRiYy0wMjE4MjA1MTY1NjkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJib3BzL2V6Z2lmLmNvbS12aWRlby10by13ZWJwLWNvbnZlcnRlciAoMSkubXA0IiwiaWF0IjoxNzY4MTY3OTA5LCJleHAiOjIwODM1Mjc5MDl9.uYjb_HfMHedwoq2RsDmmmpEVowzoOXswklfqWCxUILU"
+        />
 
-      <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center pt-12 md:pt-20">
+        {/* TINT OVERLAY: Blue/Cyan mix to match site identity */}
+        <div className="absolute inset-0 bg-blue-600/20 mix-blend-overlay z-10 pointer-events-none"></div>
 
-        {/* PILL BADGE */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100/50 border border-cyan-500/20 mb-8 animate-in fade-in slide-in-from-top-4 duration-1000 backdrop-blur-md">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-          </span>
-          <span className="text-cyan-700 text-xs font-bold tracking-widest uppercase">Next-Gen Automation</span>
-        </div>
+        {/* BOTTOM GRADIENT: Transition to Slate-50 (Page BG) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-50/10 to-transparent z-10 pointer-events-none"></div>
+      </div>
 
-        {/* HEADLINE */}
-        <div
-          ref={containerRef}
-          className="relative min-h-[200px] flex flex-col justify-center items-center mb-8"
-        >
-          <div className="text-[42px] leading-[1.1] md:text-9xl font-[900] tracking-tighter text-slate-900 animate-in fade-in zoom-in-95 duration-1000 md:leading-[1] max-w-6xl drop-shadow-sm text-center">
-            Sistematiza tu <br />
-            <span className="relative inline-block mt-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-700 inline-block min-h-[1.2em] font-[900]">
-                Éxito Operativo
-              </span>
+      {/* 2. CONTENT (Pushed to bottom/sides) */}
+      <div className="absolute bottom-0 left-0 w-full z-20 p-8 md:p-12 flex flex-col md:flex-row items-end justify-between gap-8">
+
+        {/* Left Side: Pill + Description */}
+        <div className="text-left max-w-lg">
+          {/* PILL - High Contrast for light gradient area */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm mb-4">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
             </span>
+            <span className="text-slate-700 text-[10px] font-bold tracking-widest uppercase">Next-Gen Automation</span>
           </div>
+
+          {/* Description - Light Theme (Dark Text) */}
+          <p className="text-slate-900 text-lg md:text-xl font-medium leading-relaxed drop-shadow-none">
+            Tecnología compleja, hecha simple para ti. <br />
+            <span className="text-slate-600 font-light text-base">Impulsamos tu negocio con IA.</span>
+          </p>
         </div>
 
-        {/* SUBHEADLINE */}
-        <p className="text-slate-600 text-lg md:text-xl leading-relaxed max-w-2xl font-light mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
-          Creamos automatizaciones con inteligencia artificial que impulsan tu negocio. <br />
-          <span className="text-slate-900 font-medium">Tecnología compleja, hecha simple para&nbsp;ti.</span>
-        </p>
-
-        {/* CTA BUTTONS - MATCHING SCREENSHOT */}
-        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 relative z-20 w-full sm:w-auto">
-
-          {/* PRIMARY CTA - CONSULTORIA */}
-          <a
+        {/* Right Side: CTAs */}
+        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+          {/* CONTRATAR - Liquid Glass */}
+          <GlassButton
             href="https://wa.me/34691708138"
             target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-full shadow-[0_4px_14px_0_rgba(0,118,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,118,255,0.23)] hover:scale-105 transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2"
+            className="text-slate-900"
           >
-            <span className="material-symbols-outlined text-[20px]">handshake</span>
-            Consultoría Estratégica
-          </a>
+            <span className="material-symbols-outlined text-[20px] text-blue-600">handshake</span>
+            <span className="font-bold tracking-wide uppercase text-sm">Consultoría</span>
+          </GlassButton>
 
-          {/* SECONDARY CTA - FORMACION */}
-          <a
+          {/* FORMACION - Liquid Glass */}
+          <GlassButton
             href="#about"
-            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-full shadow-[0_4px_14px_0_rgba(0,118,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,118,255,0.23)] hover:scale-105 transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2"
+            className="text-slate-900"
           >
-            <span className="material-symbols-outlined text-[20px] text-cyan-200">school</span>
-            Formación IA
-          </a>
+            <span className="material-symbols-outlined text-[20px] text-cyan-500">school</span>
+            <span className="font-bold tracking-wide uppercase text-sm">Formación</span>
+          </GlassButton>
         </div>
 
       </div>
 
-      {/* SCROLL INDICATOR */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 hidden md:block">
-        <span className="material-symbols-outlined text-slate-400 text-3xl">keyboard_arrow_down</span>
+      {/* Glass Filter Definition for the Liquid Effect */}
+      <GlassFilter />
+
+      {/* SCROLL INDICATOR - Dark color for Slate-50 background compatibility */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce opacity-50 z-20">
+        <span className="material-symbols-outlined text-slate-400 text-2xl">keyboard_arrow_down</span>
       </div>
 
     </section>
