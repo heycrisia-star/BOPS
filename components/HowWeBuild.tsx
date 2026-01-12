@@ -86,12 +86,13 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
               className={`h-full p-8 rounded-[32px] border border-white/50 bg-white/40 backdrop-blur-xl hover:bg-white/60 hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
             >
               {/* PIXEL CANVAS EFFECT */}
-              <div className="absolute inset-0 z-0 opacity-50 pointer-events-none">
+              <div className="absolute inset-0 z-0 pointer-events-none">
                 <PixelCanvas
                   gap={10}
                   speed={25}
-                  colors={["#ecfeff", "#cffafe", "#22d3ee"]}
+                  colors={["#bae6fd", "#7dd3fc", "#0ea5e9"]}
                   variant="default"
+                  noFocus={true}
                 />
               </div>
 
