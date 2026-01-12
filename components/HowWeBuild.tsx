@@ -2,6 +2,7 @@ import React from 'react';
 import SpotlightCard from './SpotlightCard';
 import ScrollVelocity from './ScrollVelocity';
 import ShinyText from './ShinyText';
+import { PixelCanvas } from './ui/pixel-canvas';
 
 interface HowWeBuildProps {
   onNavigateToSales: () => void;
@@ -82,10 +83,20 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
             <div
               key={idx}
               onClick={() => service.action && service.action()}
-              className={`h-full p-8 rounded-[32px] border border-white/50 bg-white/40 backdrop-blur-xl hover:bg-white/60 hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-xl hover:-translate-y-1 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
+              className={`h-full p-8 rounded-[32px] border border-white/50 bg-white/40 backdrop-blur-xl hover:bg-white/60 hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
             >
+              {/* PIXEL CANVAS EFFECT */}
+              <div className="absolute inset-0 z-0 opacity-50 pointer-events-none">
+                <PixelCanvas
+                  gap={10}
+                  speed={25}
+                  colors={["#ecfeff", "#cffafe", "#22d3ee"]}
+                  variant="default"
+                />
+              </div>
+
               {/* Active Stripe Effect */}
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
 
               <div className="mb-6 relative z-10">
                 <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-white/70 border border-white/60 group-hover:scale-110 transition-transform duration-300 shadow-sm">
@@ -106,9 +117,12 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 group-hover:gap-4 transition-all duration-300 mt-auto z-10 relative">
-                <span className="text-sm font-bold text-cyan-800">Ver más</span>
-                <span className="material-symbols-outlined text-cyan-800 text-lg">arrow_forward</span>
+              {/* POWERFUL CTA */}
+              <div className="mt-auto relative z-20 w-full">
+                <button className="w-full py-3 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-wider text-sm shadow-lg group-hover:bg-cyan-600 group-hover:shadow-cyan-500/30 transition-all duration-300 flex items-center justify-center gap-2 transform group-hover:scale-[1.02]">
+                  <span>Ver Detalles</span>
+                  <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                </button>
               </div>
             </div>
           ))}

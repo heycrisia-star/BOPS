@@ -1,8 +1,6 @@
 "use client"
 
-import * as React from "react"
-
-// Pixel Class Definition
+// Сначала определяем класс Pixel
 class Pixel {
     width: number
     height: number
@@ -117,7 +115,7 @@ class Pixel {
     }
 }
 
-// Web Component Definition
+// Затем определяем веб-компонент
 class PixelCanvasElement extends HTMLElement {
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D | null
@@ -329,6 +327,9 @@ class PixelCanvasElement extends HTMLElement {
     }
 }
 
+// React-компонент обертка
+import * as React from "react"
+
 export interface PixelCanvasProps extends React.HTMLAttributes<HTMLDivElement> {
     gap?: number
     speed?: number
@@ -340,18 +341,16 @@ export interface PixelCanvasProps extends React.HTMLAttributes<HTMLDivElement> {
 const PixelCanvas = React.forwardRef<HTMLDivElement, PixelCanvasProps>(
     ({ gap, speed, colors, variant, noFocus, style, ...props }, ref) => {
         React.useEffect(() => {
-            // Register web component on first render
+            // Регистрируем веб-компонент при первом рендере
             if (typeof window !== "undefined") {
                 if (!customElements.get("pixel-canvas")) {
-                    // Use a class expression or define it in a way that avoids ReferenceError if run in SSR, though this is client-side
                     customElements.define("pixel-canvas", PixelCanvasElement)
                 }
             }
         }, [])
 
         return (
-            // @ts-ignore - Custom element
-            <pixel-canvas
+            <pixel-canvas // @ts-ignore
                 ref={ref}
                 data-gap={gap}
                 data-speed={speed}
@@ -374,3 +373,17 @@ const PixelCanvas = React.forwardRef<HTMLDivElement, PixelCanvasProps>(
 PixelCanvas.displayName = "PixelCanvas"
 
 export { PixelCanvas }
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            "pixel-canvas": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+                "data-gap"?: number;
+                "data-speed"?: number;
+                "data-colors"?: string;
+                "data-variant"?: string;
+                "data-no-focus"?: boolean;
+            };
+        }
+    }
+}
