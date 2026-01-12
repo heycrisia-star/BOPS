@@ -14,23 +14,18 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
   const services = [
     {
       icon: "smart_toy",
-      title: "Captación y Ventas Automáticas",
-      desc: "Automatizamos todo el proceso desde la entrada del lead hasta la agenda, sin intervención manual.",
-      tags: ["Integracion WhatsApp", "Respuestas IA", "Multi-idioma"],
-      action: onNavigateToSales // Special action for this card
+      title: "Builders Ops",
+      desc: "Diseñamos y construimos sistemas digitales y automatizaciones que hacen que tu negocio venda y opere mejor.",
+      tags: ["Webs & Apps", "Chatbots & Voice", "Facturación Auto", "Gestión Leads"],
+      ctaText: "Start Building",
+      action: onNavigateToSales
     },
     {
-      icon: "support_agent",
-      title: "Atención al Cliente y Soporte",
-      desc: "Automatizamos la atención al cliente y el soporte para resolver consultas frecuentes, incidencias y dudas técnicas.",
-      tags: ["Soporte 24/7", "Incidencias Auto", "Happy Clients"],
-      action: onNavigateToSupport
-    },
-    {
-      icon: "settings_suggest",
-      title: "Operaciones y Control del Negocio",
-      desc: "Automatizamos tareas administrativas y operativas para reducir errores, ganar visibilidad y tomar mejores decisiones.",
-      tags: ["Desarrollo Web", "Dashboard KPIs", "Facturación Auto", "Sistemas IDP"],
+      icon: "manage_search",
+      title: "Consultant Ops",
+      desc: "Analizamos tu negocio, detectamos oportunidades reales de automatización e IA y proponemos un plan claro para ejecutarlas.",
+      tags: ["Auditoría 360", "Análisis Oportunidades", "Roadmap Ejecutivo", "Estrategia IA"],
+      ctaText: "Explore Opportunities",
       action: onNavigateToOperations
     }
   ];
@@ -78,31 +73,31 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
         </div>
 
         {/* SERVICES GRID WITH SPOTLIGHT */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32 max-w-5xl mx-auto">
           {services.map((service, idx) => (
             <PixelCard
               key={idx}
               variant="blue"
               onClick={() => service.action && service.action()}
-              className={`h-full p-8 rounded-[32px] border border-white/50 bg-white/40 backdrop-blur-xl hover:bg-white/60 hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
+              className={`h-full p-10 rounded-[32px] border border-white/50 bg-white/40 backdrop-blur-xl hover:bg-white/60 hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
             >
               {/* Active Stripe Effect */}
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
 
-              <div className="mb-6 relative z-10">
-                <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-white/70 border border-white/60 group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                  <span className="material-symbols-outlined text-3xl text-cyan-700 group-hover:text-cyan-600 transition-colors">
+              <div className="mb-8 relative z-10">
+                <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-white/70 border border-white/60 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                  <span className="material-symbols-outlined text-4xl text-cyan-700 group-hover:text-cyan-600 transition-colors">
                     {service.icon}
                   </span>
                 </div>
               </div>
 
-              <h3 className="text-2xl font-bold text-slate-900 mb-3 z-10 relative drop-shadow-sm">{service.title}</h3>
-              <p className="text-slate-700 leading-relaxed text-base mb-8 flex-grow z-10 relative font-medium">{service.desc}</p>
+              <h3 className="text-3xl font-bold text-slate-900 mb-4 z-10 relative drop-shadow-sm tracking-tight">{service.title}</h3>
+              <p className="text-slate-700 leading-relaxed text-lg mb-10 flex-grow z-10 relative font-medium">{service.desc}</p>
 
-              <div className="flex flex-wrap gap-2 mb-8 z-10 relative">
+              <div className="flex flex-wrap gap-2 mb-10 z-10 relative">
                 {service.tags.map((tag, i) => (
-                  <span key={i} className="px-3 py-1 rounded-full bg-white/50 border border-white/40 text-slate-700 text-xs font-bold uppercase tracking-wide backdrop-blur-md shadow-sm">
+                  <span key={i} className="px-3 py-1.5 rounded-full bg-white/50 border border-white/40 text-slate-700 text-xs font-bold uppercase tracking-wide backdrop-blur-md shadow-sm">
                     {tag}
                   </span>
                 ))}
@@ -110,8 +105,8 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
 
               {/* POWERFUL CTA */}
               <div className="mt-auto relative z-20 w-full">
-                <button className="w-full py-3 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-wider text-sm shadow-lg group-hover:bg-cyan-600 group-hover:shadow-cyan-500/30 transition-all duration-300 flex items-center justify-center gap-2 transform group-hover:scale-[1.02]">
-                  <span>Ver Detalles</span>
+                <button className="w-full py-4 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-wider text-sm shadow-lg group-hover:bg-cyan-600 group-hover:shadow-cyan-500/30 transition-all duration-300 flex items-center justify-center gap-2 transform group-hover:scale-[1.02]">
+                  <span>{service.ctaText}</span>
                   <span className="material-symbols-outlined text-lg">arrow_forward</span>
                 </button>
               </div>
