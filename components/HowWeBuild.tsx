@@ -18,7 +18,8 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
       desc: "Diseñamos y construimos sistemas digitales y automatizaciones que hacen que tu negocio venda y opere mejor.",
       tags: ["Webs & Apps", "Chatbots & Voice", "Facturación Auto", "Gestión Leads"],
       ctaText: "Start Building",
-      action: onNavigateToSales
+      action: onNavigateToSales,
+      theme: "amber"
     },
     {
       icon: "manage_search",
@@ -26,7 +27,8 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
       desc: "Analizamos tu negocio, detectamos oportunidades reales de automatización e IA y proponemos un plan claro para ejecutarlas.",
       tags: ["Auditoría 360", "Análisis Oportunidades", "Roadmap Ejecutivo", "Estrategia IA"],
       ctaText: "Explore Opportunities",
-      action: onNavigateToOperations
+      action: onNavigateToOperations,
+      theme: "emerald"
     }
   ];
 
@@ -72,21 +74,32 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
           </p>
         </div>
 
-        {/* SERVICES GRID WITH SPOTLIGHT */}
+        {/* SERVICES GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32 max-w-5xl mx-auto">
           {services.map((service, idx) => (
-            <PixelCard
+            <div
               key={idx}
-              variant="blue"
               onClick={() => service.action && service.action()}
-              className={`h-full p-10 rounded-[32px] border border-white/50 bg-white/40 backdrop-blur-xl hover:bg-white/60 hover:border-cyan-500/30 transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden ${service.action ? 'cursor-pointer' : ''}`}
+              className={`h-full p-10 rounded-[32px] border bg-white/60 backdrop-blur-xl transition-all group flex flex-col shadow-lg hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden cursor-pointer
+                ${service.theme === 'amber'
+                  ? 'border-amber-200/60 hover:border-amber-400 hover:shadow-amber-500/10'
+                  : 'border-emerald-200/60 hover:border-emerald-400 hover:shadow-emerald-500/10'}
+              `}
             >
               {/* Active Stripe Effect */}
-              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+              <div className={`absolute top-0 left-0 w-1 h-full opacity-0 group-hover:opacity-100 transition-opacity z-10
+                ${service.theme === 'amber' ? 'bg-gradient-to-b from-amber-400 to-orange-500' : 'bg-gradient-to-b from-emerald-400 to-teal-500'}
+              `}></div>
 
               <div className="mb-8 relative z-10">
-                <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-white/70 border border-white/60 group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                  <span className="material-symbols-outlined text-4xl text-cyan-700 group-hover:text-cyan-600 transition-colors">
+                <div className={`w-16 h-16 flex items-center justify-center rounded-2xl border transition-transform duration-300 shadow-sm group-hover:scale-110
+                  ${service.theme === 'amber'
+                    ? 'bg-amber-50 border-amber-100'
+                    : 'bg-emerald-50 border-emerald-100'}
+                `}>
+                  <span className={`material-symbols-outlined text-4xl transition-colors
+                    ${service.theme === 'amber' ? 'text-amber-600' : 'text-emerald-600'}
+                  `}>
                     {service.icon}
                   </span>
                 </div>
@@ -97,7 +110,11 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
 
               <div className="flex flex-wrap gap-2 mb-10 z-10 relative">
                 {service.tags.map((tag, i) => (
-                  <span key={i} className="px-3 py-1.5 rounded-full bg-white/50 border border-white/40 text-slate-700 text-xs font-bold uppercase tracking-wide backdrop-blur-md shadow-sm">
+                  <span key={i} className={`px-3 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wide backdrop-blur-md shadow-sm
+                    ${service.theme === 'amber'
+                      ? 'bg-amber-50/50 border-amber-200/50 text-amber-800'
+                      : 'bg-emerald-50/50 border-emerald-200/50 text-emerald-800'}
+                  `}>
                     {tag}
                   </span>
                 ))}
@@ -105,12 +122,16 @@ const HowWeBuild: React.FC<HowWeBuildProps> = ({ onNavigateToSales, onNavigateTo
 
               {/* POWERFUL CTA */}
               <div className="mt-auto relative z-20 w-full">
-                <button className="w-full py-4 rounded-xl bg-slate-900 text-white font-bold uppercase tracking-wider text-sm shadow-lg group-hover:bg-cyan-600 group-hover:shadow-cyan-500/30 transition-all duration-300 flex items-center justify-center gap-2 transform group-hover:scale-[1.02]">
+                <button className={`w-full py-4 rounded-xl text-white font-bold uppercase tracking-wider text-sm shadow-lg transition-all duration-300 flex items-center justify-center gap-2 transform group-hover:scale-[1.02]
+                  ${service.theme === 'amber'
+                    ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20'
+                    : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20'}
+                `}>
                   <span>{service.ctaText}</span>
                   <span className="material-symbols-outlined text-lg">arrow_forward</span>
                 </button>
               </div>
-            </PixelCard>
+            </div>
           ))}
         </div>
 
